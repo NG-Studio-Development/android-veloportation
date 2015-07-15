@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Veloport</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="field_name">Имя</string>
+    <string name="field_email">Email</string>
+    <string name="field_phone">Телефон</string>
+    <string name="field_address_sender">Адрес отправителя</string>
+    <string name="field_address_delivery">Адрес доставки</string>
+    <string name="field_message">Сообщение</string>
+
+    <string name="button_send">Велопортировать</string>
+
+    <string name="google_key">AIzaSyDvTVnB2ls-_d1hIVXWbVykP7qq7oPeUCQ</string>
+    <string name="title_activity_start">StartActivity</string>
+
+    <string name="text_customer">Я клиент</string>
+    <string name="text_courier">Я курьер</string>
+
+
+    <string name="hello_courier_fragment">Hello courier fragment</string>
+
+    <string name="authorization_incorrect_data"> Authorization incorrect data </string>
+
+    <string name="about_us"> О нас </string>
+    <string name="title_activity_about_as">AboutAsActivity</string>
+
+    <string name="contacts">Контакты</string>
+    <string name="vacancy">Вакансии</string>
+    <string name="we_are">Мы </string>
+
+    <string name="order_1">Заказ 1: Пицца </string>
+    <string name="order_2">Заказ 2: Роллы </string>
+
+
+
+
+</resources>
