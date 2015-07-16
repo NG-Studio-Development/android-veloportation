@@ -12,7 +12,7 @@ import ru.veloportation.veloport.ui.fragments.OrdersMenuFragment;
 
 public class MainActivity extends BaseActivity {
 
-    private static final String START_TYPE = "start_type";
+    public static final String START_TYPE = "start_type";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +51,13 @@ public class MainActivity extends BaseActivity {
         startActivityByType(context, START_COURIER);
     }
 
-    private final static int START_COURIER = 0;
+    public final static int START_COURIER = 0;
 
     public static void startCustomerActivity(Context context) {
         startActivityByType(context, START_CUSTOMER);
     }
 
-    private final static int START_CUSTOMER = 1;
+    public final static int START_CUSTOMER = 1;
 
     private static void startActivityByType(Context context, int type) {
         Intent intent = new Intent(context, MainActivity.class);

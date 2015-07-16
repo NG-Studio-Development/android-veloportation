@@ -59,7 +59,8 @@ public class StartActivity extends BaseActivity {
 
     GoogleCloudMessaging gcm;
     String regId;
-    String SENDER_ID = "197291868967";
+    //String SENDER_ID = "197291868967";
+    String SENDER_ID = "185997592493";
 
     public void registerInBackground() {
         new AsyncTask<Void, String, String>() {

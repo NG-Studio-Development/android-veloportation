@@ -8,23 +8,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 import ru.veloportation.VeloportApplication;
-import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.db.Order;
+import ru.veloportation.veloport.model.requests.OrderRequest;
 
 
 public class BookingFragment extends BaseFragment {
-
-
 
     EditText etName;
     EditText etEmail;
@@ -76,26 +71,25 @@ public class BookingFragment extends BaseFragment {
     private void checkout(Order order) {
         final RequestQueue queue = Volley.newRequestQueue(getHostActivity());
 
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
 
-        String url = ConstantsVeloportApp.URL_SERVER+"/addOrder/"+gson.toJson(order);
+        //String url = ConstantsVeloportApp.URL_SERVER+"/addOrder/"+gson.toJson(order);
 
-        final StringRequest checkoutRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("SEND_ORDER","Result = "+response);
-                        VeloportApplication.orderFlagDEBUG = true;
-                        getHostActivity().onBackPressed();
-                    }
-                }, new Response.ErrorListener() {
+        OrderRequest orderCheckoutRequest = OrderRequest.requestCreateOrder(order, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("SEND_ORDER","Result = "+response);
+                VeloportApplication.orderFlagDEBUG = true;
+                getHostActivity().onBackPressed();
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("SEND_ORDER", "Error = " + error.getMessage());
             }
-        });
+        } );
 
-        queue.add(checkoutRequest);
+        queue.add(orderCheckoutRequest);
     }
 
 }

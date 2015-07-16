@@ -6,39 +6,46 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ru.veloportation.veloport.R;
+import ru.veloportation.veloport.model.db.Order;
 
 
-public class ItemsAdapter extends ArrayAdapter<ItemsAdapter.OrderItem> {
+public class OrderAdapter extends ArrayAdapter<Order> {
 
     private LayoutInflater inflater;
     private int item;
     private List<EditText> listEditText;// = new ArrayList();
 
-    private ItemsAdapter(Context context, OrderItem[] items, int item) {
-        super(context, 0, Arrays.asList(items));
+    private OrderAdapter(Context context, List<Order> orderList, int item) {
+        super(context, 0, orderList);
         this.item = item;
         inflater = LayoutInflater.from(context);
-        listEditText = new ArrayList();
+
     }
 
-    public static ItemsAdapter getOrderAdapter(Context context /* ,OrderItem[] orderItems  */) {
+    /*public static OrderAdapter getOrderAdapterDEBUG(Context context ) {
 
 
-        ItemsAdapter.OrderItem[] orderItems = {new ItemsAdapter.OrderItem(context.getString(R.string.order_1)),
-                new ItemsAdapter.OrderItem(context.getString(R.string.order_2)) };
+        OrderAdapter.OrderItem[] orderItems = {new OrderAdapter.OrderItem(context.getString(R.string.order_1)),
+                new OrderAdapter.OrderItem(context.getString(R.string.order_2)) };
 
 
-        return new ItemsAdapter(context, orderItems, R.layout.item_order);
+        return new OrderAdapter(context, orderItems, R.layout.item_order);
+    } */
+
+    public static OrderAdapter createOrderAdapter(Context context, List<Order> listOrder) {
+
+        OrderAdapter.OrderItem[] orderItems = {new OrderAdapter.OrderItem(context.getString(R.string.order_1)),
+                new OrderAdapter.OrderItem(context.getString(R.string.order_2)) };
+
+
+        return new OrderAdapter(context, listOrder, R.layout.item_order);
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -54,9 +61,8 @@ public class ItemsAdapter extends ArrayAdapter<ItemsAdapter.OrderItem> {
             holder = (Holder) convertView.getTag();
         }
 
-        OrderItem item = getItem(position);
-        holder.text.setText(item.text);
-        //listEditText.add(holder.etMark);
+        Order item = getItem(position);
+        holder.text.setText(item.getAddressSender());
         return convertView;
     }
 
@@ -75,8 +81,8 @@ public class ItemsAdapter extends ArrayAdapter<ItemsAdapter.OrderItem> {
 
 
 
-    public static ItemsAdapter fillLinearLayout(Context context, OrderItem[] calculatorItems, LinearLayout linearLayout, int item) {
-        ItemsAdapter adapter = new ItemsAdapter(context,calculatorItems, item);
+    /*public static OrderAdapter fillLinearLayout(Context context, OrderItem[] calculatorItems, LinearLayout linearLayout, int item) {
+        OrderAdapter adapter = new OrderAdapter(context,calculatorItems, item);
 
         final int adapterCount = adapter.getCount();
 
@@ -85,7 +91,7 @@ public class ItemsAdapter extends ArrayAdapter<ItemsAdapter.OrderItem> {
             linearLayout.addView(itemView);
         }
         return adapter;
-    }
+    } */
 
     public List<EditText> getAllEditText() {
         return listEditText;

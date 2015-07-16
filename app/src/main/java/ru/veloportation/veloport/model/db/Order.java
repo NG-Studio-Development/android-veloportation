@@ -5,18 +5,21 @@ import android.telephony.TelephonyManager;
 
 public class Order {
 
+    private String id;
     private String customerName;
     private String email;
     private String phone;
     private String addressSender;
     private String addressDelivery;
     private String message;
-    private String uuid;
+    private int statusOrder;
+    private String customerUUID;
 
 
     public Order(Context context) {
         TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        uuid = tManager.getDeviceId();
+        customerUUID = tManager.getDeviceId();
+        setState(false);
 
     }
 
@@ -50,12 +53,21 @@ public class Order {
         return this;
     }
 
+    public Order setState(boolean status) {
+        this.statusOrder = status ? 1:0;
+        this.message = message;
+        return this;
+    }
+
     public String getCustomerName() { return customerName; }
     public String getEmail() { return email; }
     public String getPhone() { return phone; }
     public String getAddressSender() { return addressSender; }
     public String getAddressDelivery() { return addressDelivery; }
-    public String getAddressMessage() { return message; }
+    public String getAddress() { return message; }
+    public boolean getStatus() { return statusOrder == 1 ? true:false; }
+    public String getId() { return id; }
+
 
 
 

@@ -14,7 +14,7 @@ import ru.veloportation.veloport.ConstantsVeloportApp;
 public class RegisterIdRequest extends StringRequest {
 
 
-    public RegisterIdRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    private RegisterIdRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(method, url, listener, errorListener);
     }
 
@@ -27,7 +27,6 @@ public class RegisterIdRequest extends StringRequest {
         //Log.d("REQUEST URL", "Request = "+ConstantsVeloportApp.URL_SERVER+"/classes/Users/"+name+"/"+regId);
         JSONObject jsonObject = new JSONObject();
         try {
-
             jsonObject.put("registerId",regId);
         } catch (JSONException ex) {
             ex.printStackTrace();

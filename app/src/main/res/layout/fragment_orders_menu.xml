@@ -8,10 +8,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ibCreateOrder"
-        android:visibility="gone"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_launcher"/>
+
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,7 +24,9 @@
         android:layout_alignParentEnd="true"
         android:padding="10dp" />
 
-    <TextView
+
+
+    <!-- <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Через 00:42:18"
@@ -37,7 +40,13 @@
         android:text="На карте"
         android:id="@+id/buttonMap"
         android:layout_below="@+id/tvTimer"
+        android:layout_centerHorizontal="true" /> -->
+
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvOrders"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-
-
 </RelativeLayout>

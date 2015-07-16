@@ -39,7 +39,7 @@ public class EnterFragment extends BaseFragment<StartActivity> implements View.O
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.tvCourier:
-                getHostActivity().replaceFragment(new LoginFragment(),false);
+                getHostActivity().replaceFragment(new LoginFragment(), true);
                 break;
             case R.id.tvCustomer:
                 MainActivity.startCustomerActivity(getHostActivity());
