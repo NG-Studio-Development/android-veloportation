@@ -1,9 +1,14 @@
 package ru.veloportation.veloport.model.db;
 
 import android.content.Context;
-import android.telephony.TelephonyManager;
+
+import ru.veloportation.VeloportApplication;
 
 public class Order {
+
+    public static int STATE_SEARCH_COURIER = 0;
+    public static int STATE_TAKE = 1;
+    public static int STATE_DELIVERY = 2;
 
     private String id;
     private String customerName;
@@ -17,10 +22,10 @@ public class Order {
 
 
     public Order(Context context) {
-        TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        customerUUID = tManager.getDeviceId();
-        setState(false);
-
+        //TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        //customerUUID = tManager.getDeviceId();
+        customerUUID = VeloportApplication.getInstance().getUUID();
+        setState(STATE_SEARCH_COURIER);
     }
 
     public Order setCustomerName(String customerName) {
@@ -53,8 +58,8 @@ public class Order {
         return this;
     }
 
-    public Order setState(boolean status) {
-        this.statusOrder = status ? 1:0;
+    public Order setState(int state) {
+        this.statusOrder = state;
         this.message = message;
         return this;
     }
@@ -65,7 +70,9 @@ public class Order {
     public String getAddressSender() { return addressSender; }
     public String getAddressDelivery() { return addressDelivery; }
     public String getAddress() { return message; }
-    public boolean getStatus() { return statusOrder == 1 ? true:false; }
+
+    public int getStatus() { return statusOrder; }
+
     public String getId() { return id; }
 
 

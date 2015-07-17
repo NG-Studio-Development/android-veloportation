@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 import ru.veloportation.veloport.R;
+import ru.veloportation.veloport.components.SampleAlarmReceiver;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.OrderRequest;
 import ru.veloportation.veloport.ui.activities.MainActivity;
@@ -27,6 +28,8 @@ public class OrderFragment extends BaseFragment<MainActivity> {
 
     private Order order;
     private String runAs;
+
+    private SampleAlarmReceiver alarm;// = new SampleAlarmReceiver();
 
 
 
@@ -48,9 +51,9 @@ public class OrderFragment extends BaseFragment<MainActivity> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        alarm = new SampleAlarmReceiver();
 
-        }
+        //if (getArguments() != null) {}
     }
 
     @Override
@@ -93,19 +96,22 @@ public class OrderFragment extends BaseFragment<MainActivity> {
 
         final Button buttonGet = (Button) view.findViewById(R.id.buttonGet);
 
-        if (order.getStatus())
+        if (order.getStatus() == Order.STATE_TAKE)
             buttonGet.setVisibility(View.INVISIBLE);
         else
             buttonGet.setVisibility(View.VISIBLE);
+
         buttonGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                order.setState(true);
+                order.setState(Order.STATE_TAKE);
 
                 OrderRequest request = OrderRequest.requestTakeOrder(order, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        buttonGet.setVisibility(View.INVISIBLE);
+                        //buttonGet.setVisibility(View.INVISIBLE);
+                        buttonGet.setText("Доставлено");
+                        alarm.setAlarm(getHostActivity());
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -122,7 +128,7 @@ public class OrderFragment extends BaseFragment<MainActivity> {
     private void createCustomerView(View view) {
         TextView tvStatus = (TextView) view.findViewById(R.id.tvStatus);
         tvStatus.setVisibility(View.VISIBLE);
-        if (order.getStatus()) {
+        if (order.getStatus() == Order.STATE_TAKE) {
             tvStatus.setText(getString(R.string.order_take));
             tvStatus.setTextColor(getResources().getColor(R.color.green));
         } else {

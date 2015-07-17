@@ -60,6 +60,10 @@
     <uses-permission android:name="ru.veloportation.veloport.C2D_MESSAGE" />
 
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+
+
+
     <application
         android:name="ru.veloportation.VeloportApplication"
         android:allowBackup="true"
@@ -107,6 +111,17 @@
 
         <service android:name="GCMIntentService" />
 
+
+        <receiver android:name=".components.SampleAlarmReceiver"></receiver>
+
+        <receiver android:name=".components.SampleBootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".components.SampleSchedulingService" />
 
     </application>
 

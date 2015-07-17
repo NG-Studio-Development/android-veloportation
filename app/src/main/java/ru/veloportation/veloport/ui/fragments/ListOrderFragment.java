@@ -65,8 +65,4 @@ public class ListOrderFragment extends BaseFragment {
 
         return view;
     }
-
-
-
-
 }
