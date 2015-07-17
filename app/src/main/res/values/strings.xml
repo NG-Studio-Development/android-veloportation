@@ -43,4 +43,11 @@
     <string name="searching_of_courier"> Поиск курьера </string>
     <string name="order_take"> Заказ принят </string>
 
+    <!-- Default message for progress dialog -->
+    <string name="please_wait"> Идет обработка запроса </string>
+
+    <!-- Hintes for authorization -->
+    <string name="login"> Логин </string>
+    <string name="pass"> Пароль </string>
+
 </resources>

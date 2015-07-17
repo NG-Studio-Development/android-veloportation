@@ -14,12 +14,14 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/etLogin" />
+            android:id="@+id/etLogin"
+            android:hint="@string/login"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/etPass" />
+            android:id="@+id/etPass"
+            android:hint="@string/pass"/>
 
         <Button
             android:layout_width="wrap_content"

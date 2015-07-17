@@ -13,14 +13,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.gson.Gson;
 
 import java.io.IOException;
 
 import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
-import ru.veloportation.veloport.model.db.User;
 import ru.veloportation.veloport.model.requests.RegisterIdRequest;
 import ru.veloportation.veloport.ui.fragments.EnterFragment;
 
@@ -59,7 +57,6 @@ public class StartActivity extends BaseActivity {
 
     GoogleCloudMessaging gcm;
     String regId;
-    //String SENDER_ID = "197291868967";
     String SENDER_ID = "185997592493";
 
     public void registerInBackground() {
@@ -80,35 +77,49 @@ public class StartActivity extends BaseActivity {
                 TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
                 String uuid = tManager.getDeviceId();
 
-                authClientAction(uuid);
+                //authClientAction(uuid);
                 return regId;
             }
 
             @Override
             protected void onPostExecute(String result) {
 
+                if (listener != null)
+                    listener.onRegister(result);
+
                 if (result.contains("Error")) {
                     Log.d("REGISTER API", result);
                     return;
                 }
+
+
             }
         }.execute(null, null, null);
     }
 
-    private void authClientAction(String uuid) {
 
+    public interface OnRegisterIdListener { void onRegister(String regId); };
 
-        RegisterIdRequest request = RegisterIdRequest.requestRegisterUUID(uuid, regId,
+    OnRegisterIdListener listener = null;
+
+    public void setOnRegisterIdListener(OnRegisterIdListener listener) {
+        this.listener = listener;
+    }
+
+    public void authCourierAction(String login, String pass, String regId) {
+
+        RegisterIdRequest request = RegisterIdRequest.requestUpdateId(login, pass, regId,
 
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
-                        if (response.contains("ERROR"))
+                        if (response.contains("Error")) {
                             Toast.makeText(StartActivity.this, R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
-                        else
+                        } else {
                             saveEnterDataFromJson(response);
-
+                            MainActivity.startCourierActivity(StartActivity.this);
+                        }
                     }
                 },
 
@@ -119,20 +130,26 @@ public class StartActivity extends BaseActivity {
                     }
                 });
 
+        Volley.newRequestQueue(this).add(request);
+    }
+
+    public void authClientAction(String uuid, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener ) {
+
+        RegisterIdRequest request = RegisterIdRequest.requestRegisterUUID(uuid, regId,listener, errorListener);
         Volley.newRequestQueue(StartActivity.this).add(request);
     }
 
     public void saveEnterDataFromJson(String stringJson) {
-        Gson gson = new Gson();
-        User user = null;// = gson.fromJson(stringJson, User.class);
-        saveEnterData(user);
+        //Gson gson = new Gson();
+        //User user = null;// = gson.fromJson(stringJson, User.class);
+        saveEnterData(/*user*/);
     }
 
-    void saveEnterData(User user) {
+    void saveEnterData(/*User user*/) {
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_IS_LOGGED_IN, true);
         //WhereAreYouApplication.getInstance().getApplicationPreferencesEditor().putString(ConstantsVeloportApp.PREF_KEY_LOGIN,user.getLogin());
         VeloportApplication.getInstance().getApplicationPreferencesEditor().commit();
-        MainActivity.startCourierActivity(StartActivity.this);
+        //MainActivity.startCourierActivity(StartActivity.this);
     }
 
 

@@ -18,9 +18,10 @@ public class RegisterIdRequest extends StringRequest {
         super(method, url, listener, errorListener);
     }
 
-    public static RegisterIdRequest requestUpdateId(String name, String pass, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        //Log.d("REQUEST URL", "Request = "+ConstantsVeloportApp.URL_SERVER+"/classes/Users/"+name+"/"+regId);
-        return new RegisterIdRequest(Request.Method.GET, ConstantsVeloportApp.URL_SERVER+"/classes/Users/"+name+"/"+regId,listener,errorListener);
+    public static RegisterIdRequest requestUpdateId(String login, String pass, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        Log.d("REQUEST URL", "Request = "+ConstantsVeloportApp.URL_SERVER+"/login/"+login+"/"+pass+"/"+regId);
+        //return new RegisterIdRequest(Request.Method.GET, ConstantsVeloportApp.URL_SERVER+"/classes/Users/"+login+"/"+regId,listener,errorListener);
+        return new RegisterIdRequest(Request.Method.GET, ConstantsVeloportApp.URL_SERVER+"/login/"+login+"/"+pass+"/"+regId,listener,errorListener);
     }
 
     public static RegisterIdRequest requestRegisterUUID(String uuid, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener) {

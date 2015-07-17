@@ -6,14 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 
 import ru.veloportation.veloport.R;
-import ru.veloportation.veloport.model.requests.RegisterIdRequest;
 import ru.veloportation.veloport.ui.activities.StartActivity;
 
 public class LoginFragment extends BaseFragment<StartActivity> {
@@ -42,48 +36,22 @@ public class LoginFragment extends BaseFragment<StartActivity> {
 
             @Override
             public void onClick(View v) {
-                authCourierAction(etLogin.getText().toString(), etPass.getText().toString(), "REG_ID_DEBUG");
+                openCourier(etLogin.getText().toString(), etPass.getText().toString());
             }
         });
-
 
         return view;
     }
 
+    private void openCourier(final String login, final String pass) {
 
+        getHostActivity().setOnRegisterIdListener(new StartActivity.OnRegisterIdListener() {
+            @Override
+            public void onRegister(String regId) {
+                getHostActivity().authCourierAction(login, pass, regId);
+            }
+        });
 
-
-
-
-
-    private void authCourierAction(String name, String pass, String regId) {
-
-        RegisterIdRequest request = RegisterIdRequest.requestUpdateId(name, pass, regId,
-
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        if (response.contains("ERROR"))
-                            Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
-                        else
-                            getHostActivity().saveEnterDataFromJson(response);
-
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.fillInStackTrace();
-                    }
-                });
-
-        Volley.newRequestQueue(getHostActivity()).add(request);
+        getHostActivity().registerInBackground();
     }
-
-
-
-
-
 }
