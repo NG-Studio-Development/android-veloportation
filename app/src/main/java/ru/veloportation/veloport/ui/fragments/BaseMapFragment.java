@@ -1,8 +1,6 @@
 package ru.veloportation.veloport.ui.fragments;
 
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +15,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.List;
-
-import ru.veloportation.veloport.ui.activities.BaseActivity;
 import ru.veloportation.veloport.R;
+import ru.veloportation.veloport.ui.activities.BaseActivity;
+import ru.veloportation.veloport.utils.LocationUtils;
 
 //import com.ngstudio.friendstep.R;
 //import com.ngstudio.friendstep.ui.activities.BaseActivity;
@@ -114,7 +111,8 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
     }*/
 
     protected Location getLastKnownLocation() {
-        LocationManager mLocationManager = (LocationManager) getHostActivity().getSystemService(Context.LOCATION_SERVICE);
+        return LocationUtils.getInstance().getLastKnownLocation(getHostActivity());
+        /*LocationManager mLocationManager = (LocationManager) getHostActivity().getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
@@ -128,6 +126,6 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
                 bestLocation = l;
             }
         }
-        return bestLocation;
+        return bestLocation; */
     }
 }

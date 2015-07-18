@@ -2,6 +2,7 @@ package ru.veloportation.veloport.components;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -10,21 +11,23 @@ import com.android.volley.toolbox.Volley;
 
 import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.model.requests.LocationRequest;
+import ru.veloportation.veloport.utils.LocationUtils;
 
 public class SampleSchedulingService extends IntentService {
     public SampleSchedulingService() {
         super("SchedulingService");
     }
-    
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
         Log.d("SERVICE_UPDATE_LOCATION", "Update location");
         String uuid = VeloportApplication.getInstance().getUUID();
-        double latitude = System.currentTimeMillis() / 10000;
-        double longitude = System.currentTimeMillis() / 11000;
+
+        Location location = LocationUtils.getInstance().getLastKnownLocation(this);
+
+        double latitude = location.getLatitude(); //System.currentTimeMillis() / 10000;
+        double longitude = location.getLongitude(); //System.currentTimeMillis() / 11000;
 
         LocationRequest request = LocationRequest.requestUpdateLocation(uuid, latitude, longitude, new Response.Listener<String>() {
             @Override

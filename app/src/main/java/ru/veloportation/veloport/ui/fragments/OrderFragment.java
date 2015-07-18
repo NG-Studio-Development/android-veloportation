@@ -26,6 +26,8 @@ public class OrderFragment extends BaseFragment<MainActivity> {
 
     private static final String RUN_COURIER = "state_courier";
 
+    private TextView tvStatus;
+
     private Order order;
     private String runAs;
 
@@ -68,6 +70,8 @@ public class OrderFragment extends BaseFragment<MainActivity> {
         TextView tvAddressDelivery = (TextView) view.findViewById(R.id.tvAddressDelivery);
         TextView tvMessage = (TextView) view.findViewById(R.id.tvMessage);
 
+        tvStatus = (TextView) view.findViewById(R.id.tvStatus);
+
         tvName.setText(order.getCustomerName());
         tvPhone.setText(order.getPhone());
         tvAddressSender.setText(order.getAddressSender());
@@ -79,7 +83,7 @@ public class OrderFragment extends BaseFragment<MainActivity> {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getHostActivity().replaceFragment(new MapFragment(), true);
+                getHostActivity().replaceFragment(MapFragment.newMapFragment(order), true);
             }
         });
 
@@ -104,23 +108,12 @@ public class OrderFragment extends BaseFragment<MainActivity> {
         buttonGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                order.setState(Order.STATE_TAKE);
+                if ( order.getStatus() == Order.STATE_SEARCH_COURIER ) {
+                    takeOrderAction(buttonGet);
+                } else if ( order.getStatus() == Order.STATE_TAKE ) {
+                    deliveryOrderAction(buttonGet);
+                }
 
-                OrderRequest request = OrderRequest.requestTakeOrder(order, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //buttonGet.setVisibility(View.INVISIBLE);
-                        buttonGet.setText("Доставлено");
-                        alarm.setAlarm(getHostActivity());
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("LIST_ORDER", "ERROR");
-                    }
-                });
-
-                Volley.newRequestQueue(getHostActivity()).add(request);
             }
         });
     }
@@ -146,5 +139,33 @@ public class OrderFragment extends BaseFragment<MainActivity> {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+    }
+
+    private void takeOrderAction(final Button buttonGet) {
+        order.setState(Order.STATE_TAKE);
+
+        OrderRequest request = OrderRequest.requestTakeOrder(order, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //buttonGet.setVisibility(View.INVISIBLE);
+                buttonGet.setText(R.string.order_delivery);
+                alarm.setAlarm(getHostActivity());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("LIST_ORDER", "ERROR");
+            }
+        });
+
+        Volley.newRequestQueue(getHostActivity()).add(request);
+    }
+
+    private void deliveryOrderAction(Button button) {
+        alarm.cancelAlarm(getHostActivity());
+        button.setVisibility(View.INVISIBLE);
+        tvStatus.setVisibility(View.VISIBLE);
+        tvStatus.setText(R.string.order_delivery);
+        tvStatus.setTextColor(getResources().getColor(R.color.green));
     }
 }
