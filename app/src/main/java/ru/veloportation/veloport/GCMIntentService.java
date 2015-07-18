@@ -14,6 +14,7 @@ import android.support.v4.app.TaskStackBuilder;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import ru.veloportation.veloport.ui.activities.MainActivity;
+import ru.veloportation.veloport.ui.fragments.OrderFragment;
 
 public class GCMIntentService extends IntentService {
 
@@ -41,6 +42,11 @@ public class GCMIntentService extends IntentService {
         if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
             if (mess != null)
                 sendNotification("Received: "+notificationType);
+
+            Intent intentBroadcast = new Intent(ConstantsVeloportApp.BROADCAST_ACTION);
+            intentBroadcast.putExtra(OrderFragment.PARAM_ACTION, OrderFragment.ACTION_TAKE_ORDER);
+
+            sendBroadcast(intentBroadcast);
         }
     }
 

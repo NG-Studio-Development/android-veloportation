@@ -12,4 +12,6 @@ public class ConstantsVeloportApp {
 
     public static final String SHARED_PREFERENCE_NAME = "prefs";
 
+    public final static String BROADCAST_ACTION = "ru.veloportation.veloport.broadcast.action";
+
 }

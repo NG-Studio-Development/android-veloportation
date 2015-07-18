@@ -1,6 +1,10 @@
 package ru.veloportation.veloport.ui.fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
+import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.components.SampleAlarmReceiver;
 import ru.veloportation.veloport.model.db.Order;
@@ -26,12 +31,19 @@ public class OrderFragment extends BaseFragment<MainActivity> {
 
     private static final String RUN_COURIER = "state_courier";
 
+    public final static String PARAM_ACTION = "param_action";
+
+    public final static String ACTION_TAKE_ORDER = "action_take_order";
+
+
     private TextView tvStatus;
 
     private Order order;
     private String runAs;
 
-    private SampleAlarmReceiver alarm;// = new SampleAlarmReceiver();
+    private SampleAlarmReceiver alarm;
+
+    private BroadcastReceiver broadcastReceiver;
 
 
 
@@ -54,8 +66,6 @@ public class OrderFragment extends BaseFragment<MainActivity> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         alarm = new SampleAlarmReceiver();
-
-        //if (getArguments() != null) {}
     }
 
     @Override
@@ -78,7 +88,6 @@ public class OrderFragment extends BaseFragment<MainActivity> {
         tvAddressDelivery.setText(order.getAddressDelivery());
         tvMessage.setText(order.getAddress());
 
-
         Button button = (Button) view.findViewById(R.id.buttonMap);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +101,24 @@ public class OrderFragment extends BaseFragment<MainActivity> {
         else if ( runAs.equals(RUN_CUSTOMER) )
             createCustomerView(view);
 
+        IntentFilter intFilt = new IntentFilter(ConstantsVeloportApp.BROADCAST_ACTION);
+        broadcastReceiver = createBroadCast();
+        getHostActivity().registerReceiver(broadcastReceiver, intFilt);
+
         return view;
     }
 
+    BroadcastReceiver createBroadCast() {
+        return new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+
+                if (intent.getStringExtra(PARAM_ACTION).equals(ACTION_TAKE_ORDER)) {
+                    onTakeOrder();
+                }
+
+            }
+        };
+    }
 
     private void createCourierView(View view) {
 
@@ -113,7 +137,6 @@ public class OrderFragment extends BaseFragment<MainActivity> {
                 } else if ( order.getStatus() == Order.STATE_TAKE ) {
                     deliveryOrderAction(buttonGet);
                 }
-
             }
         });
     }
@@ -167,5 +190,22 @@ public class OrderFragment extends BaseFragment<MainActivity> {
         tvStatus.setVisibility(View.VISIBLE);
         tvStatus.setText(R.string.order_delivery);
         tvStatus.setTextColor(getResources().getColor(R.color.green));
+    }
+
+    private void onTakeOrder() {
+        Log.d("UPDATE_INTERFACE", "onTakeOrder");
+        if (isAdded()) {
+            tvStatus.setText(getString(R.string.order_take));
+            tvStatus.setTextColor(getResources().getColor(R.color.green));
+        }
+
+
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getHostActivity().unregisterReceiver(broadcastReceiver);
     }
 }
