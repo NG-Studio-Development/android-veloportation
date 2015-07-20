@@ -41,7 +41,7 @@ public class FetchAddressIntentService extends IntentService {
             float distance = locationAddressSender.distanceTo(locationAddressDelivery);
             int cost = (int) (distance > 3 ? (distance - 3) * 10 + (3*20) : distance*20);
 
-            deliverResultToReceiver(ConstantsVeloportApp.FAILURE_RESULT, String.valueOf(cost));
+            deliverResultToReceiver(ConstantsVeloportApp.SUCCESS_RESULT, String.valueOf(cost));
         }
 
     }

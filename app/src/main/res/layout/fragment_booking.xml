@@ -12,6 +12,7 @@
         android:hint="@string/field_name"
         android:ems="10"
         android:id="@+id/etName"
+        android:visibility="gone"
         android:layout_weight="1" />
 
     <EditText
@@ -21,6 +22,7 @@
         android:hint="@string/field_email"
         android:ems="10"
         android:id="@+id/etEmail"
+        android:visibility="gone"
         android:layout_weight="1" />
 
     <EditText
@@ -30,6 +32,7 @@
         android:hint="@string/field_phone"
         android:ems="10"
         android:id="@+id/etPhone"
+        android:visibility="gone"
         android:layout_weight="1" />
 
     <EditText
@@ -38,23 +41,30 @@
         android:inputType="textPostalAddress"
         android:hint="@string/field_address_sender"
         android:ems="10"
-        android:id="@+id/etAddressSender"
-        android:layout_weight="1" />
+        android:id="@+id/etAddressSender" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPostalAddress"
-        android:hint="@string/field_address_sender"
+        android:hint="@string/field_address_delivery"
         android:ems="10"
-        android:id="@+id/etAddressDelivery"
-        android:layout_weight="1" />
+        android:id="@+id/etAddressDelivery" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/calculate_cost"
+        android:padding="20dp"
+        android:id="@+id/tvCost"
+        android:layout_gravity="center_horizontal" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/etMessage"
         android:hint="@string/field_message"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:layout_weight="8" />
 
@@ -63,6 +73,5 @@
         android:layout_height="wrap_content"
         android:text="@string/button_send"
         android:id="@+id/buttonSend"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1" />
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

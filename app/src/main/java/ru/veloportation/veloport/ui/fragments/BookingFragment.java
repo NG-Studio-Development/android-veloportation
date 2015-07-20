@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,6 +33,7 @@ public class BookingFragment extends BaseFragment  {
     EditText etAddressSender;
     EditText etAddressDelivery;
     EditText etMessage;
+    TextView tvCost;
     Button buttonSend;
 
     LocationResultReceiver locationResultReceiver;
@@ -57,12 +59,22 @@ public class BookingFragment extends BaseFragment  {
         etAddressSender = (EditText) view.findViewById(R.id.etAddressSender);
         etAddressDelivery = (EditText) view.findViewById(R.id.etAddressDelivery);
         etMessage = (EditText) view.findViewById(R.id.etMessage);
-        buttonSend = (Button) view.findViewById(R.id.buttonSend);
-        buttonSend.setOnClickListener(new View.OnClickListener() {
+
+        tvCost = (TextView) view.findViewById(R.id.tvCost);
+        tvCost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startIntentService(etAddressSender.getText().toString(),
                         etAddressDelivery.getText().toString());
+            }
+        });
+
+        buttonSend = (Button) view.findViewById(R.id.buttonSend);
+        buttonSend.setVisibility(View.INVISIBLE);
+        buttonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
                 /* checkout(new Order(getHostActivity())
                         .setCustomerName(etName.getText().toString())
                         .setEmail(etEmail.getText().toString())
@@ -129,7 +141,7 @@ public class BookingFragment extends BaseFragment  {
         getHostActivity().getProgressDialog().setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                getHostActivity().getProgressDialog().setMessage(getString(R.string.calculate_cost));
+                getHostActivity().getProgressDialog().setMessage(getString(R.string.calculating_cost));
                 getHostActivity().startService(intent);
             }
         });
@@ -149,7 +161,10 @@ public class BookingFragment extends BaseFragment  {
 
             String cost = resultData.getString(ConstantsVeloportApp.RESULT_DATA_KEY);
 
-            if ( resultCode == ConstantsVeloportApp.SUCCESS_RESULT ) {}
+            if ( resultCode == ConstantsVeloportApp.SUCCESS_RESULT ) {
+                buttonSend.setVisibility(View.VISIBLE);
+                tvCost.setText(cost+"p.");
+            }
 
             getHostActivity().getProgressDialog().hide();
         }

@@ -47,7 +47,7 @@
     <!-- Default message for progress dialog -->
     <string name="please_wait"> Идет обработка запроса </string>
 
-    <string name="calculate_cost"> Идет подсчет цены </string>
+    <string name="calculating_cost"> Идет подсчет цены </string>
 
     <!-- Hintes for authorization -->
     <string name="login"> Логин </string>
@@ -62,5 +62,8 @@
     <string name="no_address_found">No address found</string>
 
     <string name="address_found">Address found</string>
+
+
+    <string name="calculate_cost">Посчитать цену</string>
 
 </resources>
