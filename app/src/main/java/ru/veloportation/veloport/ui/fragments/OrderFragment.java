@@ -12,20 +12,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.components.SampleAlarmReceiver;
 import ru.veloportation.veloport.model.db.Order;
+import ru.veloportation.veloport.model.requests.LocationRequest;
 import ru.veloportation.veloport.model.requests.OrderRequest;
 import ru.veloportation.veloport.ui.activities.MainActivity;
 
 
-public class OrderFragment extends BaseFragment<MainActivity> {
+public class OrderFragment extends BaseMapFragment<MainActivity> {
+
+    private static final float START_ZOOM = 14.0f;
 
     private static final String RUN_CUSTOMER = "state_customer";
 
@@ -34,6 +43,10 @@ public class OrderFragment extends BaseFragment<MainActivity> {
     //public final static String PARAM_ACTION = "param_action";
 
     public final static String ACTION_TAKE_ORDER = "action_take_order";
+
+    public final static String DATA_LATITUDE = "data_latitude";
+
+    public final static String DATA_LONGITUDE = "data_longitude";
 
 
     private TextView tvStatus;
@@ -74,6 +87,36 @@ public class OrderFragment extends BaseFragment<MainActivity> {
 
         View view = inflater.inflate(R.layout.fragment_order, container, false);
 
+        LocationRequest request =  LocationRequest.requestGetCourierLocation(order, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.contains("Error")) {
+                    Toast.makeText(getHostActivity(), "Probliem with location", Toast.LENGTH_LONG);
+                } else {
+                    try {
+                        JSONArray arr = new JSONArray(response);
+                        JSONObject jsonObject = arr.getJSONObject(0);
+
+                        double latitude = jsonObject.getDouble("latitude");
+                        double longitude = jsonObject.getDouble("longitude");
+
+                        setLocation(new LatLng(latitude, longitude));
+
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        Volley.newRequestQueue(getHostActivity()).add(request);
+
+
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
         TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
         TextView tvAddressSender = (TextView) view.findViewById(R.id.tvAddressSender);
@@ -106,6 +149,24 @@ public class OrderFragment extends BaseFragment<MainActivity> {
         getHostActivity().registerReceiver(broadcastReceiver, intFilt);
 
         return view;
+    }
+
+    private void setLocation(Bundle extras) {
+
+        double latitude = extras.getDouble(DATA_LATITUDE, -1);
+        double longitude = extras.getDouble(DATA_LONGITUDE, -1);
+
+        Log.d("SET_LOCATION", "latitude = "+latitude+" longitude = "+longitude);
+
+        if (latitude != -1 && longitude != -1)
+            setLocation( new LatLng(latitude, longitude) );
+
+    }
+
+    private void setLocation(LatLng latLng) {
+        changingCameraPosition(latLng);
+        updateLocations(latLng, null, null);
+        zoomIn(getOptimalCameraPosition(), START_ZOOM);
     }
 
     BroadcastReceiver createBroadCast() {

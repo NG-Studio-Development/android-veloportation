@@ -63,7 +63,12 @@
 
     <string name="address_found">Address found</string>
 
-
     <string name="calculate_cost">Посчитать цену</string>
+
+    <string name="cost">Цена</string>
+
+    <string name="address_sender">Адресс отправления</string>
+
+    <string name="address_delivery">Адресс доставки</string>
 
 </resources>

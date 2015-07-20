@@ -75,13 +75,14 @@ public class BookingFragment extends BaseFragment  {
             @Override
             public void onClick(View v) {
 
-                /* checkout(new Order(getHostActivity())
+                 checkout( new Order(getHostActivity())
                         .setCustomerName(etName.getText().toString())
                         .setEmail(etEmail.getText().toString())
                         .setPhone(etPhone.getText().toString())
                         .setAddressDelivery(etAddressDelivery.getText().toString())
                         .setAddressSender(etAddressSender.getText().toString())
-                        .setMessage(etMessage.getText().toString())); */
+                        .setMessage(etMessage.getText().toString())
+                        .setCost(tvCost.getText().toString()) );
             }
         });
 
@@ -90,25 +91,6 @@ public class BookingFragment extends BaseFragment  {
         //calculateCost();
         return view;
     }
-
-    /* private void calculateCost() {
-
-        Geocoder geocoder = new Geocoder(getHostActivity(), Locale.getDefault());
-        List<Address> list = null;
-        try {
-            list = geocoder.getFromLocationName(getString(R.string.izvilistaya),99);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Log.d("CALCULATE_COST", "Error");
-        }
-
-
-        if (list != null) {
-            Address address = list.get(0);
-            Log.d("CALCULATE_COST", "Latitude = "+address.getLatitude()+" Longitude = "+address.getLongitude());
-        }
-    } */
 
     private void checkout(Order order) {
         final RequestQueue queue = Volley.newRequestQueue(getHostActivity());
@@ -128,9 +110,6 @@ public class BookingFragment extends BaseFragment  {
 
         queue.add(orderCheckoutRequest);
     }
-
-
-
 
     protected void startIntentService(String addressSender, String addressDelivery) {
         final Intent intent = new Intent(getHostActivity(), FetchAddressIntentService.class);

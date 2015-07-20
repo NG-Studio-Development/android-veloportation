@@ -11,6 +11,7 @@ public class Order {
     public static int STATE_DELIVERY = 2;
 
     private String id;
+    private String cost;
     private String customerName;
     private String email;
     private String phone;
@@ -30,6 +31,11 @@ public class Order {
 
     public Order setCustomerName(String customerName) {
         this.customerName = customerName;
+        return this;
+    }
+
+    public Order setCost(String cost) {
+        this.cost = cost;
         return this;
     }
 
@@ -65,6 +71,7 @@ public class Order {
     }
 
     public String getCustomerName() { return customerName; }
+    public String getCost() { return cost; }
     public String getEmail() { return email; }
     public String getPhone() { return phone; }
     public String getAddressSender() { return addressSender; }
