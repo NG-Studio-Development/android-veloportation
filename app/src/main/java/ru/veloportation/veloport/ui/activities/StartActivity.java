@@ -29,7 +29,7 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-
+        getSupportActionBar().hide();
         addFragment(new EnterFragment(), false);
     }
 
@@ -69,7 +69,7 @@ public class StartActivity extends BaseActivity {
 
                     gcm.unregister();
                     regId = gcm.register(SENDER_ID);
-                    //storeRegistrationId(getHostActivity(), regId);
+
                 } catch (IOException ex) {
                     return "Error :" + ex.getMessage();
                 }
@@ -77,23 +77,21 @@ public class StartActivity extends BaseActivity {
                 TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
                 String uuid = tManager.getDeviceId();
 
-                //authClientAction(uuid);
                 return regId;
             }
 
             @Override
             protected void onPostExecute(String result) {
 
-                if (listener != null)
+                if ( listener != null )
                     listener.onRegister(result);
 
-                if (result.contains("Error")) {
+                if ( result.contains("Error") ) {
                     Log.d("REGISTER API", result);
                     return;
                 }
-
-
             }
+
         }.execute(null, null, null);
     }
 

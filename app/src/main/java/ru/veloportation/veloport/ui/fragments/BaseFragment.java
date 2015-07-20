@@ -14,7 +14,9 @@ import ru.veloportation.veloport.BuildConfig;
 
 public abstract class BaseFragment<ActivityClass extends BaseActivity> extends Fragment {
 
-	public static int sd;
+    public final static String PARAM_ACTION = "param_action";
+
+    public static int sd;
     protected BaseFragment() {
         /* Nothing to do */
 	}

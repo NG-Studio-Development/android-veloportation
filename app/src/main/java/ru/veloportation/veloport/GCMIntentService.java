@@ -14,6 +14,8 @@ import android.support.v4.app.TaskStackBuilder;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import ru.veloportation.veloport.ui.activities.MainActivity;
+import ru.veloportation.veloport.ui.fragments.BaseFragment;
+import ru.veloportation.veloport.ui.fragments.MapFragment;
 import ru.veloportation.veloport.ui.fragments.OrderFragment;
 
 public class GCMIntentService extends IntentService {
@@ -43,12 +45,30 @@ public class GCMIntentService extends IntentService {
             if (mess != null)
                 sendNotification("Received: "+notificationType);
 
-            Intent intentBroadcast = new Intent(ConstantsVeloportApp.BROADCAST_ACTION);
-            intentBroadcast.putExtra(OrderFragment.PARAM_ACTION, OrderFragment.ACTION_TAKE_ORDER);
+            Intent intentBroadcast = createIntentBroadcast(notificationType, extras);
 
             sendBroadcast(intentBroadcast);
         }
     }
+
+    private static String TYPE_MAKE_ORDER = "makeOrder";
+    private static String TYPE_UPDATE_LOCATION = "updateLocation";
+
+    Intent createIntentBroadcast(String notificationType, Bundle extras) {
+
+        Intent intentBroadcast = new Intent(ConstantsVeloportApp.BROADCAST_ACTION);
+
+        if (notificationType.equals(TYPE_MAKE_ORDER)) {
+            intentBroadcast.putExtra(BaseFragment.PARAM_ACTION, OrderFragment.ACTION_TAKE_ORDER);
+
+        } else if (notificationType.equals(TYPE_UPDATE_LOCATION)) {
+            intentBroadcast.putExtra(BaseFragment.PARAM_ACTION, MapFragment.ACTION_NEW_LOCATION);
+            intentBroadcast.putExtra(MapFragment.KEY_DATA,extras);
+        }
+
+        return intentBroadcast;
+    }
+
 
     /* private void saveIncomingMessage(Intent intent) {
         List<Message> list = new ArrayList<Message>();

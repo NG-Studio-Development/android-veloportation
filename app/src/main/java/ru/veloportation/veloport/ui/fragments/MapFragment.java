@@ -1,6 +1,10 @@
 package ru.veloportation.veloport.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +23,21 @@ import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.LocationRequest;
 
-public class MapFragment extends BaseMapFragment{
+public class MapFragment extends BaseMapFragment {
 
     private static final float START_ZOOM = 14.0f;
 
+    public final static String ACTION_NEW_LOCATION = "action_new_location";
+
+    public final static String KEY_DATA = "key_data";
+
+    public final static String DATA_LATITUDE = "data_latitude";
+
+    public final static String DATA_LONGITUDE = "data_longitude";
+
     private Order order;
+
+    private BroadcastReceiver broadcastReceiver;
 
     public MapFragment() { }
 
@@ -37,7 +51,6 @@ public class MapFragment extends BaseMapFragment{
     public int getLayoutResID() {
         return R.layout.fragment_map;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,18 +69,10 @@ public class MapFragment extends BaseMapFragment{
                         double latitude = jsonObject.getDouble("latitude");
                         double longitude = jsonObject.getDouble("longitude");
 
-                        LatLng latLng = new LatLng(latitude, longitude);
-                        changingCameraPosition(latLng);
-
-                        updateLocations(latLng, null, null);
-                        zoomIn(getOptimalCameraPosition(), START_ZOOM);
-
-
+                        setLocation(new LatLng(latitude, longitude));
 
                     } catch (JSONException ex) {
                         ex.printStackTrace();}
-
-
                 }
             }
         }, new Response.ErrorListener() {
@@ -78,7 +83,52 @@ public class MapFragment extends BaseMapFragment{
         });
 
         Volley.newRequestQueue(getHostActivity()).add(request);
+
+        /** In future realize update location in real time */
+        //IntentFilter intFilt = new IntentFilter(ConstantsVeloportApp.BROADCAST_ACTION);
+        //broadcastReceiver = createBroadCast();
+        //getHostActivity().registerReceiver(broadcastReceiver, intFilt);
+
         return super.onCreateView(inflater,container,savedInstanceState);
+    }
+
+    private void setLocation(LatLng latLng) {
+        changingCameraPosition(latLng);
+        updateLocations(latLng, null, null);
+        zoomIn(getOptimalCameraPosition(), START_ZOOM);
+    }
+
+
+
+    BroadcastReceiver createBroadCast() {
+        return new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+
+                if (intent.getStringExtra(PARAM_ACTION).equals(ACTION_NEW_LOCATION)) {
+                    setLocation(intent.getBundleExtra(KEY_DATA));
+                }
+
+            }
+        };
+    }
+
+
+    private void setLocation(Bundle extras) {
+
+        double latitude = extras.getDouble(DATA_LATITUDE, -1);
+        double longitude = extras.getDouble(DATA_LONGITUDE, -1);
+
+        Log.d("SET_LOCATION", "latitude = "+latitude+" longitude = "+longitude);
+
+        if (latitude != -1 && longitude != -1)
+            setLocation( new LatLng(latitude, longitude) );
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getHostActivity().unregisterReceiver(broadcastReceiver);
     }
 
 }

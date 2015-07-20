@@ -12,7 +12,7 @@ import ru.veloportation.veloport.ConstantsVeloportApp;
 public class VeloportApplication extends Application {
 
 
-    public static boolean orderFlagDEBUG = false;
+    //public static boolean orderFlagDEBUG = false;
 
     private volatile static VeloportApplication instance;
     private SharedPreferences applicationPreferences;

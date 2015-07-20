@@ -31,7 +31,7 @@ public class OrderFragment extends BaseFragment<MainActivity> {
 
     private static final String RUN_COURIER = "state_courier";
 
-    public final static String PARAM_ACTION = "param_action";
+    //public final static String PARAM_ACTION = "param_action";
 
     public final static String ACTION_TAKE_ORDER = "action_take_order";
 

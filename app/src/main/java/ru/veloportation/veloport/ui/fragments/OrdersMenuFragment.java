@@ -18,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
-import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.OrderRequest;
@@ -96,19 +95,6 @@ public class OrdersMenuFragment extends BaseFragment {
                 getHostActivity().replaceFragment(new BookingFragment(), true);
             }
         });
-
-
-
-        if (VeloportApplication.orderFlagDEBUG) {
-            //ibCreateOrder.setVisibility(View.GONE);
-            //button.setVisibility(View.VISIBLE);
-            //tvTimer.setVisibility(View.VISIBLE);
-        } else {
-            //ibCreateOrder.setVisibility(View.VISIBLE);
-            //button.setVisibility(View.GONE);
-            //tvTimer.setVisibility(View.GONE);
-        }
-
 
         return view;
     }

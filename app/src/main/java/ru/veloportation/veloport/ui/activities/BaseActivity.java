@@ -22,7 +22,6 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     }
 
-
     public ProgressDialog getProgressDialog() {
 
         if( progressDialog == null ) {
@@ -35,18 +34,11 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     public void replaceFragment(Fragment fragment, boolean saveInBackStack) {
         updateFragment(fragment,SWITCH_FRAGMENT_REPLACE,saveInBackStack);
-        //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //transaction.replace(getContainer(), fragment);
-        //transaction.commit();
     }
 
     public void addFragment(Fragment fragment, boolean saveInBackStack) {
         updateFragment(fragment,SWITCH_FRAGMENT_ADD, saveInBackStack);
-        //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //transaction.add(getContainer(), fragment);
-        //transaction.commit();
     }
-
 
     private void updateFragment(Fragment fragment, String keySwitchFragment, boolean saveInBackStack) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
