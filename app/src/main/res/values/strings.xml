@@ -81,4 +81,6 @@
 
     <string name="new_orders">Новый заказ</string>
 
+    <string name="check_of_login_and_pass">Проверка логина и пароля</string>
+
 </resources>

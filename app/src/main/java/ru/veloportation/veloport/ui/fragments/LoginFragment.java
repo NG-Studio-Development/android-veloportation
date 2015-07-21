@@ -6,8 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import ru.veloportation.veloport.R;
+import ru.veloportation.veloport.ui.activities.MainActivity;
 import ru.veloportation.veloport.ui.activities.StartActivity;
 
 public class LoginFragment extends BaseFragment<StartActivity> {
@@ -48,9 +53,31 @@ public class LoginFragment extends BaseFragment<StartActivity> {
         getHostActivity().setOnRegisterIdListener(new StartActivity.OnRegisterIdListener() {
             @Override
             public void onRegister(String regId) {
-                getHostActivity().authCourierAction(login, pass, regId);
+                getHostActivity().authCourierAction(login, pass, regId, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                                getHostActivity().getProgressDialog().dismiss();
+
+                                if (response.contains("Error")) {
+                                    Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    getHostActivity().saveEnterDataFromJson(response);
+                                    MainActivity.startCourierActivity(getHostActivity());
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.fillInStackTrace();
+                                getHostActivity().getProgressDialog().dismiss();
+                            }
+                        });
             }
         });
+
+        getHostActivity().getProgressDialog().setMessage(getString(R.string.check_of_login_and_pass));
+        getHostActivity().getProgressDialog().show();
 
         getHostActivity().registerInBackground();
     }

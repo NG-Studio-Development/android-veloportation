@@ -7,10 +7,8 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -104,29 +102,10 @@ public class StartActivity extends BaseActivity {
         this.listener = listener;
     }
 
-    public void authCourierAction(String login, String pass, String regId) {
+    public void authCourierAction( String login, String pass, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
 
-        RegisterIdRequest request = RegisterIdRequest.requestUpdateId(login, pass, regId,
 
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        if (response.contains("Error")) {
-                            Toast.makeText(StartActivity.this, R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
-                        } else {
-                            saveEnterDataFromJson(response);
-                            MainActivity.startCourierActivity(StartActivity.this);
-                        }
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.fillInStackTrace();
-                    }
-                });
+        RegisterIdRequest request = RegisterIdRequest.requestUpdateId(login, pass, regId, VeloportApplication.getInstance().getUUID(), listener, errorListener);
 
         Volley.newRequestQueue(this).add(request);
     }

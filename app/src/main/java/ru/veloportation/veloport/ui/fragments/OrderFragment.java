@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -133,13 +132,9 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         TextView tvMessage = (TextView) view.findViewById(R.id.tvMessage);
 
         tvStatus = (TextView) view.findViewById(R.id.tvStatus);
-
-        //tvName.setText(order.getCustomerName());
-        //tvPhone.setText(order.getPhone());
         tvAddressSender.setText(order.getAddressSender());
         tvAddressDelivery.setText(order.getAddressDelivery());
         tvCost.setText(order.getCost());
-        //tvMessage.setText(order.getAddress());
 
         Button button = (Button) view.findViewById(R.id.buttonMap);
         button.setOnClickListener(new View.OnClickListener() {
@@ -157,8 +152,6 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         IntentFilter intFilt = new IntentFilter(ConstantsVeloportApp.BROADCAST_ACTION);
         broadcastReceiver = createBroadCast();
         getHostActivity().registerReceiver(broadcastReceiver, intFilt);
-
-        //return super.onCreateView(inflater, container, savedInstanceState);//view;
         return view;
     }
 
@@ -282,7 +275,7 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     }
 
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -292,5 +285,5 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    } */
 }
