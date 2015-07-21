@@ -22,6 +22,7 @@ public class OrderRequest extends StringRequest {
         String jsonOrderString = new Gson().toJson(order);
         String url = ConstantsVeloportApp.URL_SERVER+"/classes/"+className+"/"+jsonOrderString;
 
+
         Log.d("ORDER_REQUEST", "Request = " + url);
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
     }
@@ -38,9 +39,10 @@ public class OrderRequest extends StringRequest {
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
     }
 
-    public static OrderRequest requestTakeOrder(Order order, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public static OrderRequest requestTakeOrder(Order order, String uuid, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         String jsonOrderString = new Gson().toJson(order);
-        String url = ConstantsVeloportApp.URL_SERVER+"/classes/2/"+className+"/"+order.getId()+"/"+jsonOrderString;
+        //String url = ConstantsVeloportApp.URL_SERVER+"/classes/2/"+className+"/"+order.getId()+"/"+jsonOrderString;
+        String url = ConstantsVeloportApp.URL_SERVER+"/put/takeorder/"+order.getId()+"/"+uuid+"/"+jsonOrderString;
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
     }
 }

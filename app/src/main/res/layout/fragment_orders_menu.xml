@@ -33,20 +33,39 @@
         android:layout_centerHorizontal="true" /> -->
 
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lvOrders"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tvAboutUs" />
-
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ibCreateOrder"
 
-        android:src="@drawable/ic_launcher"
+        android:background="@drawable/bg_round_button"
+        android:src="@drawable/drawable_ic_add"
+
+        android:layout_margin="@dimen/margin_button_plus"
+
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/not_have_orders"
+        android:visibility="gone"
+        android:id="@+id/tvEmptyList"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvAboutUs">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lvOrders"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
 </RelativeLayout>

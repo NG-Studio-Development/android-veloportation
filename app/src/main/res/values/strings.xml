@@ -71,4 +71,14 @@
 
     <string name="address_delivery">Адресс доставки</string>
 
+    <string name="enter">Войти</string>
+
+    <string name="free_booking">Свободные заказы</string>
+
+    <string name="your_order">Ваши заказы</string>
+
+    <string name="not_have_orders">Вы не сделали заказ</string>
+
+    <string name="new_orders">Новый заказ</string>
+
 </resources>

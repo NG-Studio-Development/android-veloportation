@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ru/veloportation/veloport/model/requests/OrderRequest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_round_button.xml" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/drawable_ic_add.xml" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_add.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_btn_round.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_btn_round_pressed.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_add.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_btn_round.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_btn_round_pressed.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_add.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_btn_round.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_btn_round_pressed.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_add.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_btn_round.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_btn_round_pressed.png" charset="windows-1251" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

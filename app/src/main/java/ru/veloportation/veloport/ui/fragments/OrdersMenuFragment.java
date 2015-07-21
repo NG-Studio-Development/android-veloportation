@@ -3,6 +3,7 @@ package ru.veloportation.veloport.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,17 +46,13 @@ public class OrdersMenuFragment extends BaseFragment {
 
 
         View view = inflater.inflate(R.layout.fragment_orders_menu, container, false);
+        final TextView tvEmptyList = (TextView) view.findViewById(R.id.tvEmptyList);
+        setHasOptionsMenu(true);
 
-        /*Button button = (Button) view.findViewById(R.id.buttonMap);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getHostActivity().replaceFragment(new MapFragment(), true);
-            }
-        });*/
+        //getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getHostActivity().getSupportActionBar().setTitle(getString(R.string.your_order));
 
         final ListView lvOrder = (ListView) view.findViewById(R.id.lvOrders);
-        // = new ArrayList<>();// =
 
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -69,6 +66,9 @@ public class OrdersMenuFragment extends BaseFragment {
             @Override
             public void onResponse(String response) {
                 listOrder = new Gson().fromJson(response, new TypeToken< List<Order> >() {}.getType());
+                if ( listOrder.isEmpty() )
+                    tvEmptyList.setVisibility(View.VISIBLE);
+
                 lvOrder.setAdapter(OrderAdapter.createOrderAdapter(getHostActivity(), listOrder));
             }
         }, new Response.ErrorListener() {
@@ -100,7 +100,17 @@ public class OrdersMenuFragment extends BaseFragment {
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getHostActivity().onBackPressed();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
 

@@ -53,6 +53,11 @@ public class BookingFragment extends BaseFragment  {
                              final Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_booking, container, false);
+
+        setHasOptionsMenu(true);
+        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getHostActivity().getSupportActionBar().setTitle(getString(R.string.new_order));
+
         etName = (EditText) view.findViewById(R.id.etName);
         etEmail = (EditText) view.findViewById(R.id.etEmail);
         etPhone = (EditText) view.findViewById(R.id.etPhone);

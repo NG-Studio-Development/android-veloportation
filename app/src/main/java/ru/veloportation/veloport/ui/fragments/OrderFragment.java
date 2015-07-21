@@ -1,6 +1,5 @@
 package ru.veloportation.veloport.ui.fragments;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +7,11 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.components.SampleAlarmReceiver;
@@ -40,8 +42,6 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
 
     private static final String RUN_COURIER = "state_courier";
 
-    //public final static String PARAM_ACTION = "param_action";
-
     public final static String ACTION_TAKE_ORDER = "action_take_order";
 
     public final static String DATA_LATITUDE = "data_latitude";
@@ -57,6 +57,8 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     private SampleAlarmReceiver alarm;
 
     private BroadcastReceiver broadcastReceiver;
+
+    private LocationRequest requestLocation;
 
 
 
@@ -85,9 +87,15 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        //super.onCreateView(inflater,container,savedInstanceState);//inflater.inflate(R.layout.fragment_order, container, false);
 
-        LocationRequest request =  LocationRequest.requestGetCourierLocation(order, new Response.Listener<String>() {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        setHasOptionsMenu(true);
+        getHostActivity().getSupportActionBar().setTitle(order.getAddressDelivery());
+        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        requestLocation =  LocationRequest.requestGetCourierLocation(order, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.contains("Error")) {
@@ -110,26 +118,28 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getHostActivity(),"LOCATION_ERROR", Toast.LENGTH_LONG);
             }
         });
 
-        Volley.newRequestQueue(getHostActivity()).add(request);
+        Volley.newRequestQueue(getHostActivity()).add(requestLocation);
 
 
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
         TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
+        TextView tvCost = (TextView) view.findViewById(R.id.tvCost);
         TextView tvAddressSender = (TextView) view.findViewById(R.id.tvAddressSender);
         TextView tvAddressDelivery = (TextView) view.findViewById(R.id.tvAddressDelivery);
         TextView tvMessage = (TextView) view.findViewById(R.id.tvMessage);
 
         tvStatus = (TextView) view.findViewById(R.id.tvStatus);
 
-        tvName.setText(order.getCustomerName());
-        tvPhone.setText(order.getPhone());
+        //tvName.setText(order.getCustomerName());
+        //tvPhone.setText(order.getPhone());
         tvAddressSender.setText(order.getAddressSender());
         tvAddressDelivery.setText(order.getAddressDelivery());
-        tvMessage.setText(order.getAddress());
+        tvCost.setText(order.getCost());
+        //tvMessage.setText(order.getAddress());
 
         Button button = (Button) view.findViewById(R.id.buttonMap);
         button.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +158,7 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         broadcastReceiver = createBroadCast();
         getHostActivity().registerReceiver(broadcastReceiver, intFilt);
 
+        //return super.onCreateView(inflater, container, savedInstanceState);//view;
         return view;
     }
 
@@ -182,6 +193,9 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     }
 
     private void createCourierView(View view) {
+
+        RelativeLayout rlMapContainer = (RelativeLayout) view.findViewById(R.id.rlMapContainer);
+        rlMapContainer.setVisibility(View.INVISIBLE);
 
         final Button buttonGet = (Button) view.findViewById(R.id.buttonGet);
 
@@ -219,16 +233,10 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         return R.layout.fragment_order;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-    }
-
     private void takeOrderAction(final Button buttonGet) {
         order.setState(Order.STATE_TAKE);
 
-        OrderRequest request = OrderRequest.requestTakeOrder(order, new Response.Listener<String>() {
+        OrderRequest request = OrderRequest.requestTakeOrder(order, VeloportApplication.getInstance().getUUID(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //buttonGet.setVisibility(View.INVISIBLE);
@@ -255,10 +263,13 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
 
     private void onTakeOrder() {
         Log.d("UPDATE_INTERFACE", "onTakeOrder");
-        if (isAdded()) {
-            tvStatus.setText(getString(R.string.order_take));
-            tvStatus.setTextColor(getResources().getColor(R.color.green));
-        }
+
+        tvStatus.setText(getString(R.string.order_take));
+        tvStatus.setTextColor(getResources().getColor(R.color.green));
+
+        if ( requestLocation != null )
+            Volley.newRequestQueue(getHostActivity()).add(requestLocation);
+
 
 
     }
@@ -268,5 +279,18 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     public void onDestroyView() {
         super.onDestroyView();
         getHostActivity().unregisterReceiver(broadcastReceiver);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getHostActivity().onBackPressed();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

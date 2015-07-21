@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -60,5 +61,17 @@ public abstract class BaseFragment<ActivityClass extends BaseActivity> extends F
 
     /*public ObjectPool<Fragment> getFragmentPool() {
     }*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getHostActivity().onBackPressed();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 }

@@ -37,7 +37,8 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        //fragment_map
+        View view = inflater.inflate(R.layout.fragment_order, container, false);
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         MapsInitializer.initialize(getActivity());
@@ -66,6 +67,8 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
     public void onMapLoaded() { /* Options */ }
 
     public GoogleMap getMap() { return map; }
+
+    public MapView getMapView() { return mapView; }
 
     protected Marker updateLocations(LatLng latLng, String title, String text) {
         minLat = countMarker>0?Math.min(latLng.latitude,minLat) : latLng.latitude;

@@ -40,6 +40,9 @@ public class ListOrderFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_list_order, container, false);
+
+        getHostActivity().getSupportActionBar().setTitle(getString(R.string.free_booking));
+
         final ListView lvOrder = (ListView) view.findViewById(R.id.lvOrders);
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

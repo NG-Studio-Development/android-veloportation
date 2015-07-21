@@ -1,8 +1,45 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle"   tools:ignore="NewApi">@style/ActionBarGeneric</item>
+        <item name="actionBarStyle">@style/ActionBarGeneric</item>
+
     </style>
+
+
+    <style name="ActionBarGeneric" parent="Widget.AppCompat.Light.ActionBar">
+
+        <item name="android:textColor"  tools:ignore="NewApi">@color/white</item>
+
+        <item name="android:background"  tools:ignore="NewApi">@color/main_color</item>
+        <item name="background">@color/main_color</item>
+
+        <item name="android:textColorPrimary" tools:ignore="NewApi">#fff</item>
+        <item name="android:textColorPrimaryInverse" tools:ignore="NewApi">#fff</item>
+        <item name="android:textColorSecondary" tools:ignore="NewApi">#fff</item>
+        <item name="actionMenuTextColor" tools:ignore="NewApi">#fff</item>
+
+    </style>
+
+    <style name="EditTextAuthorization" parent="android:Widget.EditText">
+        <!-- <item name="android:textColor">@android:color/black</item> -->
+        <item name="android:background"> @drawable/border </item>
+        <item name="android:minWidth"> 150dp </item>
+        <item name="android:paddingLeft"> 10dp </item>
+        <item name="android:paddingTop"> 5dp </item>
+        <item name="android:paddingBottom"> 5dp </item>
+
+        <!-- <item name="android:textColorHint">@color/gray_light</item>
+        <item name="android:textSize">@dimen/text_size_dialog</item> -->
+        <!-- <item name="android:textStyle">bold</item> -->
+    </style>
+
+    <style name="TextViewEmptyList" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/text_size_default_large</item>
+
+    </style>
+
 
 </resources>
