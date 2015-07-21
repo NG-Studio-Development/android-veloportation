@@ -36,9 +36,10 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        //super.onCreateView(inflater,container,savedInstanceState);
         //fragment_map
-        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        View view = super.onCreateView(inflater,container,savedInstanceState);//inflater.inflate(R.layout.fragment_order, container, false);
+        //View view = inflater.inflate(R.layout.fragment_order, container, false);
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         MapsInitializer.initialize(getActivity());
