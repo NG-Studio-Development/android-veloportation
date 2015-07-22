@@ -58,6 +58,7 @@ public class OrdersMenuFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 getHostActivity().replaceFragment( OrderFragment.customerFragment(listOrder.get(position)), true );
+                //getHostActivity().replaceFragment( new MapFragment(), true );
             }
         });
 

@@ -86,7 +86,7 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //super.onCreateView(inflater,container,savedInstanceState);//inflater.inflate(R.layout.fragment_order, container, false);
+        super.onCreateView(inflater,container,savedInstanceState); //inflater.inflate(R.layout.fragment_order, container, false);
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
@@ -132,9 +132,13 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         TextView tvMessage = (TextView) view.findViewById(R.id.tvMessage);
 
         tvStatus = (TextView) view.findViewById(R.id.tvStatus);
+
+        //tvName.setText(order.getCustomerName());
+        //tvPhone.setText(order.getPhone());
         tvAddressSender.setText(order.getAddressSender());
         tvAddressDelivery.setText(order.getAddressDelivery());
         tvCost.setText(order.getCost());
+        //tvMessage.setText(order.getAddress());
 
         Button button = (Button) view.findViewById(R.id.buttonMap);
         button.setOnClickListener(new View.OnClickListener() {
@@ -152,8 +156,12 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         IntentFilter intFilt = new IntentFilter(ConstantsVeloportApp.BROADCAST_ACTION);
         broadcastReceiver = createBroadCast();
         getHostActivity().registerReceiver(broadcastReceiver, intFilt);
+
+        //return super.onCreateView(inflater, container, savedInstanceState);//view;
         return view;
     }
+
+
 
     private void setLocation(Bundle extras) {
 

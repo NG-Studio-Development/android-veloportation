@@ -1,6 +1,8 @@
 package ru.veloportation.veloport.ui.fragments;
 
+import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +17,10 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import ru.veloportation.veloport.R;
+import java.util.List;
+
 import ru.veloportation.veloport.ui.activities.BaseActivity;
-import ru.veloportation.veloport.utils.LocationUtils;
+import ru.veloportation.veloport.R;
 
 //import com.ngstudio.friendstep.R;
 //import com.ngstudio.friendstep.ui.activities.BaseActivity;
@@ -36,10 +39,8 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //super.onCreateView(inflater,container,savedInstanceState);
-        //fragment_map
-        View view = super.onCreateView(inflater,container,savedInstanceState);//inflater.inflate(R.layout.fragment_order, container, false);
-        //View view = inflater.inflate(R.layout.fragment_order, container, false);
+        super.onCreateView(inflater,container,savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_order, container, false);
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         MapsInitializer.initialize(getActivity());
@@ -68,8 +69,6 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
     public void onMapLoaded() { /* Options */ }
 
     public GoogleMap getMap() { return map; }
-
-    public MapView getMapView() { return mapView; }
 
     protected Marker updateLocations(LatLng latLng, String title, String text) {
         minLat = countMarker>0?Math.min(latLng.latitude,minLat) : latLng.latitude;
@@ -115,8 +114,7 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
     }*/
 
     protected Location getLastKnownLocation() {
-        return LocationUtils.getInstance().getLastKnownLocation(getHostActivity());
-        /*LocationManager mLocationManager = (LocationManager) getHostActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager mLocationManager = (LocationManager) getHostActivity().getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
@@ -130,6 +128,6 @@ public abstract class BaseMapFragment<ActivityClass extends BaseActivity> extend
                 bestLocation = l;
             }
         }
-        return bestLocation; */
+        return bestLocation;
     }
 }
