@@ -64,7 +64,7 @@ public class SampleAlarmReceiver extends WakefulBroadcastReceiver {
 
         // 86400000
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(), 60000, alarmIntent);
+                calendar.getTimeInMillis(), 15000, alarmIntent);
 
         /*alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);*/

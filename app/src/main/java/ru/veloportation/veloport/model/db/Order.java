@@ -21,6 +21,7 @@ public class Order {
     private int statusOrder;
     private String customerUUID;
 
+    private long timeInMills;
 
     public Order(Context context) {
         //TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -66,9 +67,15 @@ public class Order {
 
     public Order setState(int state) {
         this.statusOrder = state;
-        this.message = message;
         return this;
     }
+
+    public Order setTimeInMills( long timeInMills ) {
+        this.timeInMills = timeInMills;
+        return this;
+    }
+
+    public long getTimeInMills() { return timeInMills; }
 
     public String getCustomerName() { return customerName; }
     public String getCost() { return cost; }

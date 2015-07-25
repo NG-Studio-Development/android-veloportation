@@ -7,10 +7,15 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -27,6 +32,8 @@ public class StartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        checkPlayServices();
+
         getSupportActionBar().hide();
         addFragment(new EnterFragment(), false);
     }
@@ -49,7 +56,6 @@ public class StartActivity extends BaseActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -104,15 +110,19 @@ public class StartActivity extends BaseActivity {
 
     public void authCourierAction( String login, String pass, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
 
-
-        RegisterIdRequest request = RegisterIdRequest.requestUpdateId(login, pass, regId, VeloportApplication.getInstance().getUUID(), listener, errorListener);
+        RegisterIdRequest request = RegisterIdRequest.requestUpdateId( login, pass, regId, VeloportApplication.getInstance().getUUID(), listener, errorListener);
 
         Volley.newRequestQueue(this).add(request);
     }
 
-    public void authClientAction(String uuid, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener ) {
+    public void authClientAction(String login, String pass, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener ) {
+        RegisterIdRequest request = RegisterIdRequest.requestLoginCustomer(login, pass, VeloportApplication.getInstance().getUUID(), regId, listener, errorListener);
+        Volley.newRequestQueue(StartActivity.this).add(request);
+    }
 
-        RegisterIdRequest request = RegisterIdRequest.requestRegisterUUID(uuid, regId,listener, errorListener);
+    public void registerClientAction(String uuid, JSONObject jsonObject, Response.Listener<String> listener, Response.ErrorListener errorListener ) {
+
+        RegisterIdRequest request = RegisterIdRequest.requestRegisterUser(uuid, jsonObject, listener, errorListener);
         Volley.newRequestQueue(StartActivity.this).add(request);
     }
 
@@ -130,6 +140,28 @@ public class StartActivity extends BaseActivity {
     }
 
 
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (!isGooglePlayServicesAvailable()) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Toast.makeText(this, "This device is not supported google play services.", Toast.LENGTH_LONG).show();
+                finish();
+            }
+            return false;
+        }
+        Toast.makeText(this, "ALL RIGHT.", Toast.LENGTH_LONG).show();
+        return true;
+    }
+
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    public boolean isGooglePlayServicesAvailable() {
+        return GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS;
+    }
 
 
 

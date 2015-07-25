@@ -38,6 +38,10 @@
 
     <style name="TextViewEmptyList" parent="android:Widget.TextView">
         <item name="android:textSize">@dimen/text_size_default_large</item>
+    </style>
+
+    <style name="TextViewTitle" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/text_size_default_large</item>
 
     </style>
 

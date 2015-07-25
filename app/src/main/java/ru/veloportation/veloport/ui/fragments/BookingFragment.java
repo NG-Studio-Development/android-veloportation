@@ -1,9 +1,9 @@
 package ru.veloportation.veloport.ui.fragments;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,15 +21,18 @@ import com.android.volley.toolbox.Volley;
 
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
-import ru.veloportation.veloport.components.FetchAddressIntentService;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.OrderRequest;
+import ru.veloportation.veloport.utils.CommonUtils;
+import ru.veloportation.veloport.utils.LocationUtils;
 
 
 public class BookingFragment extends BaseFragment  {
 
-    EditText etName;
-    EditText etEmail;
+    private int LOCATION_SUCCESS = 0;
+    private int LOCATION_NOT_AVIALABLE = 1;
+    private int LOCATION_ERROR = 2;
+
     EditText etPhone;
     EditText etAddressSender;
     EditText etAddressDelivery;
@@ -36,17 +40,34 @@ public class BookingFragment extends BaseFragment  {
     TextView tvCost;
     Button buttonSend;
 
-    LocationResultReceiver locationResultReceiver;
+    Handler handler;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                getHostActivity().getProgressDialog().dismiss();
+                String result = msg.getData().getString(ConstantsVeloportApp.RESULT_DATA_KEY);
+
+                if (msg.what == LOCATION_SUCCESS) {
+                    buttonSend.setVisibility(View.VISIBLE);
+                    tvCost.setText(result + "p.");
+                } else {
+                    tvCost.setText(getHostActivity().getString(R.string.calculate_cost));
+                    Toast.makeText(getHostActivity(),result, Toast.LENGTH_LONG).show();
+                }
+            }
+        };
     }
 
     @Override
     public int getLayoutResID() {
         return R.layout.fragment_booking;
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,8 +79,8 @@ public class BookingFragment extends BaseFragment  {
         getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getHostActivity().getSupportActionBar().setTitle(getString(R.string.new_order));
 
-        etName = (EditText) view.findViewById(R.id.etName);
-        etEmail = (EditText) view.findViewById(R.id.etEmail);
+        //etName = (EditText) view.findViewById(R.id.etName);
+        //etEmail = (EditText) view.findViewById(R.id.etEmail);
         etPhone = (EditText) view.findViewById(R.id.etPhone);
         etAddressSender = (EditText) view.findViewById(R.id.etAddressSender);
         etAddressDelivery = (EditText) view.findViewById(R.id.etAddressDelivery);
@@ -69,29 +90,41 @@ public class BookingFragment extends BaseFragment  {
         tvCost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startIntentService(etAddressSender.getText().toString(),
-                        etAddressDelivery.getText().toString());
+                if ( CommonUtils.isConnected(getActivity()) ) {
+                    startIntentService(etAddressSender.getText().toString(),
+                            etAddressDelivery.getText().toString());
+                } else {
+                    Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+                }
+
+
+
             }
         });
 
         buttonSend = (Button) view.findViewById(R.id.buttonSend);
         buttonSend.setVisibility(View.INVISIBLE);
-        buttonSend.setOnClickListener(new View.OnClickListener() {
+        buttonSend.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                 checkout( new Order(getHostActivity())
-                        .setCustomerName(etName.getText().toString())
-                        .setEmail(etEmail.getText().toString())
-                        .setPhone(etPhone.getText().toString())
-                        .setAddressDelivery(etAddressDelivery.getText().toString())
-                        .setAddressSender(etAddressSender.getText().toString())
-                        .setMessage(etMessage.getText().toString())
-                        .setCost(tvCost.getText().toString()) );
-            }
-        });
+                if ( CommonUtils.isConnected(getActivity()) ) {
+                    checkout( new Order(getHostActivity())
+                            //.setCustomerName(etName.getText().toString())
+                            //.setEmail(etEmail.getText().toString())
+                            .setPhone(etPhone.getText().toString())
+                            .setAddressDelivery(etAddressDelivery.getText().toString())
+                            .setAddressSender(etAddressSender.getText().toString())
+                            .setMessage(etMessage.getText().toString())
+                            .setCost(tvCost.getText().toString()) );
+                } else {
+                    Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+                }
 
-        locationResultReceiver = new LocationResultReceiver(new Handler());
+            }
+        } );
+
+
 
         //calculateCost();
         return view;
@@ -116,22 +149,48 @@ public class BookingFragment extends BaseFragment  {
         queue.add(orderCheckoutRequest);
     }
 
-    protected void startIntentService(String addressSender, String addressDelivery) {
+    protected void startIntentService(final String addressSender, final String addressDelivery) {
+        /*locationResultReceiver = new LocationResultReceiver(new Handler());
         final Intent intent = new Intent(getHostActivity(), FetchAddressIntentService.class);
         intent.putExtra(ConstantsVeloportApp.RECEIVER, locationResultReceiver);
         intent.putExtra(ConstantsVeloportApp.SENDER_DATA_EXTRA, addressSender);
-        intent.putExtra(ConstantsVeloportApp.DELIVERY_DATA_EXTRA, addressDelivery);
+        intent.putExtra(ConstantsVeloportApp.DELIVERY_DATA_EXTRA, addressDelivery); */
 
         getHostActivity().getProgressDialog().setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
                 getHostActivity().getProgressDialog().setMessage(getString(R.string.calculating_cost));
-                getHostActivity().startService(intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String result = LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery);
+                        Message msg = Message.obtain();
+
+                        if ( result.contains("Error") || result.contains(getString(R.string.no_address_found)) )
+                            msg.what = LOCATION_ERROR;
+                        else
+                            msg.what = LOCATION_SUCCESS;
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(ConstantsVeloportApp.RESULT_DATA_KEY, result);
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
+                    }
+                }).start();
+                //getHostActivity().startService(intent);
+                //FetchAddressIntentService.startService(getHostActivity(), intent);
+
+
             }
         });
 
+        //String cost = LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery);
+        //tvCost.setText(cost+"p.");
+        //getHostActivity().getProgressDialog().dismiss();
         getHostActivity().getProgressDialog().show();
     }
+
+
 
 
 

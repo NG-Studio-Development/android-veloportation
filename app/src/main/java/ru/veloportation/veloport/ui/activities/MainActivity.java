@@ -64,7 +64,4 @@ public class MainActivity extends BaseActivity {
         intent.putExtra(START_TYPE, type);
         context.startActivity(intent);
     }
-
-
-
 }

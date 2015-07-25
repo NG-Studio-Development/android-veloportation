@@ -2,7 +2,6 @@ package ru.veloportation.veloport.components;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.location.Location;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -11,7 +10,6 @@ import com.android.volley.toolbox.Volley;
 
 import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.model.requests.LocationRequest;
-import ru.veloportation.veloport.utils.LocationUtils;
 
 public class SampleSchedulingService extends IntentService {
     public SampleSchedulingService() {
@@ -24,25 +22,37 @@ public class SampleSchedulingService extends IntentService {
         Log.d("SERVICE_UPDATE_LOCATION", "Update location");
         String uuid = VeloportApplication.getInstance().getUUID();
 
-        Location location = LocationUtils.getInstance().getLastKnownLocation(this);
+        final GPSTracker gps;
 
-        double latitude = location.getLatitude(); //System.currentTimeMillis() / 10000;
-        double longitude = location.getLongitude(); //System.currentTimeMillis() / 11000;
+        // Location location = LocationUtils.getInstance().getLastKnownLocation(this);
 
-        LocationRequest request = LocationRequest.requestUpdateLocation(uuid, latitude, longitude, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("SERVICE_UPDATE_LOCATION", "successfull");
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("SERVICE_UPDATE_LOCATION", "successfull");
-            }
-        });
+        //double latitude = location.getLatitude(); //System.currentTimeMillis() / 10000;
+        //double longitude = location.getLongitude(); //System.currentTimeMillis() / 11000;
 
-        Volley.newRequestQueue(this).add(request);
+        gps = new GPSTracker(this);
+
+        if ( gps.canGetLocation() ) {
+
+            //double latitude = location.getLatitude(); //System.currentTimeMillis() / 10000;
+            //double longitude = location.getLongitude(); //System.currentTimeMillis() / 11000;
+
+            LocationRequest request = LocationRequest.requestUpdateLocation(uuid, gps.getLatitude(), gps.getLongitude(), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("SERVICE_UPDATE_LOCATION", "successfull");
+                    gps.stopUsingGPS();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("SERVICE_UPDATE_LOCATION", "error");
+                    gps.stopUsingGPS();
+                }
+            });
+
+            Volley.newRequestQueue(this).add(request);
+        }
+
         SampleAlarmReceiver.completeWakefulIntent(intent);
-
     }
 }

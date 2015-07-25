@@ -1,18 +1,11 @@
 package ru.veloportation.veloport.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
 import ru.veloportation.veloport.R;
-import ru.veloportation.veloport.ui.activities.MainActivity;
 import ru.veloportation.veloport.ui.activities.StartActivity;
 
 
@@ -45,16 +38,16 @@ public class EnterFragment extends BaseFragment<StartActivity> implements View.O
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.tvCourier:
-                getHostActivity().replaceFragment(new LoginFragment(), true);
+                getHostActivity().replaceFragment(LoginFragment.newInstance(LoginFragment.LOGIN_COURIER), true);
                 break;
             case R.id.tvCustomer:
-                openCustomer();
+                getHostActivity().replaceFragment(LoginFragment.newInstance(LoginFragment.LOGIN_CUSTOMER), true);
                 break;
         }
 
     }
 
-    private void openCustomer() {
+    /* private void openCustomer() {
         TelephonyManager tManager = (TelephonyManager)getHostActivity().getSystemService(Context.TELEPHONY_SERVICE);
         final String uuid = tManager.getDeviceId();
 
@@ -96,6 +89,6 @@ public class EnterFragment extends BaseFragment<StartActivity> implements View.O
 
         getHostActivity().getProgressDialog().show();
         getHostActivity().registerInBackground();
-    }
+    } */
 
 }

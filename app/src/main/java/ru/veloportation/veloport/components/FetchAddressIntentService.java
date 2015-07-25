@@ -1,6 +1,7 @@
 package ru.veloportation.veloport.components;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,6 +23,26 @@ public class FetchAddressIntentService extends IntentService {
 
     public FetchAddressIntentService() {
         super("FetchAddressService");
+    }
+
+    private static FetchAddressIntentService service = null;
+
+    private int startId;
+
+    public static void startService(Context context, Intent intent) {
+
+        context.startService(intent);
+
+        if (service == null)
+            context.startService(intent);
+        else
+            service.onHandleIntent(intent);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        this.startId = startId;
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -95,6 +116,7 @@ public class FetchAddressIntentService extends IntentService {
         Bundle bundle = new Bundle();
         bundle.putString(ConstantsVeloportApp.RESULT_DATA_KEY, message);
         mReceiver.send(resultCode, bundle);
+        onDestroy();
     }
 
 

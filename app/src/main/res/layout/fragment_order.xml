@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="ru.veloportation.veloport.ui.fragments.OrderFragment">
 
 
@@ -18,14 +19,49 @@
             android:apiKey="@string/google_key" />
     </RelativeLayout>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/get"
+        android:layout_marginTop="@dimen/margin_widget_default_small"
+        android:id="@+id/buttonGet"
+        android:textColor="@color/white"
+        android:background="@color/orange"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:layout_marginLeft="@dimen/margin_widget_default_small"
+        android:layout_marginRight="@dimen/margin_widget_default_small"
+        android:layout_marginTop="@dimen/margin_widget_default_small"
+        android:layout_above="@+id/buttonGet">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_default_medium"
+                android:id="@+id/tvTimer"
+                android:layout_alignParentRight="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delivery_via"
+                android:id="@+id/tvTitleTimer"
+                android:textSize="@dimen/text_size_default_medium"/>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,14 +83,14 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <TextView
+        <!-- <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/tvTimer"
             android:visibility="gone"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true" /> -->
 
         <Button
             android:layout_width="wrap_content"
@@ -75,28 +111,20 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/get"
-            android:id="@+id/buttonGet"
-            android:visibility="gone"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true" />
-
-        <TextView
+        <!-- <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/tvStatus"
             android:visibility="gone"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true" /> -->
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
 
+            android:layout_marginTop="@dimen/margin_widget_default_small" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -112,17 +140,17 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
+
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_widget_default_small" >
 
-            <!-- android:text="@string/address_sender" -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:text="Адрес"
                 android:id="@+id/tvTitleSender" />
 
@@ -139,7 +167,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_widget_default_small" >
 
             <TextView
                 android:layout_width="wrap_content"

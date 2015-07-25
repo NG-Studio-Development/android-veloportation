@@ -11,7 +11,9 @@
     <string name="field_phone">Телефон</string>
     <string name="field_address_sender">Адрес отправителя</string>
     <string name="field_address_delivery">Адрес доставки</string>
-    <string name="field_message">Сообщение</string>
+    <string name="field_message">Сообщение</string>    <!-- Hintes for authorization -->
+    <string name="field_login"> Логин </string>
+    <string name="field_pass"> Пароль </string>
 
     <string name="button_send">Велопортировать</string>
 
@@ -49,9 +51,7 @@
 
     <string name="calculating_cost"> Идет подсчет цены </string>
 
-    <!-- Hintes for authorization -->
-    <string name="login"> Логин </string>
-    <string name="pass"> Пароль </string>
+
 
     <string name="izvilistaya">Извилистая 19 Ростов-на-Дону Ростов-на-Дону</string>
 
@@ -82,5 +82,31 @@
     <string name="new_orders">Новый заказ</string>
 
     <string name="check_of_login_and_pass">Проверка логина и пароля</string>
+
+    <string name="delivery_via">Доставка через</string>
+
+    <string name="take_from">Забрать:</string>
+
+    <string name="delivery_to">Доставить:</string>
+
+    <string name="registration"> Создать учетную запись </string>
+
+    <string name="forgot_password"> Забыли пароль? </string>
+
+    <string name="registrate"> Зарегистрироваться </string>
+
+    <string name="title_registration"> Регистрация </string>
+
+    <string name="free_courier"> Свободных курьеров </string>
+
+    <string name="customer"> Клиент </string>
+
+    <string name="courier"> Курьер </string>
+
+    <string name="how_been_courier"> Как стать курьером ? </string>
+
+    <string name="call_to_administrator_for_more_information"> Обратитесь к админитратору за подробной информацией! </string>
+
+    <string name="no_internet_connection"> Отсутствует интернет соединение </string>
 
 </resources>

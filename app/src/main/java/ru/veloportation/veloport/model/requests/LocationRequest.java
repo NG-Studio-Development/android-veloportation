@@ -23,12 +23,9 @@ public class LocationRequest extends StringRequest {
     }
 
     public static LocationRequest requestGetCourierLocation(Order order, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        String url = ConstantsVeloportApp.URL_SERVER+"/location/"+order.getId();// :idorder:
+        String url = ConstantsVeloportApp.URL_SERVER+"/location/"+order.getId();
         Log.d("REQ_COURIER_LOCATION", url);
         return new LocationRequest(Request.Method.GET, url, listener, errorListener);
     }
 
-    /* public LocationRequest requestGetLocationByAddress(String address, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        return new LocationRequest(Request.Method.GET, url, listener, errorListener);
-    } */
 }

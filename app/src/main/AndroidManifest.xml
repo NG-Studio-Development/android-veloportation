@@ -14,9 +14,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-
 
     <permission
         android:name="com.ngstudio.friendstep.permission.C2D_MESSAGE"
@@ -60,10 +57,7 @@
         android:protectionLevel="signature" />
     <uses-permission android:name="ru.veloportation.veloport.C2D_MESSAGE" />
 
-
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
-
-
 
     <application
         android:name="ru.veloportation.VeloportApplication"
@@ -110,7 +104,12 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="GCMIntentService" />
+        <service android:name="GCMIntentService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
 
 
         <receiver android:name=".components.SampleAlarmReceiver"></receiver>
@@ -125,8 +124,7 @@
         <service android:name=".components.SampleSchedulingService" />
 
         <service
-            android:name=".components.FetchAddressIntentService"
-            android:exported="false"/>
+            android:name=".components.FetchAddressIntentService" />
 
     </application>
 

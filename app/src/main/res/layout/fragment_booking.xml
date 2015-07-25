@@ -7,32 +7,37 @@
 
 
     <!-- android:text="@string/button_send" -->
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/linearLayout2"
-        android:layout_above="@+id/buttonSend">
+        android:layout_above="@+id/buttonSend"
+        android:layout_marginLeft="@dimen/margin_widget_default_small"
+        android:layout_marginRight="@dimen/margin_widget_default_small"
+        android:layout_marginBottom="@dimen/margin_widget_default_small"
+        android:layout_below="@+id/textView">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="@string/field_name"
+            android:inputType="textPostalAddress"
+            android:hint="@string/field_address_sender"
             android:ems="10"
-            android:id="@+id/etName"
-            android:visibility="gone"
-            android:layout_weight="1" />
+            android:layout_marginTop="@dimen/margin_widget_default_medium"
+            android:id="@+id/etAddressSender"
+            style="@style/EditTextAuthorization" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="@string/field_email"
+            android:inputType="textPostalAddress"
+            android:hint="@string/field_address_delivery"
             android:ems="10"
-            android:id="@+id/etEmail"
-            android:visibility="gone"
-            android:layout_weight="1" />
+            android:id="@+id/etAddressDelivery"
+            android:layout_marginTop="@dimen/margin_widget_default_medium"
+            style="@style/EditTextAuthorization" />
 
         <EditText
             android:layout_width="match_parent"
@@ -41,24 +46,21 @@
             android:hint="@string/field_phone"
             android:ems="10"
             android:id="@+id/etPhone"
-            android:visibility="gone"
-            android:layout_weight="1" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/margin_widget_default_medium"
+            style="@style/EditTextAuthorization" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPostalAddress"
-            android:hint="@string/field_address_sender"
-            android:ems="10"
-            android:id="@+id/etAddressSender" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPostalAddress"
-            android:hint="@string/field_address_delivery"
-            android:ems="10"
-            android:id="@+id/etAddressDelivery" />
+            android:id="@+id/etMessage"
+            android:hint="@string/field_message"
+            android:lines="3"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_widget_default_medium"
+            style="@style/EditTextAuthorization" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -75,16 +77,9 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
+
         </RelativeLayout>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/etMessage"
-            android:hint="@string/field_message"
-            android:visibility="gone"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="8" />
     </LinearLayout>
 
     <Button
@@ -95,5 +90,31 @@
         android:textColor="@color/white"
         android:background="@color/orange"
         android:layout_alignParentBottom="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/free_courier"
+        android:id="@+id/textView4"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/text_size_default_medium"
+        android:layout_alignLeft="@+id/linearLayout2"
+        android:layout_toLeftOf="@+id/textView"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignTop="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:id="@+id/textView"
+        android:background="@mipmap/ic_btn_round_small_red"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/margin_widget_default_small"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/linearLayout2"
+        android:layout_alignEnd="@+id/linearLayout2" />
 
 </RelativeLayout>

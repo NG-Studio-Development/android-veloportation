@@ -19,13 +19,27 @@ public class RegisterIdRequest extends StringRequest {
     }
 
     public static RegisterIdRequest requestUpdateId(String login, String pass, String regId, String uuid, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        Log.d("REQUEST URL", "Request = "+ConstantsVeloportApp.URL_SERVER+"/login/"+login+"/"+pass+"/"+regId+"/"+uuid);
-        //return new RegisterIdRequest(Request.Method.GET, ConstantsVeloportApp.URL_SERVER+"/classes/Users/"+login+"/"+regId,listener,errorListener);
+
+        Log.d("REQUEST URL", "Request = " + ConstantsVeloportApp.URL_SERVER + "/login/" + login + "/" + pass + "/" + regId + "/" + uuid);
         return new RegisterIdRequest(Request.Method.GET, ConstantsVeloportApp.URL_SERVER+"/login/"+login+"/"+pass+"/"+regId+"/"+uuid, listener,errorListener);
     }
 
+    public static RegisterIdRequest requestLoginCustomer(String login, String pass, String regId, String uuid, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+
+        String url = ConstantsVeloportApp.URL_SERVER+"/get/customer/"+login+"/"+pass+"/"+regId+"/"+uuid;
+        Log.d("REQUEST URL", "Request = "+url);
+        return new RegisterIdRequest(Request.Method.GET, url, listener,errorListener);
+    }
+
+    public static RegisterIdRequest requestRegisterUser(String uuid, JSONObject jsonObject, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+
+        String url = ConstantsVeloportApp.URL_SERVER+"/post/user/"+uuid+"/"+jsonObject.toString();
+        Log.d("REQUEST", "Request = " + url);
+
+        return new RegisterIdRequest(Request.Method.GET, url, listener,errorListener);
+    }
+
     public static RegisterIdRequest requestRegisterUUID(String uuid, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        //Log.d("REQUEST URL", "Request = "+ConstantsVeloportApp.URL_SERVER+"/classes/Users/"+name+"/"+regId);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("registerId",regId);
@@ -34,7 +48,6 @@ public class RegisterIdRequest extends StringRequest {
             throw new RuntimeException("Error in json data");
         }
         Log.d("REQUEST", "Request = " + ConstantsVeloportApp.URL_SERVER + "/classes/1/Users/" + uuid + "/" + jsonObject.toString());
-
         return new RegisterIdRequest(Request.Method.GET, ConstantsVeloportApp.URL_SERVER+"/classes/1/Users/"+uuid+"/"+jsonObject.toString(),listener,errorListener);
     }
 }

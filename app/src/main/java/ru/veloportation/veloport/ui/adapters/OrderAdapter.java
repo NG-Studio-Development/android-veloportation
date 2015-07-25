@@ -5,10 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.veloportation.veloport.R;
@@ -19,31 +17,18 @@ public class OrderAdapter extends ArrayAdapter<Order> {
 
     private LayoutInflater inflater;
     private int item;
-    private List<EditText> listEditText;// = new ArrayList();
+    private Context context;
 
     private OrderAdapter(Context context, List<Order> orderList, int item) {
         super(context, 0, orderList);
         this.item = item;
         inflater = LayoutInflater.from(context);
-
+        this.context = context;
     }
 
-    /*public static OrderAdapter getOrderAdapterDEBUG(Context context ) {
-
-
-        OrderAdapter.OrderItem[] orderItems = {new OrderAdapter.OrderItem(context.getString(R.string.order_1)),
-                new OrderAdapter.OrderItem(context.getString(R.string.order_2)) };
-
-
-        return new OrderAdapter(context, orderItems, R.layout.item_order);
-    } */
-
     public static OrderAdapter createOrderAdapter(Context context, List<Order> listOrder) {
-
         OrderAdapter.OrderItem[] orderItems = {new OrderAdapter.OrderItem(context.getString(R.string.order_1)),
                 new OrderAdapter.OrderItem(context.getString(R.string.order_2)) };
-
-
         return new OrderAdapter(context, listOrder, R.layout.item_order);
     }
 
@@ -54,20 +39,20 @@ public class OrderAdapter extends ArrayAdapter<Order> {
         if(convertView == null) {
             holder = new Holder();
             convertView = inflater.inflate(item,null);
-            holder.text = (TextView) convertView.findViewById(R.id.tvName);
-            //holder.etMark = (EditText) convertView.findViewById(R.id.etMark);
+            holder.textSender = (TextView) convertView.findViewById(R.id.tvName);
+            holder.textDelivery = (TextView) convertView.findViewById(R.id.tvNameDelivery);
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
         }
 
         Order item = getItem(position);
-        holder.text.setText(item.getAddressSender());
+        holder.textSender.setText(context.getString(R.string.take_from)+" "+item.getAddressSender());
+        holder.textDelivery.setText(context.getString(R.string.delivery_to)+" "+item.getAddressDelivery());
         return convertView;
     }
 
     public static final class OrderItem {
-
         private String text;
         public OrderItem(String text) {
             this.text = text;
@@ -75,43 +60,8 @@ public class OrderAdapter extends ArrayAdapter<Order> {
     }
 
     private static class Holder {
-        TextView text;
-        //EditText etMark;
-    }
-
-
-
-    /*public static OrderAdapter fillLinearLayout(Context context, OrderItem[] calculatorItems, LinearLayout linearLayout, int item) {
-        OrderAdapter adapter = new OrderAdapter(context,calculatorItems, item);
-
-        final int adapterCount = adapter.getCount();
-
-        for (int i = 0; i < adapterCount; i++) {
-            View itemView = adapter.getView(i, null, null);
-            linearLayout.addView(itemView);
-        }
-        return adapter;
-    } */
-
-    public List<EditText> getAllEditText() {
-        return listEditText;
-    }
-
-    /*public boolean isAllEditTextEmpty() {
-        for (EditText editText : listEditText)
-            if (!editText.getText().toString().isEmpty())
-                return false;
-        return true;
-    } */
-
-    public ArrayList<String> getAllEnterMark() {
-        ArrayList<String> list = new ArrayList<>();
-        for (EditText editText : listEditText) {
-            String text = editText.getText().toString();
-            if (!text.isEmpty())
-                list.add(text);
-        }
-        return list;
+        TextView textSender;
+        TextView textDelivery;
     }
 
 }

@@ -1,10 +1,14 @@
 package ru.veloportation.veloport.ui.fragments;
 
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -22,6 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
@@ -47,19 +54,21 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
 
     public final static String DATA_LONGITUDE = "data_longitude";
 
+    //private TextView tvStatus;
 
-    private TextView tvStatus;
+    private static Order order;
 
-    private Order order;
     private String runAs;
 
-    private SampleAlarmReceiver alarm;
+    private static SampleAlarmReceiver alarm;
 
     private BroadcastReceiver broadcastReceiver;
 
     private LocationRequest requestLocation;
 
+    static Button buttonGet;
 
+    TextView tvTimer;
 
     public static OrderFragment customerFragment(Order order) {
         return createOrderFragment(order, RUN_CUSTOMER);
@@ -86,10 +95,10 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        super.onCreateView(inflater,container,savedInstanceState); //inflater.inflate(R.layout.fragment_order, container, false);
+        super.onCreateView(inflater,container,savedInstanceState);
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
-
+        buttonGet = (Button) view.findViewById(R.id.buttonGet);
         setHasOptionsMenu(true);
         getHostActivity().getSupportActionBar().setTitle(order.getAddressDelivery());
         getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -117,28 +126,25 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getHostActivity(),"LOCATION_ERROR", Toast.LENGTH_LONG);
+                Toast.makeText(getHostActivity(),"LOCATION_ERROR", Toast.LENGTH_LONG).show();
             }
         });
 
         Volley.newRequestQueue(getHostActivity()).add(requestLocation);
 
-
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
+        tvTimer = (TextView) view.findViewById(R.id.tvTimer);
         TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
         TextView tvCost = (TextView) view.findViewById(R.id.tvCost);
         TextView tvAddressSender = (TextView) view.findViewById(R.id.tvAddressSender);
         TextView tvAddressDelivery = (TextView) view.findViewById(R.id.tvAddressDelivery);
         TextView tvMessage = (TextView) view.findViewById(R.id.tvMessage);
 
-        tvStatus = (TextView) view.findViewById(R.id.tvStatus);
+        //tvStatus = (TextView) view.findViewById(R.id.tvStatus);
 
-        //tvName.setText(order.getCustomerName());
-        //tvPhone.setText(order.getPhone());
         tvAddressSender.setText(order.getAddressSender());
         tvAddressDelivery.setText(order.getAddressDelivery());
         tvCost.setText(order.getCost());
-        //tvMessage.setText(order.getAddress());
 
         Button button = (Button) view.findViewById(R.id.buttonMap);
         button.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +163,6 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         broadcastReceiver = createBroadCast();
         getHostActivity().registerReceiver(broadcastReceiver, intFilt);
 
-        //return super.onCreateView(inflater, container, savedInstanceState);//view;
         return view;
     }
 
@@ -168,7 +173,7 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         double latitude = extras.getDouble(DATA_LATITUDE, -1);
         double longitude = extras.getDouble(DATA_LONGITUDE, -1);
 
-        Log.d("SET_LOCATION", "latitude = "+latitude+" longitude = "+longitude);
+        Log.d("SET_LOCATION", "latitude = " + latitude + " longitude = " + longitude);
 
         if (latitude != -1 && longitude != -1)
             setLocation( new LatLng(latitude, longitude) );
@@ -184,11 +189,9 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     BroadcastReceiver createBroadCast() {
         return new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
-
                 if (intent.getStringExtra(PARAM_ACTION).equals(ACTION_TAKE_ORDER)) {
                     onTakeOrder();
                 }
-
             }
         };
     }
@@ -198,12 +201,15 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         RelativeLayout rlMapContainer = (RelativeLayout) view.findViewById(R.id.rlMapContainer);
         rlMapContainer.setVisibility(View.INVISIBLE);
 
-        final Button buttonGet = (Button) view.findViewById(R.id.buttonGet);
 
-        if (order.getStatus() == Order.STATE_TAKE)
-            buttonGet.setVisibility(View.INVISIBLE);
-        else
+
+        if (order.getStatus() == Order.STATE_TAKE) {
+            buttonGet.setText(R.string.order_delivery);
             buttonGet.setVisibility(View.VISIBLE);
+        } else if(order.getStatus() == Order.STATE_DELIVERY) {
+            buttonGet.setVisibility(View.INVISIBLE);
+        }
+
 
         buttonGet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,15 +224,57 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     }
 
     private void createCustomerView(View view) {
-        TextView tvStatus = (TextView) view.findViewById(R.id.tvStatus);
-        tvStatus.setVisibility(View.VISIBLE);
+        //TextView tvStatus = (TextView) view.findViewById(R.id.tvStatus);
+        //tvStatus.setVisibility(View.VISIBLE);
+
+        TextView tvTitleTimer = (TextView) view.findViewById(R.id.tvTitleTimer);
+        tvTitleTimer.setVisibility(View.VISIBLE);
+
+        TextView tvTimer = (TextView) view.findViewById(R.id.tvTimer);
+        tvTimer.setVisibility(View.INVISIBLE);
+
+        gonButton(buttonGet);
+
         if (order.getStatus() == Order.STATE_TAKE) {
-            tvStatus.setText(getString(R.string.order_take));
-            tvStatus.setTextColor(getResources().getColor(R.color.green));
+            //tvStatus.setText(getString(R.string.order_take));
+            //tvStatus.setTextColor(getResources().getColor(R.color.green));
+            tvTitleTimer.setText(getString(R.string.delivery_via));
+            tvTimer.setVisibility(View.VISIBLE);
+            tvTimer.setText(getTimeResidueString());
         } else {
-            tvStatus.setText(getString(R.string.searching_of_courier));
-            tvStatus.setTextColor(getResources().getColor(R.color.red));
+
+            tvTitleTimer.setText(getString(R.string.searching_of_courier));
+            tvTitleTimer.setTextColor(getResources().getColor(R.color.red));
+
+
+            /*tvStatus.setText(getString(R.string.searching_of_courier));
+            tvStatus.setTextColor(getResources().getColor(R.color.red));*/
         }
+    }
+
+    private void gonButton(Button button) {
+        button.getLayoutParams().height=0;
+
+    }
+
+    String getTimeResidueString() {
+
+        long timestamp = getTimeResidue();
+
+        int days = (int) (timestamp / (1000*60*60*24));
+        int hours = (int) ((timestamp - (1000*60*60*24*days)) / (1000*60*60));
+        int min = (int) (timestamp - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+
+        return hours+" : "+min;
+    }
+
+    long getTimeResidue() {
+        Calendar calendar = Calendar.getInstance();
+        long orderTime = order.getTimeInMills();
+        long currentTime = calendar.getTimeInMillis();
+        long result = orderTime - currentTime;
+
+        return result;
     }
 
     @Override
@@ -235,44 +283,39 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     }
 
     private void takeOrderAction(final Button buttonGet) {
-        order.setState(Order.STATE_TAKE);
+        showDatePickerDialog();
+    }
 
-        OrderRequest request = OrderRequest.requestTakeOrder(order, VeloportApplication.getInstance().getUUID(), new Response.Listener<String>() {
+    private void deliveryOrderAction(Button button) {
+        order.setState(Order.STATE_DELIVERY);
+        alarm.cancelAlarm(getHostActivity());
+        button.setVisibility(View.INVISIBLE);
+        //tvStatus.setVisibility(View.VISIBLE);
+        //tvStatus.setText(R.string.order_delivery);
+        //tvStatus.setTextColor(getResources().getColor(R.color.green));
+
+        OrderRequest request = OrderRequest.removeDelivery( order, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //buttonGet.setVisibility(View.INVISIBLE);
-                buttonGet.setText(R.string.order_delivery);
-                alarm.setAlarm(getHostActivity());
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("LIST_ORDER", "ERROR");
+
             }
-        });
-
+        } );
         Volley.newRequestQueue(getHostActivity()).add(request);
-    }
-
-    private void deliveryOrderAction(Button button) {
-        alarm.cancelAlarm(getHostActivity());
-        button.setVisibility(View.INVISIBLE);
-        tvStatus.setVisibility(View.VISIBLE);
-        tvStatus.setText(R.string.order_delivery);
-        tvStatus.setTextColor(getResources().getColor(R.color.green));
     }
 
     private void onTakeOrder() {
         Log.d("UPDATE_INTERFACE", "onTakeOrder");
 
-        tvStatus.setText(getString(R.string.order_take));
-        tvStatus.setTextColor(getResources().getColor(R.color.green));
+        //tvStatus.setText(getString(R.string.order_take));
+        //tvStatus.setTextColor(getResources().getColor(R.color.green));
 
         if ( requestLocation != null )
             Volley.newRequestQueue(getHostActivity()).add(requestLocation);
-
-
-
     }
 
 
@@ -282,16 +325,66 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         getHostActivity().unregisterReceiver(broadcastReceiver);
     }
 
+    public void showDatePickerDialog() {
+        DialogFragment newFragment = TimePickerFragment.newDatePickerFragment(getHostActivity());
+        newFragment.show(getHostActivity().getSupportFragmentManager(), "datePicker");
+    }
 
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getHostActivity().onBackPressed();
-                break;
+        static Context context;
+
+        static TimePickerFragment newDatePickerFragment(Context context) {
+            TimePickerFragment.context = context;
+            return new TimePickerFragment();
         }
 
-        return super.onOptionsItemSelected(item);
-    } */
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            return new TimePickerDialog(context, this, hour, minute,
+                    DateFormat.is24HourFormat(context));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            order.setState(Order.STATE_TAKE);
+
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, day);
+
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay+1);
+            calendar.set(Calendar.MINUTE, minute);
+
+            long time = calendar.getTimeInMillis();
+
+            order.setTimeInMills(time);
+
+            OrderRequest request = OrderRequest.requestTakeOrder(order, VeloportApplication.getInstance().getUUID(), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    buttonGet.setText(R.string.order_delivery);
+                    alarm.setAlarm(context);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            if (view.isShown())
+                Volley.newRequestQueue(context).add(request);
+        }
+    }
 }
