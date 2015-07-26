@@ -4,30 +4,24 @@
     android:background="@color/white"
     tools:context="ru.veloportation.veloport.ui.fragments.LoginFragment">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/margin_widget_default_normal"
-        android:id="@+id/ibBack"
-        android:src="@mipmap/ic_back"
-        android:background="@null"
-
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/border"
+        android:padding="@dimen/margin_widget_default_normal"
         android:id="@+id/relativeLayout">
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/etLogin"
+            android:ems="15"
             style="@style/EditTextAuthorization"
-            android:hint="@string/field_login" />
+            android:hint="@string/field_login"
+            android:layout_alignRight="@+id/etPass"
+            android:layout_alignEnd="@+id/etPass" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -36,7 +30,11 @@
             android:hint="@string/field_pass"
             style="@style/EditTextAuthorization"
             android:layout_below="@+id/etLogin"
-            android:layout_marginTop="@dimen/margin_widget_default_small" />
+            android:layout_marginTop="@dimen/margin_widget_default_small"
+            android:layout_alignRight="@+id/buttonAuthorize"
+            android:layout_alignEnd="@+id/buttonAuthorize"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <Button
             android:layout_width="wrap_content"
@@ -45,13 +43,57 @@
             android:background="@color/main_color"
             android:textColor="@color/white"
             android:id="@+id/buttonAuthorize"
+            android:layout_marginLeft="@dimen/margin_widget_default_large"
             android:layout_marginTop="@dimen/margin_widget_default_normal"
             android:layout_gravity="center"
             android:layout_below="@+id/etPass"
+            android:layout_toRightOf="@+id/radioGroup"
+            android:layout_toEndOf="@+id/radioGroup" />
+
+        <!-- <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:text="@string/customer"
+            android:id="@+id/checkBox"
+            android:layout_marginTop="@dimen/margin_widget_default_small"
+            android:layout_below="@+id/etPass"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/etPass"
-            android:layout_alignEnd="@+id/etPass" />
+            android:layout_alignParentStart="true" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/courier"
+            android:id="@+id/checkBox2"
+            android:layout_below="@+id/checkBox"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" /> -->
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioGroup"
+            android:layout_below="@+id/etPass"
+            android:layout_marginTop="@dimen/margin_widget_default_small"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/courier"
+                android:id="@+id/rbCourier" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/customer"
+                android:id="@+id/rbCustomer"
+                android:layout_below="@+id/radioGroup"
+                android:layout_alignLeft="@+id/radioGroup"
+                android:layout_alignStart="@+id/radioGroup" />
+        </RadioGroup>
 
     </RelativeLayout>
 
@@ -59,17 +101,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relativeLayout"
-        android:layout_alignParentBottom="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/forgot_password"
-            android:id="@+id/tvForgotPass"
-            android:gravity="center"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/margin_widget_default_normal" />
+        android:layout_alignParentBottom="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -88,13 +121,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_widget_default_small"
+        android:text="@string/forgot_password"
+        android:id="@+id/tvForgotPass"
         android:gravity="center"
-        android:textColor="@color/main_color"
+        android:layout_above="@+id/relativeLayout"
+        android:layout_alignRight="@+id/relativeLayout"
+        android:layout_alignEnd="@+id/relativeLayout" />
 
-        android:id="@+id/tvTitle"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_widget_default_normal"
+        android:layout_marginTop="@dimen/margin_widget_default_normal"
+        android:id="@+id/ivLogo"
+        android:src="@drawable/logo"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignBottom="@+id/ibBack"
-        style="@style/TextViewTitle"/>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,7 +15,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import ru.veloportation.veloport.R;
-import ru.veloportation.veloport.ui.activities.MainActivity;
 import ru.veloportation.veloport.ui.activities.StartActivity;
 import ru.veloportation.veloport.utils.CommonUtils;
 
@@ -28,7 +29,6 @@ public class LoginFragment extends BaseFragment<StartActivity> {
     EditText etLogin;
     EditText etPass;
     TextView tvCreateAccount;
-    TextView tvTitle;
 
     public static LoginFragment newInstance(String whoLogin) {
         LoginFragment loginFragment = new LoginFragment();
@@ -50,23 +50,40 @@ public class LoginFragment extends BaseFragment<StartActivity> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        final View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        getHostActivity().getSupportActionBar().hide();
 
         tvCreateAccount = (TextView) view.findViewById(R.id.tvCreateAccount);
-
-        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
 
         etLogin = (EditText) view.findViewById(R.id.etLogin);
         etPass = (EditText) view.findViewById(R.id.etPass);
 
-        /*Button button = (Button) view.findViewById(R.id.buttonAuthorize);
-        button.setOnClickListener(new View.OnClickListener() {
-
+        RadioButton rbCustomer = (RadioButton) view.findViewById(R.id.rbCustomer);
+        rbCustomer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                openCourier(etLogin.getText().toString(), etPass.getText().toString());
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked)
+                    return;
+
+                whoLogin = LOGIN_CUSTOMER;
+                createCustomerView(view);
             }
-        });*/
+        });
+
+        RadioButton rbCourier = (RadioButton) view.findViewById(R.id.rbCourier);
+        rbCourier.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked)
+                    return;
+
+                whoLogin = LOGIN_COURIER;
+                createCourierView(view);
+            }
+        });
+
+        rbCustomer.setChecked(true);
 
         if ( whoLogin.equals(LOGIN_CUSTOMER) )
             createCustomerView(view);
@@ -77,8 +94,6 @@ public class LoginFragment extends BaseFragment<StartActivity> {
     }
 
     protected void createCustomerView(View view) {
-        tvTitle.setText(getString(R.string.customer));
-        TextView tvCreateAccount = (TextView) view.findViewById(R.id.tvCreateAccount);
         tvCreateAccount.setText(getString(R.string.registrate));
         tvCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,15 +110,12 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                     openCustomer(etLogin.getText().toString(), etPass.getText().toString());
                 else
                     Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
-
             }
         });
 
     }
 
-
     protected void createCourierView(View view) {
-        tvTitle.setText(getString(R.string.courier));
         tvCreateAccount.setText(getString(R.string.how_been_courier));
         tvCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,9 +131,7 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                 openCourier(etLogin.getText().toString(), etPass.getText().toString());
             }
         });
-
     }
-
 
     protected Button createEnterButton(View view) {
         return (Button) view.findViewById(R.id.buttonAuthorize);
@@ -141,8 +151,8 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                                 if (response.contains("Error")) {
                                     Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
                                 } else {
-                                    getHostActivity().saveEnterDataFromJson(response);
-                                    MainActivity.startCourierActivity(getHostActivity());
+                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_COURIER);
+                                    getHostActivity().startMainActivity(StartActivity.LOGGED_COURIER);
                                 }
                             }
                         }, new Response.ErrorListener() {
@@ -175,8 +185,8 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                         if (response.contains("Error")) {
                             Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
                         } else {
-                            getHostActivity().saveEnterDataFromJson(response);
-                            MainActivity.startCustomerActivity(getHostActivity());
+                            getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER);
+                            getHostActivity().startMainActivity(StartActivity.LOGGED_CUSTOMER);
                         }
                     }
                 }, new Response.ErrorListener() {

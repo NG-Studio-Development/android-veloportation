@@ -18,18 +18,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Calendar;
-
 import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
@@ -54,8 +50,6 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
 
     public final static String DATA_LONGITUDE = "data_longitude";
 
-    //private TextView tvStatus;
-
     private static Order order;
 
     private String runAs;
@@ -69,6 +63,10 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     static Button buttonGet;
 
     TextView tvTimer;
+
+    TextView tvTitleTimer;
+
+    RelativeLayout rlEmptyMap;
 
     public static OrderFragment customerFragment(Order order) {
         return createOrderFragment(order, RUN_CUSTOMER);
@@ -99,6 +97,10 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
         buttonGet = (Button) view.findViewById(R.id.buttonGet);
+        rlEmptyMap = (RelativeLayout) view.findViewById(R.id.rlEmptyMap);
+
+        tvTitleTimer = (TextView) view.findViewById(R.id.tvTitleTimer);
+
         setHasOptionsMenu(true);
         getHostActivity().getSupportActionBar().setTitle(order.getAddressDelivery());
         getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -132,15 +134,10 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
 
         Volley.newRequestQueue(getHostActivity()).add(requestLocation);
 
-        TextView tvName = (TextView) view.findViewById(R.id.tvName);
         tvTimer = (TextView) view.findViewById(R.id.tvTimer);
-        TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
         TextView tvCost = (TextView) view.findViewById(R.id.tvCost);
         TextView tvAddressSender = (TextView) view.findViewById(R.id.tvAddressSender);
         TextView tvAddressDelivery = (TextView) view.findViewById(R.id.tvAddressDelivery);
-        TextView tvMessage = (TextView) view.findViewById(R.id.tvMessage);
-
-        //tvStatus = (TextView) view.findViewById(R.id.tvStatus);
 
         tvAddressSender.setText(order.getAddressSender());
         tvAddressDelivery.setText(order.getAddressDelivery());
@@ -153,6 +150,19 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
                 getHostActivity().replaceFragment(MapFragment.newMapFragment(order), true);
             }
         });
+
+
+        if ( order.getStatus() == Order.STATE_TAKE ) {
+
+            tvTitleTimer.setText(getString(R.string.delivery_via));
+            tvTimer.setVisibility(View.VISIBLE);
+            tvTimer.setText(getTimeResidueString());
+            rlEmptyMap.setVisibility(View.GONE);
+        } else {
+
+            tvTitleTimer.setText(getString(R.string.searching_of_courier));
+            tvTitleTimer.setTextColor(getResources().getColor(R.color.red));
+        }
 
         if ( runAs.equals(RUN_COURIER) )
             createCourierView(view);
@@ -198,16 +208,14 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
 
     private void createCourierView(View view) {
 
-        RelativeLayout rlMapContainer = (RelativeLayout) view.findViewById(R.id.rlMapContainer);
-        rlMapContainer.setVisibility(View.INVISIBLE);
-
-
-
         if (order.getStatus() == Order.STATE_TAKE) {
             buttonGet.setText(R.string.order_delivery);
             buttonGet.setVisibility(View.VISIBLE);
         } else if(order.getStatus() == Order.STATE_DELIVERY) {
             buttonGet.setVisibility(View.INVISIBLE);
+        } else {
+            tvTitleTimer.setVisibility(View.INVISIBLE);
+            tvTimer.setVisibility(View.INVISIBLE);
         }
 
 
@@ -224,37 +232,17 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     }
 
     private void createCustomerView(View view) {
-        //TextView tvStatus = (TextView) view.findViewById(R.id.tvStatus);
-        //tvStatus.setVisibility(View.VISIBLE);
 
-        TextView tvTitleTimer = (TextView) view.findViewById(R.id.tvTitleTimer);
         tvTitleTimer.setVisibility(View.VISIBLE);
 
         TextView tvTimer = (TextView) view.findViewById(R.id.tvTimer);
         tvTimer.setVisibility(View.INVISIBLE);
 
         gonButton(buttonGet);
-
-        if (order.getStatus() == Order.STATE_TAKE) {
-            //tvStatus.setText(getString(R.string.order_take));
-            //tvStatus.setTextColor(getResources().getColor(R.color.green));
-            tvTitleTimer.setText(getString(R.string.delivery_via));
-            tvTimer.setVisibility(View.VISIBLE);
-            tvTimer.setText(getTimeResidueString());
-        } else {
-
-            tvTitleTimer.setText(getString(R.string.searching_of_courier));
-            tvTitleTimer.setTextColor(getResources().getColor(R.color.red));
-
-
-            /*tvStatus.setText(getString(R.string.searching_of_courier));
-            tvStatus.setTextColor(getResources().getColor(R.color.red));*/
-        }
     }
 
     private void gonButton(Button button) {
         button.getLayoutParams().height=0;
-
     }
 
     String getTimeResidueString() {
@@ -290,9 +278,6 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
         order.setState(Order.STATE_DELIVERY);
         alarm.cancelAlarm(getHostActivity());
         button.setVisibility(View.INVISIBLE);
-        //tvStatus.setVisibility(View.VISIBLE);
-        //tvStatus.setText(R.string.order_delivery);
-        //tvStatus.setTextColor(getResources().getColor(R.color.green));
 
         OrderRequest request = OrderRequest.removeDelivery( order, new Response.Listener<String>() {
             @Override
@@ -309,10 +294,11 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     }
 
     private void onTakeOrder() {
-        Log.d("UPDATE_INTERFACE", "onTakeOrder");
 
-        //tvStatus.setText(getString(R.string.order_take));
-        //tvStatus.setTextColor(getResources().getColor(R.color.green));
+        tvTitleTimer.setVisibility(View.VISIBLE);
+        tvTimer.setVisibility(View.VISIBLE);
+        tvTimer.setText(getTimeResidueString());
+        rlEmptyMap.setVisibility(View.GONE);
 
         if ( requestLocation != null )
             Volley.newRequestQueue(getHostActivity()).add(requestLocation);

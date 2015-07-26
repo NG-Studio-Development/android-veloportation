@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,6 @@ import ru.veloportation.veloport.utils.LocationUtils;
 public class BookingFragment extends BaseFragment  {
 
     private int LOCATION_SUCCESS = 0;
-    private int LOCATION_NOT_AVIALABLE = 1;
     private int LOCATION_ERROR = 2;
 
     EditText etPhone;
@@ -79,8 +77,6 @@ public class BookingFragment extends BaseFragment  {
         getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getHostActivity().getSupportActionBar().setTitle(getString(R.string.new_order));
 
-        //etName = (EditText) view.findViewById(R.id.etName);
-        //etEmail = (EditText) view.findViewById(R.id.etEmail);
         etPhone = (EditText) view.findViewById(R.id.etPhone);
         etAddressSender = (EditText) view.findViewById(R.id.etAddressSender);
         etAddressDelivery = (EditText) view.findViewById(R.id.etAddressDelivery);
@@ -90,15 +86,18 @@ public class BookingFragment extends BaseFragment  {
         tvCost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if ( CommonUtils.isConnected(getActivity()) ) {
-                    startIntentService(etAddressSender.getText().toString(),
-                            etAddressDelivery.getText().toString());
-                } else {
                     Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (etAddressSender.getText().toString().isEmpty() ||
+                        etAddressDelivery.getText().toString().isEmpty() ) {
+                    Toast.makeText(getActivity(), R.string.inadmissible_empty_address_field, Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
-
-
+                startIntentService(etAddressSender.getText().toString(),
+                            etAddressDelivery.getText().toString());
             }
         });
 
@@ -109,9 +108,7 @@ public class BookingFragment extends BaseFragment  {
             public void onClick(View v) {
 
                 if ( CommonUtils.isConnected(getActivity()) ) {
-                    checkout( new Order(getHostActivity())
-                            //.setCustomerName(etName.getText().toString())
-                            //.setEmail(etEmail.getText().toString())
+                    checkout( new Order(getHostActivity() )
                             .setPhone(etPhone.getText().toString())
                             .setAddressDelivery(etAddressDelivery.getText().toString())
                             .setAddressSender(etAddressSender.getText().toString())
@@ -124,9 +121,6 @@ public class BookingFragment extends BaseFragment  {
             }
         } );
 
-
-
-        //calculateCost();
         return view;
     }
 
@@ -150,11 +144,6 @@ public class BookingFragment extends BaseFragment  {
     }
 
     protected void startIntentService(final String addressSender, final String addressDelivery) {
-        /*locationResultReceiver = new LocationResultReceiver(new Handler());
-        final Intent intent = new Intent(getHostActivity(), FetchAddressIntentService.class);
-        intent.putExtra(ConstantsVeloportApp.RECEIVER, locationResultReceiver);
-        intent.putExtra(ConstantsVeloportApp.SENDER_DATA_EXTRA, addressSender);
-        intent.putExtra(ConstantsVeloportApp.DELIVERY_DATA_EXTRA, addressDelivery); */
 
         getHostActivity().getProgressDialog().setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -176,17 +165,10 @@ public class BookingFragment extends BaseFragment  {
                         msg.setData(bundle);
                         handler.sendMessage(msg);
                     }
-                }).start();
-                //getHostActivity().startService(intent);
-                //FetchAddressIntentService.startService(getHostActivity(), intent);
-
-
+                } ).start();
             }
         });
 
-        //String cost = LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery);
-        //tvCost.setText(cost+"p.");
-        //getHostActivity().getProgressDialog().dismiss();
         getHostActivity().getProgressDialog().show();
     }
 
@@ -194,7 +176,7 @@ public class BookingFragment extends BaseFragment  {
 
 
 
-    class LocationResultReceiver extends ResultReceiver {
+    /*class LocationResultReceiver extends ResultReceiver {
         public LocationResultReceiver(Handler handler) {
             super(handler);
         }
@@ -211,6 +193,6 @@ public class BookingFragment extends BaseFragment  {
 
             getHostActivity().getProgressDialog().hide();
         }
-    }
+    }*/
 
 }

@@ -2,56 +2,69 @@
     <string name="app_name">Veloport</string>
 
     <string name="hello_world">Hello world!</string>
+
     <string name="action_settings">Settings</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="field_name">Имя</string>
+
     <string name="field_email">Email</string>
+
     <string name="field_phone">Телефон</string>
+
     <string name="field_address_sender">Адрес отправителя</string>
+
     <string name="field_address_delivery">Адрес доставки</string>
+
     <string name="field_message">Сообщение</string>    <!-- Hintes for authorization -->
+
     <string name="field_login"> Логин </string>
+
     <string name="field_pass"> Пароль </string>
 
     <string name="button_send">Велопортировать</string>
 
     <string name="google_key">AIzaSyDvTVnB2ls-_d1hIVXWbVykP7qq7oPeUCQ</string>
+
     <string name="title_activity_start">StartActivity</string>
 
     <string name="text_customer">Я клиент</string>
+
     <string name="text_courier">Я курьер</string>
 
     <string name="hello_courier_fragment">Hello courier fragment</string>
 
-    <string name="authorization_incorrect_data"> Authorization incorrect data </string>
+    <string name="authorization_incorrect_data"> Неверный логин или пароль </string>
 
     <string name="about_us"> О нас </string>
+
     <string name="title_activity_about_as">AboutAsActivity</string>
 
     <string name="contacts">Контакты</string>
+
     <string name="vacancy">Вакансии</string>
+
     <string name="we_are">Мы </string>
 
     <string name="order_1">Заказ 1: Пицца </string>
-    <string name="order_2">Заказ 2: Роллы </string>
 
+    <string name="order_2">Заказ 2: Роллы </string>
 
     <string name="new_order"> Новый Заказ </string>
 
     <string name="get"> Принять </string>
 
     <string name="searching_of_courier"> Поиск курьера </string>
+
     <string name="order_take"> Заказ принят </string>
+
     <string name="order_delivery"> Доставлен </string>
 
     <!-- Default message for progress dialog -->
     <string name="please_wait"> Идет обработка запроса </string>
 
     <string name="calculating_cost"> Идет подсчет цены </string>
-
-
 
     <string name="izvilistaya">Извилистая 19 Ростов-на-Дону Ростов-на-Дону</string>
 
@@ -108,5 +121,37 @@
     <string name="call_to_administrator_for_more_information"> Обратитесь к админитратору за подробной информацией! </string>
 
     <string name="no_internet_connection"> Отсутствует интернет соединение </string>
+
+    <string name="map"> Карта </string>
+
+    <string name="login_already_register"> Такой логин уже существует </string>
+
+    <string name="device_already_register"> С вашего девайса уже проводилась регистрация </string>
+
+    <string name="error_of_registration"> Ошибка регистрации </string>
+
+    <string name="logout"> Выйти </string>
+
+    <string name="toast_wrong_email"> Enter valid email. </string>
+
+    <string name="toast_wrong_password"> Enter valid password. </string>
+
+    <string name="toast_wrong_field"> Enter valid %s. </string>
+
+    <string name="toast_wrong_phone"> Enter valid phone number. </string>
+
+    <string name="toast_location_is_not_available"> Location is not available. </string>
+
+    <string name="toast_passwords_mismatch"> Passwords mismatch. </string>
+
+    <string name="toast_unknown_error"> Unknown error. </string>
+
+    <string name="toast_contact_was_approve"> Contact was approve </string>
+
+    <string name="inadmissible_empty_field"> Недопустимы пустые поля </string>
+
+    <string name="inadmissible_empty_address_field"> Недопустимы пустые адреса </string>
+
+    <string name="error_change_internet_connection"> Ошибка проверьте интернет соединение </string>
 
 </resources>

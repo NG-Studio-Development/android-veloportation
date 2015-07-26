@@ -11,20 +11,7 @@
        android:layout_height="match_parent"
        android:id="@+id/linearLayout3"
 
-        android:layout_centerHorizontal="true"
-        android:layout_alignTop="@+id/ibBack">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_registration"
-            android:id="@+id/textView3"
-            android:layout_gravity="start"
-            style="@style/TextViewTitle"
-            android:layout_weight="1"
-            android:layout_alignTop="@+id/linearLayout3"
-            android:layout_alignLeft="@+id/linearLayout3"
-            android:layout_alignStart="@+id/linearLayout3" />
+        android:layout_centerHorizontal="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -115,19 +102,5 @@
         </RelativeLayout>
 
     </LinearLayout>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/margin_widget_default_small"
-        android:paddingBottom="@dimen/margin_widget_default_small"
-        android:paddingLeft="@dimen/margin_widget_default_small"
-        android:paddingRight="@dimen/margin_widget_default_small"
-        android:id="@+id/ibBack"
-        android:src="@mipmap/ic_back"
-        android:background="@null"
-
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
 
 </RelativeLayout>

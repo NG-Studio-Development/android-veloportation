@@ -23,7 +23,7 @@ import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.requests.RegisterIdRequest;
-import ru.veloportation.veloport.ui.fragments.EnterFragment;
+import ru.veloportation.veloport.ui.fragments.LoginFragment;
 
 
 public class StartActivity extends BaseActivity {
@@ -31,11 +31,27 @@ public class StartActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_base);
         checkPlayServices();
 
-        getSupportActionBar().hide();
-        addFragment(new EnterFragment(), false);
+        boolean isLoggedIn = VeloportApplication.getInstance().getApplicationPreferences().getBoolean(ConstantsVeloportApp.PREF_KEY_IS_LOGGED_IN,false);
+        int whoLogged = VeloportApplication.getInstance().getApplicationPreferences().getInt(ConstantsVeloportApp.PREF_KEY_WHO_LOGGED, -1);
+
+        if (isLoggedIn && whoLogged != -1)
+            startMainActivity(whoLogged);
+        else
+            addFragment(LoginFragment.newInstance(LoginFragment.LOGIN_CUSTOMER), false);
+    }
+
+
+    public void startMainActivity(int whoLogged) {
+        if (whoLogged == StartActivity.LOGGED_CUSTOMER)
+            MainActivity.startCustomerActivity(this);
+        else if (whoLogged == StartActivity.LOGGED_COURIER)
+            MainActivity.startCourierActivity(this);
+
+        finish();
     }
 
     @Override
@@ -126,19 +142,20 @@ public class StartActivity extends BaseActivity {
         Volley.newRequestQueue(StartActivity.this).add(request);
     }
 
-    public void saveEnterDataFromJson(String stringJson) {
-        //Gson gson = new Gson();
-        //User user = null;// = gson.fromJson(stringJson, User.class);
-        saveEnterData(/*user*/);
+    public void saveEnterDataFromJson(int whoLogged) {
+        saveEnterData(whoLogged);
     }
 
-    void saveEnterData(/*User user*/) {
+    void saveEnterData(int whoLogged) {
+        VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_STATE_EMPLOYMENT, false);
+        VeloportApplication.getInstance().getApplicationPreferencesEditor().putInt(ConstantsVeloportApp.PREF_KEY_WHO_LOGGED, whoLogged);
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_IS_LOGGED_IN, true);
-        //WhereAreYouApplication.getInstance().getApplicationPreferencesEditor().putString(ConstantsVeloportApp.PREF_KEY_LOGIN,user.getLogin());
         VeloportApplication.getInstance().getApplicationPreferencesEditor().commit();
-        //MainActivity.startCourierActivity(StartActivity.this);
+
     }
 
+    public final static int LOGGED_CUSTOMER = 1;
+    public final static int LOGGED_COURIER = 2;
 
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -162,7 +179,5 @@ public class StartActivity extends BaseActivity {
         return GooglePlayServicesUtil
                 .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS;
     }
-
-
 
 }

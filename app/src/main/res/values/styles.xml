@@ -6,6 +6,8 @@
         <item name="android:actionBarStyle"   tools:ignore="NewApi">@style/ActionBarGeneric</item>
         <item name="actionBarStyle">@style/ActionBarGeneric</item>
 
+        <item name="android:windowContentOverlay">@null</item>
+
     </style>
 
 
@@ -45,5 +47,11 @@
 
     </style>
 
+
+    <style name="TextViewLiteGray" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/gray_light</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_default_large</item>
+    </style>
 
 </resources>
