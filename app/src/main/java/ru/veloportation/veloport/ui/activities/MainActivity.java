@@ -1,5 +1,6 @@
 package ru.veloportation.veloport.ui.activities;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class MainActivity extends BaseActivity {
     protected int getContainer() {
         return R.id.container;
     }
+
 
     private Fragment selectFragmentByStartType(int startType) {
         Fragment fragment = null;
@@ -105,6 +107,7 @@ public class MainActivity extends BaseActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         if (state)
                             item.setIcon(R.mipmap.ic_state_busy);
                         else
@@ -127,6 +130,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+
         inflater.inflate(R.menu.menu_main, menu);
 
         return true;

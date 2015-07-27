@@ -152,7 +152,7 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                                     Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
                                 } else {
                                     getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_COURIER);
-                                    getHostActivity().startMainActivity(StartActivity.LOGGED_COURIER);
+                                    getHostActivity().startUser(StartActivity.LOGGED_COURIER);
                                 }
                             }
                         }, new Response.ErrorListener() {
@@ -186,7 +186,7 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                             Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
                         } else {
                             getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER);
-                            getHostActivity().startMainActivity(StartActivity.LOGGED_CUSTOMER);
+                            getHostActivity().startUser(StartActivity.LOGGED_CUSTOMER);
                         }
                     }
                 }, new Response.ErrorListener() {

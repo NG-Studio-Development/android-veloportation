@@ -13,7 +13,7 @@
         android:title="@string/logout"
         android:orderInCategory="2"
         android:icon="@mipmap/ic_logout"
-        android:visible="true"
+        android:visible="false"
         app:showAsAction="ifRoom" />
 
 </menu>

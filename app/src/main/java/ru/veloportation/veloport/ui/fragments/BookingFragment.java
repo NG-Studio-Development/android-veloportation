@@ -23,6 +23,7 @@ import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.OrderRequest;
 import ru.veloportation.veloport.utils.CommonUtils;
+import ru.veloportation.veloport.utils.InputValidationUtils;
 import ru.veloportation.veloport.utils.LocationUtils;
 
 
@@ -87,7 +88,7 @@ public class BookingFragment extends BaseFragment  {
             @Override
             public void onClick(View v) {
 
-                if ( CommonUtils.isConnected(getActivity()) ) {
+                if ( !CommonUtils.isConnected(getActivity()) ) {
                     Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (etAddressSender.getText().toString().isEmpty() ||
@@ -107,16 +108,20 @@ public class BookingFragment extends BaseFragment  {
             @Override
             public void onClick(View v) {
 
-                if ( CommonUtils.isConnected(getActivity()) ) {
-                    checkout( new Order(getHostActivity() )
-                            .setPhone(etPhone.getText().toString())
-                            .setAddressDelivery(etAddressDelivery.getText().toString())
-                            .setAddressSender(etAddressSender.getText().toString())
-                            .setMessage(etMessage.getText().toString())
-                            .setCost(tvCost.getText().toString()) );
-                } else {
+                if ( !CommonUtils.isConnected(getActivity()) ) {
                     Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+                    return;
+                } else if(InputValidationUtils.checkPhoneNumberWithToast(getHostActivity(),etPhone.getText().toString())) {
+                    return;
                 }
+
+
+                checkout( new Order(getHostActivity() )
+                        .setPhone(etPhone.getText().toString())
+                        .setAddressDelivery(etAddressDelivery.getText().toString())
+                        .setAddressSender(etAddressSender.getText().toString())
+                        .setMessage(etMessage.getText().toString())
+                        .setCost(tvCost.getText().toString()) );
 
             }
         } );

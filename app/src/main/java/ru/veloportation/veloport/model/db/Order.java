@@ -2,6 +2,8 @@ package ru.veloportation.veloport.model.db;
 
 import android.content.Context;
 
+import java.util.Calendar;
+
 import ru.veloportation.VeloportApplication;
 
 public class Order {
@@ -90,6 +92,25 @@ public class Order {
     public String getId() { return id; }
 
 
+    public String getTimeResidueString() {
+
+        long timestamp = getTimeResidue();
+
+        int days = (int) (timestamp / (1000*60*60*24));
+        int hours = (int) ((timestamp - (1000*60*60*24*days)) / (1000*60*60));
+        int min = (int) (timestamp - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+
+        return hours+" : "+min;
+    }
+
+    public long getTimeResidue() {
+        Calendar calendar = Calendar.getInstance();
+        long orderTime = getTimeInMills();
+        long currentTime = calendar.getTimeInMillis();
+        long result = orderTime - currentTime;
+
+        return result;
+    }
 
 
 }

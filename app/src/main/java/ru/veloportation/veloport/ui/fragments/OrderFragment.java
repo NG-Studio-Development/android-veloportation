@@ -235,8 +235,8 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
 
         tvTitleTimer.setVisibility(View.VISIBLE);
 
-        TextView tvTimer = (TextView) view.findViewById(R.id.tvTimer);
-        tvTimer.setVisibility(View.INVISIBLE);
+        //TextView tvTimer = (TextView) view.findViewById(R.id.tvTimer);
+        //tvTimer.setVisibility(View.INVISIBLE);
 
         gonButton(buttonGet);
     }

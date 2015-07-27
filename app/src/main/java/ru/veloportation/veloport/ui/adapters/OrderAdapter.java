@@ -27,8 +27,6 @@ public class OrderAdapter extends ArrayAdapter<Order> {
     }
 
     public static OrderAdapter createOrderAdapter(Context context, List<Order> listOrder) {
-        OrderAdapter.OrderItem[] orderItems = {new OrderAdapter.OrderItem(context.getString(R.string.order_1)),
-                new OrderAdapter.OrderItem(context.getString(R.string.order_2)) };
         return new OrderAdapter(context, listOrder, R.layout.item_order);
     }
 
@@ -41,6 +39,8 @@ public class OrderAdapter extends ArrayAdapter<Order> {
             convertView = inflater.inflate(item,null);
             holder.textSender = (TextView) convertView.findViewById(R.id.tvName);
             holder.textDelivery = (TextView) convertView.findViewById(R.id.tvNameDelivery);
+            holder.tvTimer = (TextView) convertView.findViewById(R.id.tvTimer);
+
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
@@ -48,7 +48,8 @@ public class OrderAdapter extends ArrayAdapter<Order> {
 
         Order item = getItem(position);
         holder.textSender.setText(context.getString(R.string.take_from)+" "+item.getAddressSender());
-        holder.textDelivery.setText(context.getString(R.string.delivery_to)+" "+item.getAddressDelivery());
+        holder.textDelivery.setText(item.getAddressDelivery());
+        holder.tvTimer.setText(item.getTimeResidueString());
         return convertView;
     }
 
@@ -62,6 +63,7 @@ public class OrderAdapter extends ArrayAdapter<Order> {
     private static class Holder {
         TextView textSender;
         TextView textDelivery;
+        TextView tvTimer;
     }
 
 }

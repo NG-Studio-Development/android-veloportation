@@ -154,4 +154,10 @@
 
     <string name="error_change_internet_connection"> Ошибка проверьте интернет соединение </string>
 
+    <string name="title_activity_courier">CourierActivity</string>
+
+    <string name="free"> Свободные </string>
+
+    <string name="my"> Мои </string>
+
 </resources>

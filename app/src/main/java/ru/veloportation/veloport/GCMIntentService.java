@@ -85,8 +85,6 @@ public class GCMIntentService extends IntentService {
         stackBuilder.addNextIntent(createIntentUpdateData(getApplicationContext() ));
         final PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
 
-
-
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         //.setSmallIcon(R.drawable.ic_stat_gcm)

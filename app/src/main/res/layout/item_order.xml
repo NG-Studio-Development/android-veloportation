@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/textView2"
+        android:id="@+id/tvTimer"
         android:layout_above="@+id/tvNameDelivery"
 
         android:gravity="center"
@@ -47,7 +47,7 @@
         android:background="@color/gray_light"
         android:id="@+id/line"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView2"
+        android:layout_toRightOf="@+id/tvTimer"
         android:layout_marginLeft="@dimen/margin_widget_default_small"
         android:layout_marginRight="@dimen/margin_widget_default_small"
         android:layout_alignBottom="@+id/tvName" />

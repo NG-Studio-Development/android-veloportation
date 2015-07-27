@@ -19,9 +19,10 @@ import java.util.List;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.OrderRequest;
+import ru.veloportation.veloport.ui.activities.CourierActivity;
 import ru.veloportation.veloport.ui.adapters.OrderAdapter;
 
-public class ListOrderFragment extends BaseFragment {
+public class ListOrderFragment extends BaseFragment<CourierActivity> {
 
     List<Order> listOrder;
 
@@ -35,6 +36,10 @@ public class ListOrderFragment extends BaseFragment {
         return R.layout.fragment_list_order;
     }
 
+    public static ListOrderFragment createMyOrdersFragment() {
+        return new ListOrderFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class ListOrderFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_list_order, container, false);
 
         getHostActivity().getSupportActionBar().setTitle(getString(R.string.free_booking));
+        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         final ListView lvOrder = (ListView) view.findViewById(R.id.lvOrders);
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
