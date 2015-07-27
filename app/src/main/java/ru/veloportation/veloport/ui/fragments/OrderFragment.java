@@ -18,14 +18,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.Calendar;
+
 import ru.veloportation.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
@@ -33,10 +37,10 @@ import ru.veloportation.veloport.components.SampleAlarmReceiver;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.LocationRequest;
 import ru.veloportation.veloport.model.requests.OrderRequest;
-import ru.veloportation.veloport.ui.activities.MainActivity;
+import ru.veloportation.veloport.ui.activities.OrderActivity;
 
 
-public class OrderFragment extends BaseMapFragment<MainActivity> {
+public class OrderFragment extends BaseMapFragment<OrderActivity> {
 
     private static final float START_ZOOM = 14.0f;
 
@@ -232,12 +236,7 @@ public class OrderFragment extends BaseMapFragment<MainActivity> {
     }
 
     private void createCustomerView(View view) {
-
         tvTitleTimer.setVisibility(View.VISIBLE);
-
-        //TextView tvTimer = (TextView) view.findViewById(R.id.tvTimer);
-        //tvTimer.setVisibility(View.INVISIBLE);
-
         gonButton(buttonGet);
     }
 

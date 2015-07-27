@@ -2,11 +2,12 @@ package ru.veloportation.veloport.model.db;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import ru.veloportation.VeloportApplication;
 
-public class Order {
+public class Order implements Serializable {
 
     public static int STATE_SEARCH_COURIER = 0;
     public static int STATE_TAKE = 1;

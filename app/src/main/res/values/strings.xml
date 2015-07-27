@@ -159,5 +159,7 @@
     <string name="free"> Свободные </string>
 
     <string name="my"> Мои </string>
+    <string name="title_activity_customer">CustomerActivity</string>
+    <string name="title_activity_order">OrderActivity</string>
 
 </resources>

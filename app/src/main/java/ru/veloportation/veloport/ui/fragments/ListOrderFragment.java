@@ -20,6 +20,7 @@ import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.OrderRequest;
 import ru.veloportation.veloport.ui.activities.CourierActivity;
+import ru.veloportation.veloport.ui.activities.OrderActivity;
 import ru.veloportation.veloport.ui.adapters.OrderAdapter;
 
 public class ListOrderFragment extends BaseFragment<CourierActivity> {
@@ -53,7 +54,8 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                getHostActivity().replaceFragment( OrderFragment.courierFragment(listOrder.get(position)), true );
+                //getHostActivity().replaceFragment( OrderFragment.courierFragment(listOrder.get(position)), true );
+                OrderActivity.startOrderActivity(getHostActivity(),listOrder.get(position));
             }
         });
 

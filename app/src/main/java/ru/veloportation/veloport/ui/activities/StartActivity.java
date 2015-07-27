@@ -1,7 +1,6 @@
 package ru.veloportation.veloport.ui.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -48,10 +47,9 @@ public class StartActivity extends BaseActivity {
 
     public void startUser(int whoLogged) {
         if (whoLogged == StartActivity.LOGGED_CUSTOMER)
-            MainActivity.startCustomerActivity(this);
+            CustomerActivity.startCustomerActivity(this);
         else if (whoLogged == StartActivity.LOGGED_COURIER)
-            startActivity(new Intent(this,CourierActivity.class));
-            //MainActivity.startCourierActivity(this);
+            CourierActivity.startCourierActivity(this);
 
         finish();
     }

@@ -23,6 +23,7 @@ import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.OrderRequest;
 import ru.veloportation.veloport.ui.activities.AboutAsActivity;
+import ru.veloportation.veloport.ui.activities.OrderActivity;
 import ru.veloportation.veloport.ui.adapters.OrderAdapter;
 
 
@@ -49,7 +50,7 @@ public class OrdersMenuFragment extends BaseFragment {
         final TextView tvEmptyList = (TextView) view.findViewById(R.id.tvEmptyList);
         setHasOptionsMenu(true);
 
-        //getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getHostActivity().getSupportActionBar().setTitle(getString(R.string.your_order));
 
         final ListView lvOrder = (ListView) view.findViewById(R.id.lvOrders);
@@ -57,7 +58,8 @@ public class OrdersMenuFragment extends BaseFragment {
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                getHostActivity().replaceFragment( OrderFragment.customerFragment(listOrder.get(position)), true );
+                OrderActivity.startOrderActivity(getHostActivity(), listOrder.get(position));
+                //getHostActivity().replaceFragment( OrderFragment.customerFragment(listOrder.get(position)), true );
                 //getHostActivity().replaceFragment( new MapFragment(), true );
             }
         });
@@ -80,7 +82,6 @@ public class OrdersMenuFragment extends BaseFragment {
         });
         Volley.newRequestQueue(getHostActivity()).add(request);
 
-        //TextView tvTimer = (TextView) view.findViewById(R.id.tvTimer);
         TextView tvAboutUs = (TextView) view.findViewById(R.id.tvAboutUs);
         tvAboutUs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,8 +113,5 @@ public class OrdersMenuFragment extends BaseFragment {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
 
 }

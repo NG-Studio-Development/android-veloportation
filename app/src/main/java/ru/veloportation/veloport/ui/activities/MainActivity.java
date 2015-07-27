@@ -22,19 +22,14 @@ import ru.veloportation.veloport.ui.fragments.ListOrderFragment;
 import ru.veloportation.veloport.ui.fragments.OrdersMenuFragment;
 
 
-public class MainActivity extends BaseActivity {
+public abstract class MainActivity extends BaseActivity {
 
     public static final String START_TYPE = "start_type";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
 
-        Intent intent = getIntent();
-        int startType = intent.getIntExtra(START_TYPE, START_COURIER);
-
-        addFragment( selectFragmentByStartType(startType),false );
     }
 
     @Override
@@ -43,7 +38,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private Fragment selectFragmentByStartType(int startType) {
+    protected Fragment selectFragmentByStartType(int startType) {
         Fragment fragment = null;
         switch (startType) {
             default:
@@ -60,13 +55,18 @@ public class MainActivity extends BaseActivity {
     }
 
     public static void startCourierActivity(Context context) {
-        startActivityByType(context, START_COURIER);
+        Intent intent = new Intent(context, CourierActivity.class);
+        intent.putExtra(START_TYPE, START_COURIER);
+        context.startActivity(intent);
     }
 
     public final static int START_COURIER = 0;
 
     public static void startCustomerActivity(Context context) {
-        startActivityByType(context, START_CUSTOMER);
+        //startActivityByType(context, START_CUSTOMER);
+        Intent intent = new Intent(context, CustomerActivity.class);
+        intent.putExtra(START_TYPE, START_CUSTOMER);
+        context.startActivity(intent);
     }
 
     public final static int START_CUSTOMER = 1;
