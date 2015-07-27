@@ -72,7 +72,7 @@ public class LoginFragment extends BaseFragment<StartActivity> {
         });
 
         RadioButton rbCourier = (RadioButton) view.findViewById(R.id.rbCourier);
-        rbCourier.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        rbCourier.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(!isChecked)

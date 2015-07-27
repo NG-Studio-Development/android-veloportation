@@ -27,8 +27,9 @@ public class OrderRequest extends StringRequest {
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
     }
 
-    public static OrderRequest requestGetListOrder (Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        String url = ConstantsVeloportApp.URL_SERVER+"/classes/"+className;
+    public static OrderRequest requestGetFreeOrder(Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        //String url = ConstantsVeloportApp.URL_SERVER+"/classes/"+className;
+        String url = ConstantsVeloportApp.URL_SERVER+"/get/orders/"+Order.STATE_SEARCH_COURIER;
 
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
     }

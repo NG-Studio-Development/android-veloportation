@@ -11,13 +11,26 @@ import ru.veloportation.veloport.ui.fragments.OrderFragment;
 public class OrderActivity extends BaseActivity {
 
     protected static String KEY_ORDER = "key_order";
+    protected static String KEY_RUN_AS = "key_run_as";
+
+    public static String RUN_AS_COURIER = "run_as_courier";
+    public static String RUN_AS_CUSTOMER = "run_as_customer";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Order order = (Order) getIntent().getSerializableExtra(KEY_ORDER);
         setContentView(R.layout.activity_base);
-        addFragment(OrderFragment.courierFragment(order),false);
+
+        Order order = (Order) getIntent().getSerializableExtra(KEY_ORDER);
+        String runAs = getIntent().getStringExtra(KEY_RUN_AS);
+
+        if (runAs.equals(RUN_AS_COURIER)) {
+            addFragment(OrderFragment.courierFragment(order),false);
+        } else if (runAs.equals(RUN_AS_CUSTOMER)) {
+            addFragment(OrderFragment.customerFragment(order),false);
+        }
+
     }
 
     @Override
@@ -25,9 +38,11 @@ public class OrderActivity extends BaseActivity {
         return R.id.container;
     }
 
-    public static void startOrderActivity(Context context, Order order) {
+    public static void startOrderActivity(Context context, Order order, String runAs) {
         Intent intent = new Intent(context, OrderActivity.class);
         intent.putExtra(KEY_ORDER, order);
+        intent.putExtra(KEY_RUN_AS, runAs);
+
         context.startActivity(intent);
     }
 

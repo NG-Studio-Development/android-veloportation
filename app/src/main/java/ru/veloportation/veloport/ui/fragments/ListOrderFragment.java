@@ -1,7 +1,6 @@
 package ru.veloportation.veloport.ui.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,21 +53,21 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //getHostActivity().replaceFragment( OrderFragment.courierFragment(listOrder.get(position)), true );
-                OrderActivity.startOrderActivity(getHostActivity(),listOrder.get(position));
+                OrderActivity.startOrderActivity(getHostActivity(),listOrder.get(position), OrderActivity.RUN_AS_COURIER);
             }
         });
 
-        OrderRequest request = OrderRequest.requestGetListOrder(new Response.Listener<String>() {
+        OrderRequest request = OrderRequest.requestGetFreeOrder(new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                listOrder = new Gson().fromJson(response, new TypeToken< List<Order> >() {}.getType());
+                listOrder = new Gson().fromJson(response, new TypeToken<List<Order>>() {
+                }.getType());
                 lvOrder.setAdapter(OrderAdapter.createOrderAdapter(getHostActivity(), listOrder));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("LIST_ORDER","ERROR");
+                error.printStackTrace();
             }
         });
 

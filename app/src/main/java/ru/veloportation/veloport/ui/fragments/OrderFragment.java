@@ -204,7 +204,8 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
         return new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
                 if (intent.getStringExtra(PARAM_ACTION).equals(ACTION_TAKE_ORDER)) {
-                    onTakeOrder();
+                    long id = Long.valueOf(intent.getStringExtra(PARAM_ID_ORDER));
+                    onTakeOrder(id);
                 }
             }
         };
@@ -292,15 +293,19 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
         Volley.newRequestQueue(getHostActivity()).add(request);
     }
 
-    private void onTakeOrder() {
+    private void onTakeOrder(long id) {
+        if (Long.valueOf(order.getId()) == id) {
 
-        tvTitleTimer.setVisibility(View.VISIBLE);
-        tvTimer.setVisibility(View.VISIBLE);
-        tvTimer.setText(getTimeResidueString());
-        rlEmptyMap.setVisibility(View.GONE);
+            order.setState(Order.STATE_TAKE);
 
-        if ( requestLocation != null )
-            Volley.newRequestQueue(getHostActivity()).add(requestLocation);
+            tvTitleTimer.setVisibility(View.VISIBLE);
+            tvTimer.setVisibility(View.VISIBLE);
+            tvTimer.setText(getTimeResidueString());
+            rlEmptyMap.setVisibility(View.GONE);
+
+            if ( requestLocation != null )
+                Volley.newRequestQueue(getHostActivity()).add(requestLocation);
+        }
     }
 
 
@@ -358,8 +363,12 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
             OrderRequest request = OrderRequest.requestTakeOrder(order, VeloportApplication.getInstance().getUUID(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    buttonGet.setText(R.string.order_delivery);
-                    alarm.setAlarm(context);
+                    if(response.contains("success")) {
+                        buttonGet.setText(R.string.order_delivery);
+                        alarm.setAlarm(context);
+                    } else {
+                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override

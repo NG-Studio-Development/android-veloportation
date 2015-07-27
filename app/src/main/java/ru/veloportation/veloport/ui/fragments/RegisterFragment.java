@@ -39,6 +39,7 @@ public class RegisterFragment extends BaseFragment<StartActivity> {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_register, container, false);
+
         final EditText etName = (EditText) view.findViewById(R.id.etName);
         final EditText etLogin = (EditText) view.findViewById(R.id.etLogin);
         final EditText etEmail = (EditText) view.findViewById(R.id.etEmail);
@@ -88,7 +89,6 @@ public class RegisterFragment extends BaseFragment<StartActivity> {
     String FIELD_EMAIL = "email";
     String FIELD_PASS = "pass";
     String FIELD_REG_ID = "registerId";
-
 
     private void openCustomer(final JSONObject jsonObject) throws JSONException{
         TelephonyManager tManager = (TelephonyManager)getHostActivity().getSystemService(Context.TELEPHONY_SERVICE);

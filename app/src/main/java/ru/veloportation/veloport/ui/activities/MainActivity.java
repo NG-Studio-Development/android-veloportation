@@ -63,7 +63,6 @@ public abstract class MainActivity extends BaseActivity {
     public final static int START_COURIER = 0;
 
     public static void startCustomerActivity(Context context) {
-        //startActivityByType(context, START_CUSTOMER);
         Intent intent = new Intent(context, CustomerActivity.class);
         intent.putExtra(START_TYPE, START_CUSTOMER);
         context.startActivity(intent);

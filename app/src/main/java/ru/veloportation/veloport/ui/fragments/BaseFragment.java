@@ -16,6 +16,7 @@ import ru.veloportation.veloport.BuildConfig;
 public abstract class BaseFragment<ActivityClass extends BaseActivity> extends Fragment {
 
     public final static String PARAM_ACTION = "param_action";
+    public final static String PARAM_ID_ORDER = "param_id_order";
 
     public static int sd;
     protected BaseFragment() {

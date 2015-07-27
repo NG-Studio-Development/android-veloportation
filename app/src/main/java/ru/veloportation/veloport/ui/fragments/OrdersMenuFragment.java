@@ -58,7 +58,7 @@ public class OrdersMenuFragment extends BaseFragment {
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                OrderActivity.startOrderActivity(getHostActivity(), listOrder.get(position));
+                OrderActivity.startOrderActivity(getHostActivity(), listOrder.get(position), OrderActivity.RUN_AS_CUSTOMER);
                 //getHostActivity().replaceFragment( OrderFragment.customerFragment(listOrder.get(position)), true );
                 //getHostActivity().replaceFragment( new MapFragment(), true );
             }

@@ -60,6 +60,7 @@ public class GCMIntentService extends IntentService {
 
         if (notificationType.equals(TYPE_MAKE_ORDER)) {
             intentBroadcast.putExtra(BaseFragment.PARAM_ACTION, OrderFragment.ACTION_TAKE_ORDER);
+            intentBroadcast.putExtra(BaseFragment.PARAM_ID_ORDER, extras.getString("order_id"));
 
         } else if (notificationType.equals(TYPE_UPDATE_LOCATION)) {
             intentBroadcast.putExtra(BaseFragment.PARAM_ACTION, MapFragment.ACTION_NEW_LOCATION);
