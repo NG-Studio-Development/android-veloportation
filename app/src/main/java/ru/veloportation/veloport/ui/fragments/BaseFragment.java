@@ -17,6 +17,7 @@ public abstract class BaseFragment<ActivityClass extends BaseActivity> extends F
 
     public final static String PARAM_ACTION = "param_action";
     public final static String PARAM_ID_ORDER = "param_id_order";
+    public final static String PARAM_TIME_IN_MILLIS = "param_time_in_millis";
 
     public static int sd;
     protected BaseFragment() {

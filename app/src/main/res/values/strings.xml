@@ -1,4 +1,11 @@
 <resources>
+
+    <string name="title_activity_customer">CustomerActivity</string>
+
+    <string name="title_activity_order">OrderActivity</string>
+
+    <string name="title_activity_courier">CourierActivity</string>
+
     <string name="app_name">Veloport</string>
 
     <string name="hello_world">Hello world!</string>
@@ -154,12 +161,13 @@
 
     <string name="error_change_internet_connection"> Ошибка проверьте интернет соединение </string>
 
-    <string name="title_activity_courier">CourierActivity</string>
-
     <string name="free"> Свободные </string>
 
     <string name="my"> Мои </string>
-    <string name="title_activity_customer">CustomerActivity</string>
-    <string name="title_activity_order">OrderActivity</string>
+
+    <string name="server_error"> Ошибка на стороне сервера попробуйте позже </string>
+
+    <string name="delivery_near"> Доставка уже лизко :) </string>
+
 
 </resources>

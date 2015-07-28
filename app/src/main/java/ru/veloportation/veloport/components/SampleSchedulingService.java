@@ -8,7 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
-import ru.veloportation.VeloportApplication;
+import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.model.requests.LocationRequest;
 
 public class SampleSchedulingService extends IntentService {
@@ -39,7 +39,8 @@ public class SampleSchedulingService extends IntentService {
             LocationRequest request = LocationRequest.requestUpdateLocation(uuid, gps.getLatitude(), gps.getLongitude(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.d("SERVICE_UPDATE_LOCATION", "successfull");
+                    Log.d("SERVICE_UPDATE_LOCATION", "successfull = " + "Lat: "+gps.getLatitude()+" "+"Lon: "+gps.getLongitude());
+
                     gps.stopUsingGPS();
                 }
             }, new Response.ErrorListener() {

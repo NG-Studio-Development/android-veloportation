@@ -128,7 +128,10 @@ public class LoginFragment extends BaseFragment<StartActivity> {
         buttonAuthorize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openCourier(etLogin.getText().toString(), etPass.getText().toString());
+                if (CommonUtils.isConnected(getActivity()))
+                    openCourier(etLogin.getText().toString(), etPass.getText().toString());
+                else
+                    Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -151,7 +154,7 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                                 if (response.contains("Error")) {
                                     Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
                                 } else {
-                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_COURIER);
+                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_COURIER, login);
                                     getHostActivity().startUser(StartActivity.LOGGED_COURIER);
                                 }
                             }
@@ -185,7 +188,7 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                         if (response.contains("Error")) {
                             Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
                         } else {
-                            getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER);
+                            getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER, login);
                             getHostActivity().startUser(StartActivity.LOGGED_CUSTOMER);
                         }
                     }

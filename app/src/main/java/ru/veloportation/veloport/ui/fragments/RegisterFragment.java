@@ -24,6 +24,8 @@ import ru.veloportation.veloport.utils.InputValidationUtils;
 
 public class RegisterFragment extends BaseFragment<StartActivity> {
 
+    private EditText etLogin;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class RegisterFragment extends BaseFragment<StartActivity> {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
         final EditText etName = (EditText) view.findViewById(R.id.etName);
-        final EditText etLogin = (EditText) view.findViewById(R.id.etLogin);
+        etLogin = (EditText) view.findViewById(R.id.etLogin);
         final EditText etEmail = (EditText) view.findViewById(R.id.etEmail);
         final EditText etPass = (EditText) view.findViewById(R.id.etPass);
 
@@ -126,7 +128,7 @@ public class RegisterFragment extends BaseFragment<StartActivity> {
                                 } else if ( response.contains("error") ) {
                                     Toast.makeText(getHostActivity(), getString(R.string.error_of_registration), Toast.LENGTH_SHORT).show();
                                 } else {
-                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER);
+                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER, etLogin.getText().toString());
                                     MainActivity.startCustomerActivity(getHostActivity());
                                 }
                             }

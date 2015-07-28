@@ -14,7 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
-import ru.veloportation.VeloportApplication;
+import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.requests.CourierRequest;

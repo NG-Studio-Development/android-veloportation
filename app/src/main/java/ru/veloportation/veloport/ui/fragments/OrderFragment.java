@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 
-import ru.veloportation.VeloportApplication;
+import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.components.SampleAlarmReceiver;
@@ -205,7 +205,8 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
             public void onReceive(Context context, Intent intent) {
                 if (intent.getStringExtra(PARAM_ACTION).equals(ACTION_TAKE_ORDER)) {
                     long id = Long.valueOf(intent.getStringExtra(PARAM_ID_ORDER));
-                    onTakeOrder(id);
+                    long timeInMillis = Long.valueOf(intent.getStringExtra(PARAM_TIME_IN_MILLIS));
+                    onTakeOrder(id,timeInMillis);
                 }
             }
         };
@@ -246,24 +247,17 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
     }
 
     String getTimeResidueString() {
-
-        long timestamp = getTimeResidue();
-
-        int days = (int) (timestamp / (1000*60*60*24));
-        int hours = (int) ((timestamp - (1000*60*60*24*days)) / (1000*60*60));
-        int min = (int) (timestamp - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
-
-        return hours+" : "+min;
+        return order.getTimeResidueString();
     }
 
-    long getTimeResidue() {
+    /*long getTimeResidue() {
         Calendar calendar = Calendar.getInstance();
         long orderTime = order.getTimeInMills();
         long currentTime = calendar.getTimeInMillis();
         long result = orderTime - currentTime;
 
         return result;
-    }
+    } */
 
     @Override
     public int getLayoutResID() {
@@ -293,14 +287,16 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
         Volley.newRequestQueue(getHostActivity()).add(request);
     }
 
-    private void onTakeOrder(long id) {
+    private void onTakeOrder(long id, long timeInMillis) {
         if (Long.valueOf(order.getId()) == id) {
 
             order.setState(Order.STATE_TAKE);
+            order.setTimeInMills(timeInMillis);
 
             tvTitleTimer.setVisibility(View.VISIBLE);
+            tvTitleTimer.setText(getString(R.string.delivery_via));
             tvTimer.setVisibility(View.VISIBLE);
-            tvTimer.setText(getTimeResidueString());
+            tvTimer.setText(order.getTimeResidueString());
             rlEmptyMap.setVisibility(View.GONE);
 
             if ( requestLocation != null )
@@ -363,11 +359,11 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
             OrderRequest request = OrderRequest.requestTakeOrder(order, VeloportApplication.getInstance().getUUID(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    if(response.contains("success")) {
+                    if(response.contains("error")) {
+                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
+                    } else {
                         buttonGet.setText(R.string.order_delivery);
                         alarm.setAlarm(context);
-                    } else {
-                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
                     }
                 }
             }, new Response.ErrorListener() {

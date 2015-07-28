@@ -1,13 +1,10 @@
-package ru.veloportation;
+package ru.veloportation.veloport;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
-
-import ru.veloportation.veloport.BuildConfig;
-import ru.veloportation.veloport.ConstantsVeloportApp;
 
 public class VeloportApplication extends Application {
 

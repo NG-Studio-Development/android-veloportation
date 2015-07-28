@@ -17,7 +17,7 @@
         android:layout_marginLeft="@dimen/margin_widget_default_small"
         android:layout_marginRight="@dimen/margin_widget_default_small"
         android:layout_marginBottom="@dimen/margin_widget_default_small"
-        android:layout_below="@+id/textView">
+        android:layout_below="@+id/tvCountCourier">
 
         <EditText
             android:layout_width="match_parent"
@@ -99,17 +99,17 @@
         android:gravity="center_vertical"
         android:textSize="@dimen/text_size_default_medium"
         android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_toLeftOf="@+id/textView"
-        android:layout_alignBottom="@+id/textView"
-        android:layout_alignTop="@+id/textView" />
+        android:layout_toLeftOf="@+id/tvCountCourier"
+        android:layout_alignBottom="@+id/tvCountCourier"
+        android:layout_alignTop="@+id/tvCountCourier" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100"
+        android:text="0"
         android:gravity="center"
         android:textColor="@color/white"
-        android:id="@+id/textView"
+        android:id="@+id/tvCountCourier"
         android:background="@mipmap/ic_btn_round_small_red"
         android:layout_gravity="right"
         android:layout_marginTop="@dimen/margin_widget_default_small"

@@ -10,7 +10,7 @@ import android.os.Bundle;
 import java.io.IOException;
 import java.util.List;
 
-import ru.veloportation.VeloportApplication;
+import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 

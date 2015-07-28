@@ -5,7 +5,7 @@ import android.content.Context;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import ru.veloportation.VeloportApplication;
+import ru.veloportation.veloport.VeloportApplication;
 
 public class Order implements Serializable {
 
@@ -23,7 +23,7 @@ public class Order implements Serializable {
     private String message;
     private int statusOrder;
     private String customerUUID;
-
+    private String idCustomer;
     private long timeInMills;
 
     public Order(Context context) {
@@ -31,6 +31,11 @@ public class Order implements Serializable {
         //customerUUID = tManager.getDeviceId();
         customerUUID = VeloportApplication.getInstance().getUUID();
         setState(STATE_SEARCH_COURIER);
+    }
+
+    public Order setIdCustomer(String idCustomer) {
+        this.idCustomer = idCustomer;
+        return this;
     }
 
     public Order setCustomerName(String customerName) {
@@ -80,6 +85,7 @@ public class Order implements Serializable {
 
     public long getTimeInMills() { return timeInMills; }
 
+    public String getIdCustomer() { return idCustomer; }
     public String getCustomerName() { return customerName; }
     public String getCost() { return cost; }
     public String getEmail() { return email; }
@@ -93,13 +99,16 @@ public class Order implements Serializable {
     public String getId() { return id; }
 
 
-    public String getTimeResidueString() {
+    public String getTimeResidueString(/*String overTime*/) {
 
         long timestamp = getTimeResidue();
 
         int days = (int) (timestamp / (1000*60*60*24));
         int hours = (int) ((timestamp - (1000*60*60*24*days)) / (1000*60*60));
         int min = (int) (timestamp - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+
+        /*if (hours < 0 || min < 0)
+            return overTime;*/
 
         return hours+" : "+min;
     }

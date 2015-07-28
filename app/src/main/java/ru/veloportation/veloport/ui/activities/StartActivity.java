@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import ru.veloportation.VeloportApplication;
+import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.requests.RegisterIdRequest;
@@ -142,11 +142,12 @@ public class StartActivity extends BaseActivity {
         Volley.newRequestQueue(StartActivity.this).add(request);
     }
 
-    public void saveEnterDataFromJson(int whoLogged) {
-        saveEnterData(whoLogged);
+    public void saveEnterDataFromJson(int whoLogged, String login) {
+        saveEnterData(whoLogged, login);
     }
 
-    void saveEnterData(int whoLogged) {
+    void saveEnterData(int whoLogged, String login) {
+        VeloportApplication.getInstance().getApplicationPreferencesEditor().putString(ConstantsVeloportApp.PREF_KEY_LOGIN, login);
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_STATE_EMPLOYMENT, false);
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putInt(ConstantsVeloportApp.PREF_KEY_WHO_LOGGED, whoLogged);
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_IS_LOGGED_IN, true);

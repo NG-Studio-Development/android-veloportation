@@ -7,6 +7,9 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.model.db.Order;
 
@@ -27,15 +30,54 @@ public class OrderRequest extends StringRequest {
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
     }
 
-    public static OrderRequest requestGetFreeOrder(Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        //String url = ConstantsVeloportApp.URL_SERVER+"/classes/"+className;
-        String url = ConstantsVeloportApp.URL_SERVER+"/get/orders/"+Order.STATE_SEARCH_COURIER;
+    public static OrderRequest requestOfCourierOrder(String courierId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
 
+        /*JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("statusOrder", Order.STATE_SEARCH_COURIER);
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            throw new Error("Json Error in class OrderRequest, method requestGetFreeOrder");
+        } */
+
+
+
+        String url = ConstantsVeloportApp.URL_SERVER+"/get/orders/courier/"+courierId;
+        Log.d("REQUEST_GET_FREE_ORDER","requestGetFreeOrder = "+url);
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
     }
 
-    public static OrderRequest requestGetListCustomerOrder (Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        String url = ConstantsVeloportApp.URL_SERVER+"/classes/"+className;
+    public static OrderRequest requestGetFreeOrder(Response.Listener<String> listener, Response.ErrorListener errorListener) {
+
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("statusOrder", Order.STATE_SEARCH_COURIER);
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            throw new Error("Json Error in class OrderRequest, method requestGetFreeOrder");
+        }
+
+
+
+        String url = ConstantsVeloportApp.URL_SERVER+"/get/orders/"+jsonObject.toString();
+        Log.d("REQUEST_GET_FREE_ORDER","requestGetFreeOrder = "+url);
+        return new OrderRequest(Request.Method.GET, url, listener, errorListener);
+    }
+
+    public static OrderRequest requestGetListCustomerOrder (String id, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("idCustomer", id);
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            throw new Error("JSONError in class OrderRequest, method requestGetListCustomerOrder()");
+        }
+
+        String url = ConstantsVeloportApp.URL_SERVER+"/get/orders/"+jsonObject.toString();
 
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
     }

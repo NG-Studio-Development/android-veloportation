@@ -72,11 +72,11 @@ public class CourierActivity extends MainActivity {
         switch (tagId) {
 
             case TAB_1_TAG:
-                fragment =  ListOrderFragment.createMyOrdersFragment();
+                fragment =  ListOrderFragment.newFreeOrdersFragment();
                 break;
 
             case TAB_2_TAG:
-                fragment = ListOrderFragment.createMyOrdersFragment();
+                fragment = ListOrderFragment.newMyOrdersFragment();
                 break;
         }
 

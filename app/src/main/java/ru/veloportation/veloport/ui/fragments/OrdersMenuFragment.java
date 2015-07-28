@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.db.Order;
+import ru.veloportation.veloport.model.requests.CustomerRequest;
 import ru.veloportation.veloport.model.requests.OrderRequest;
 import ru.veloportation.veloport.ui.activities.AboutAsActivity;
 import ru.veloportation.veloport.ui.activities.OrderActivity;
@@ -30,6 +32,8 @@ import ru.veloportation.veloport.ui.adapters.OrderAdapter;
 public class OrdersMenuFragment extends BaseFragment {
 
     private List<Order> listOrder;
+    private ListView lvOrder;
+    private TextView tvEmptyList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,40 +51,20 @@ public class OrdersMenuFragment extends BaseFragment {
 
 
         View view = inflater.inflate(R.layout.fragment_orders_menu, container, false);
-        final TextView tvEmptyList = (TextView) view.findViewById(R.id.tvEmptyList);
+        tvEmptyList = (TextView) view.findViewById(R.id.tvEmptyList);
         setHasOptionsMenu(true);
 
         getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getHostActivity().getSupportActionBar().setTitle(getString(R.string.your_order));
 
-        final ListView lvOrder = (ListView) view.findViewById(R.id.lvOrders);
+        lvOrder = (ListView) view.findViewById(R.id.lvOrders);
 
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 OrderActivity.startOrderActivity(getHostActivity(), listOrder.get(position), OrderActivity.RUN_AS_CUSTOMER);
-                //getHostActivity().replaceFragment( OrderFragment.customerFragment(listOrder.get(position)), true );
-                //getHostActivity().replaceFragment( new MapFragment(), true );
             }
         });
-
-
-        OrderRequest request = OrderRequest.requestGetListCustomerOrder(new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                listOrder = new Gson().fromJson(response, new TypeToken< List<Order> >() {}.getType());
-                if ( listOrder.isEmpty() )
-                    tvEmptyList.setVisibility(View.VISIBLE);
-
-                lvOrder.setAdapter(OrderAdapter.createOrderAdapter(getHostActivity(), listOrder));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        Volley.newRequestQueue(getHostActivity()).add(request);
 
         TextView tvAboutUs = (TextView) view.findViewById(R.id.tvAboutUs);
         tvAboutUs.setOnClickListener(new View.OnClickListener() {
@@ -98,9 +82,49 @@ public class OrdersMenuFragment extends BaseFragment {
             }
         });
 
+        Volley.newRequestQueue(getHostActivity()).add(createRequestCustomerMyCustomerId());
+
         return view;
     }
 
+    CustomerRequest createRequestCustomerMyCustomerId() {
+        return CustomerRequest.requestCustomerMyCustomerId(new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                if ( response.contains("error") ) {
+                    Toast.makeText( getHostActivity(),getString(R.string.server_error),Toast.LENGTH_LONG ).show();
+                } else {
+                    Volley.newRequestQueue(getHostActivity()).add(createRequestGetListCustomerOrder(response));
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText( getHostActivity(),getString(R.string.server_error),Toast.LENGTH_LONG ).show();
+            }
+        });
+    }
+
+    protected OrderRequest createRequestGetListCustomerOrder(String id) {
+        return OrderRequest.requestGetListCustomerOrder(id, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                listOrder = new Gson().fromJson(response, new TypeToken<List<Order>>() {}.getType());
+
+                if (listOrder.isEmpty())
+                    tvEmptyList.setVisibility(View.VISIBLE);
+
+                lvOrder.setAdapter(OrderAdapter.createOrderAdapter(getHostActivity(), listOrder));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
