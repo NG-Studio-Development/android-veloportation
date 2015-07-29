@@ -30,9 +30,9 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 
-import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
+import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.components.SampleAlarmReceiver;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.LocationRequest;
@@ -250,14 +250,6 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
         return order.getTimeResidueString();
     }
 
-    /*long getTimeResidue() {
-        Calendar calendar = Calendar.getInstance();
-        long orderTime = order.getTimeInMills();
-        long currentTime = calendar.getTimeInMillis();
-        long result = orderTime - currentTime;
-
-        return result;
-    } */
 
     @Override
     public int getLayoutResID() {
@@ -338,7 +330,9 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            order.setState(Order.STATE_TAKE);
+
+            if ( !view.isShown() )
+                return;
 
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
@@ -349,17 +343,23 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, day);
 
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay+1);
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
 
             long time = calendar.getTimeInMillis();
 
+            if (time <= System.currentTimeMillis()) {
+                Toast.makeText(context, getString(R.string.invalid_input_time),Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            order.setState(Order.STATE_TAKE);
             order.setTimeInMills(time);
 
             OrderRequest request = OrderRequest.requestTakeOrder(order, VeloportApplication.getInstance().getUUID(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    if(response.contains("error")) {
+                    if (response.contains("error")) {
                         Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
                     } else {
                         buttonGet.setText(R.string.order_delivery);
@@ -373,8 +373,8 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
                 }
             });
 
-            if (view.isShown())
-                Volley.newRequestQueue(context).add(request);
+
+            Volley.newRequestQueue(context).add(request);
         }
     }
 }

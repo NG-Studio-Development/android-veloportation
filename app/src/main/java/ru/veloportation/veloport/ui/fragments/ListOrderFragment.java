@@ -101,9 +101,8 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
         OrderRequest request = OrderRequest.requestGetFreeOrder(new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                listOrder = new Gson().fromJson(response, new TypeToken<List<Order>>() {
-                }.getType());
-                lvOrder.setAdapter(OrderAdapter.createOrderAdapter(getHostActivity(), listOrder));
+                listOrder = new Gson().fromJson(response, new TypeToken<List<Order>>() {}.getType());
+                lvOrder.setAdapter(OrderAdapter.createOrderAdapter(VeloportApplication.getInstance(), listOrder));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -128,9 +127,9 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
         });*/
 
 
-        if ( typeOrders.equals(TYPE_FREE_ORDERS) )
+        if ( typeOrders!=null && typeOrders.equals(TYPE_FREE_ORDERS) )
             Volley.newRequestQueue(getHostActivity()).add(request);
-        else if (typeOrders.equals(TYPE_MY_ORDERS) )
+        else if ( typeOrders!=null && typeOrders.equals(TYPE_MY_ORDERS) )
             Volley.newRequestQueue(getHostActivity()).add(createRequestIdCourier());
 
         return view;
@@ -142,12 +141,12 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
                     @Override
                     public void onResponse(String response) {
                         if ( response.contains("error") ) {
-                            Toast.makeText(getHostActivity(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
+                            Toast.makeText(VeloportApplication.getInstance(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
                         } else {
 
                             try {
                                 String courierId = new JSONArray(response).getJSONObject(0).getString("id");
-                                Volley.newRequestQueue(getHostActivity()).add(createRequestOfCourierOrder(courierId) );
+                                Volley.newRequestQueue(VeloportApplication.getInstance()).add(createRequestOfCourierOrder(courierId) );
                             } catch (JSONException ex) {
                                 ex.printStackTrace();
                             }
@@ -159,7 +158,7 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getHostActivity(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
+                        Toast.makeText(VeloportApplication.getInstance(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -169,16 +168,18 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
             @Override
             public void onResponse(String response) {
                 if ( response.contains("error") ) {
-                    Toast.makeText(getHostActivity(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
+                    Toast.makeText(VeloportApplication.getInstance(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
                 } else {
+
                     listOrder = new Gson().fromJson(response, new TypeToken<List<Order>>() {}.getType());
-                    lvOrder.setAdapter(OrderAdapter.createOrderAdapter(getHostActivity(), listOrder));
+                    if (lvOrder != null)
+                        lvOrder.setAdapter(OrderAdapter.createOrderAdapter(VeloportApplication.getInstance(), listOrder));
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getHostActivity(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
+                Toast.makeText(VeloportApplication.getInstance(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
             }
         });
     }
