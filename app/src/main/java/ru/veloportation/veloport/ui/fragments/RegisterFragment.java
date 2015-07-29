@@ -144,7 +144,12 @@ public class RegisterFragment extends BaseFragment<StartActivity> {
 
             @Override
             public void onError(String error) {
-                Toast.makeText(getHostActivity(), error, Toast.LENGTH_LONG).show();
+                String errorMessage = getString(R.string.invalid_registration_id);
+
+                if ( error.contains("SERVICE_NOT_AVAILABLE") )
+                    errorMessage = getString(R.string.error_change_internet_connection);
+
+                Toast.makeText(getHostActivity(), errorMessage, Toast.LENGTH_LONG).show();
                 getHostActivity().getProgressDialog().dismiss();
             }
         });

@@ -24,6 +24,8 @@ public class CourierActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courier);
 
+        if ( !isLogged() ) logout();
+
         tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
 

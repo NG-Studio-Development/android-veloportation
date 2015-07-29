@@ -83,8 +83,6 @@ public class OrdersMenuFragment extends BaseFragment {
             }
         });
 
-
-
         return view;
     }
 
@@ -109,7 +107,6 @@ public class OrdersMenuFragment extends BaseFragment {
                 } else {
                     Volley.newRequestQueue(getHostActivity()).add(createRequestGetListCustomerOrder(response));
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override

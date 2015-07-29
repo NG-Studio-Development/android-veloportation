@@ -126,6 +126,13 @@ public abstract class MainActivity extends BaseActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
+    protected boolean isLogged() {
+        return VeloportApplication
+                .getInstance()
+                .getApplicationPreferences()
+                .getBoolean(ConstantsVeloportApp.PREF_KEY_IS_LOGGED_IN, false);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

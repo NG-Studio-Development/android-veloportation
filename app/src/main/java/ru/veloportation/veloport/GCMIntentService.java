@@ -13,7 +13,8 @@ import android.support.v4.app.TaskStackBuilder;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import ru.veloportation.veloport.ui.activities.MainActivity;
+import ru.veloportation.veloport.ui.activities.CourierActivity;
+import ru.veloportation.veloport.ui.activities.CustomerActivity;
 import ru.veloportation.veloport.ui.fragments.BaseFragment;
 import ru.veloportation.veloport.ui.fragments.MapFragment;
 import ru.veloportation.veloport.ui.fragments.OrderFragment;
@@ -21,6 +22,10 @@ import ru.veloportation.veloport.ui.fragments.OrderFragment;
 public class GCMIntentService extends IntentService {
 
     public static final String TYPE_SEND_MESSAGE = "sendmessage";
+
+    public static final String ACTION_CREATE_ORDER = "create_order";
+
+    public static final String ACTION_TAKE_ORDER = "take_order";
 
     private static final String TAG = "GCMIntentService";
 
@@ -40,13 +45,13 @@ public class GCMIntentService extends IntentService {
         String messageType = gcm.getMessageType(intent);
         String mess = "INCOMIN PUSH";
         String notificationType = extras.getString("type");
+        String action = extras.getString("action");
 
         if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
             if (mess != null)
-                sendNotification("Received: "+notificationType);
+                sendNotification(action);
 
             Intent intentBroadcast = createIntentBroadcast(notificationType, extras);
-
             sendBroadcast(intentBroadcast);
         }
     }
@@ -59,11 +64,13 @@ public class GCMIntentService extends IntentService {
         Intent intentBroadcast = new Intent(ConstantsVeloportApp.BROADCAST_ACTION);
 
         if (notificationType.equals(TYPE_MAKE_ORDER)) {
+
             intentBroadcast.putExtra(BaseFragment.PARAM_ACTION, OrderFragment.ACTION_TAKE_ORDER);
             intentBroadcast.putExtra(BaseFragment.PARAM_ID_ORDER, extras.getString("order_id"));
             intentBroadcast.putExtra(BaseFragment.PARAM_TIME_IN_MILLIS, extras.getString("time"));
 
         } else if (notificationType.equals(TYPE_UPDATE_LOCATION)) {
+
             intentBroadcast.putExtra(BaseFragment.PARAM_ACTION, MapFragment.ACTION_NEW_LOCATION);
             intentBroadcast.putExtra(MapFragment.KEY_DATA,extras);
         }
@@ -78,34 +85,69 @@ public class GCMIntentService extends IntentService {
         MessagesHelpers.getInstance().saveMessages(list);
     } */
 
-    private void sendNotification( String msg ) {
+    private void sendNotification( String action ) {
+
+
+
         mNotificationManager = (android.app.NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         final TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(createIntentUpdateData(getApplicationContext() ));
+
+        Class clazz = null;
+
+        if ( action.equals(ACTION_CREATE_ORDER) )
+            clazz = CourierActivity.class;
+            //stackBuilder.addParentStack(CourierActivity.class);
+        else
+            clazz = CustomerActivity.class;
+            //stackBuilder.addParentStack(CustomerActivity.class);
+
+        if (clazz != null) {
+            stackBuilder.addParentStack(clazz);
+            stackBuilder.addNextIntent(createIntentUpdateData( getApplicationContext(), clazz ));
+            final PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
+
+            NotificationCompat.Builder mBuilder = buildNotification(action);
+
+
+            callSound();
+            mBuilder.setAutoCancel(true);
+            mBuilder.setContentIntent(pendingIntent);
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
+
+        /*stackBuilder.addNextIntent(createIntentUpdateData( getApplicationContext() ));
         final PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        //.setSmallIcon(R.drawable.ic_stat_gcm)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Friend Step")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
-                        .setContentText(msg);
+        NotificationCompat.Builder mBuilder = buildNotification(action);
+
 
         callSound();
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(pendingIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());*/
     }
 
-    public static Intent createIntentUpdateData( Context context ) {
-        Intent intent = new Intent(context, MainActivity.class);
+    private NotificationCompat.Builder buildNotification(String action) {
+        String message = "Veloport notification";
+        if ( action.equals(ACTION_CREATE_ORDER) ) {
+            message = getString(R.string.created_new_order);
+        } else if ( action.equals(ACTION_TAKE_ORDER) ) {
+            message = getString(R.string.your_order_was_taking);
+        }
+
+        return  new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Veloport")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setContentText(message);
+    }
+
+    public static Intent createIntentUpdateData( Context context, Class clazz ) {
+        Intent intent = new Intent( context, clazz );
         Bundle b = new Bundle();
-        b.putSerializable(MainActivity.START_TYPE, MainActivity.START_COURIER);
+        //b.putSerializable(MainActivity.START_TYPE, MainActivity.START_COURIER);
         intent.putExtras(b);
 
         return intent;

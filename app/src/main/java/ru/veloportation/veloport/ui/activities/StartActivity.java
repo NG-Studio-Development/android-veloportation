@@ -104,7 +104,7 @@ public class StartActivity extends BaseActivity {
             protected void onPostExecute(String regId) {
 
                 if ( !checkValidRegisterId(regId) ) {
-                    listener.onError(getString(R.string.invalid_registration_id));
+                    listener.onError(regId);
                     Log.d("REGISTER API", regId);
                     return;
                 }

@@ -121,7 +121,7 @@ public class BookingFragment extends BaseFragment  {
                 if ( !CommonUtils.isConnected(getActivity()) ) {
                     Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
                     return;
-                } else if(InputValidationUtils.checkPhoneNumberWithToast(getHostActivity(),etPhone.getText().toString())) {
+                } else if(!InputValidationUtils.checkPhoneNumberWithToast(getHostActivity(),etPhone.getText().toString())) {
                     return;
                 }
 

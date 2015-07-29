@@ -171,6 +171,10 @@
 
     <string name="invalid_input_time"> Дата не может быть раней чем текущая </string>
 
+    <string name="created_new_order"> Создан новый заказ </string>
+
+    <string name="your_order_was_taking"> Ваш заказ был принят </string>
+
     <string name="invalid_registration_id"> Вам не удалось получить id,
         возможно у вас проблемы с Google Services, попробуйте еще раз
         или обратитесь в тех поддержку </string>
