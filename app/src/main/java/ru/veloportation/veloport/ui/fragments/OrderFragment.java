@@ -191,7 +191,6 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
 
         if (latitude != -1 && longitude != -1)
             setLocation( new LatLng(latitude, longitude) );
-
     }
 
     private void setLocation(LatLng latLng) {
@@ -217,7 +216,7 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
         if (order.getStatus() == Order.STATE_TAKE) {
             buttonGet.setText(R.string.order_delivery);
             buttonGet.setVisibility(View.VISIBLE);
-        } else if(order.getStatus() == Order.STATE_DELIVERY) {
+        } else if (order.getStatus() == Order.STATE_DELIVERY) {
             buttonGet.setVisibility(View.INVISIBLE);
         } else {
             tvTitleTimer.setVisibility(View.INVISIBLE);
@@ -247,9 +246,8 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
     }
 
     String getTimeResidueString() {
-        return order.getTimeResidueString();
+        return order.getTimeResidueString(getString(R.string.delivery_near));
     }
-
 
     @Override
     public int getLayoutResID() {
@@ -288,7 +286,7 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
             tvTitleTimer.setVisibility(View.VISIBLE);
             tvTitleTimer.setText(getString(R.string.delivery_via));
             tvTimer.setVisibility(View.VISIBLE);
-            tvTimer.setText(order.getTimeResidueString());
+            tvTimer.setText(order.getTimeResidueString(getString(R.string.delivery_near)));
             rlEmptyMap.setVisibility(View.GONE);
 
             if ( requestLocation != null )

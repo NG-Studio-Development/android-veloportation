@@ -166,7 +166,14 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                             }
                         });
             }
-        });
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getHostActivity(), error, Toast.LENGTH_LONG).show();
+                getHostActivity().getProgressDialog().dismiss();
+            }
+
+        } );
 
         getHostActivity().getProgressDialog().setMessage(getString(R.string.check_of_login_and_pass));
         getHostActivity().getProgressDialog().show();
@@ -199,6 +206,12 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                         getHostActivity().getProgressDialog().dismiss();
                     }
                 });
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getHostActivity(), error, Toast.LENGTH_LONG).show();
+                getHostActivity().getProgressDialog().dismiss();
             }
         });
 

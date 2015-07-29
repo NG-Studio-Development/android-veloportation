@@ -171,5 +171,8 @@
 
     <string name="invalid_input_time"> Дата не может быть раней чем текущая </string>
 
+    <string name="invalid_registration_id"> Вам не удалось получить id,
+        возможно у вас проблемы с Google Services, попробуйте еще раз
+        или обратитесь в тех поддержку </string>
 
 </resources>

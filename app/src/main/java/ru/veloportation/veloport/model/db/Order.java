@@ -27,8 +27,6 @@ public class Order implements Serializable {
     private long timeInMills;
 
     public Order(Context context) {
-        //TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        //customerUUID = tManager.getDeviceId();
         customerUUID = VeloportApplication.getInstance().getUUID();
         setState(STATE_SEARCH_COURIER);
     }
@@ -99,7 +97,7 @@ public class Order implements Serializable {
     public String getId() { return id; }
 
 
-    public String getTimeResidueString(/*String overTime*/) {
+    public String getTimeResidueString(String overTime) {
 
         long timestamp = getTimeResidue();
 
@@ -107,8 +105,11 @@ public class Order implements Serializable {
         int hours = (int) ((timestamp - (1000*60*60*24*days)) / (1000*60*60));
         int min = (int) (timestamp - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
 
-        /*if (hours < 0 || min < 0)
-            return overTime;*/
+        if (statusOrder == STATE_SEARCH_COURIER)
+            return "--:--";
+
+        if (hours < 0 || min < 0)
+            return overTime;
 
         return hours+" : "+min;
     }

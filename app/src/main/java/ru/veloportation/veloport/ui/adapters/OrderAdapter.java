@@ -49,7 +49,7 @@ public class OrderAdapter extends ArrayAdapter<Order> {
         Order item = getItem(position);
         holder.textSender.setText(context.getString(R.string.take_from)+" "+item.getAddressSender());
         holder.textDelivery.setText(item.getAddressDelivery());
-        holder.tvTimer.setText(item.getTimeResidueString());
+        holder.tvTimer.setText(item.getTimeResidueString(":)"));
         return convertView;
     }
 

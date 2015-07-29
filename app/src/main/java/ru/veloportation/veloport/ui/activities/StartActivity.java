@@ -101,22 +101,33 @@ public class StartActivity extends BaseActivity {
             }
 
             @Override
-            protected void onPostExecute(String result) {
+            protected void onPostExecute(String regId) {
 
-                if ( listener != null )
-                    listener.onRegister(result);
-
-                if ( result.contains("Error") ) {
-                    Log.d("REGISTER API", result);
+                if ( !checkValidRegisterId(regId) ) {
+                    listener.onError(getString(R.string.invalid_registration_id));
+                    Log.d("REGISTER API", regId);
                     return;
                 }
+
+                if ( listener != null )
+                    listener.onRegister(regId);
             }
 
         }.execute(null, null, null);
     }
 
+    protected boolean checkValidRegisterId( String regId ) {
+        return !( regId == null ||
+                    regId.toLowerCase().contains("error") ||
+                    regId.toLowerCase().contains("not available") ||
+                    regId.toLowerCase().contains("time") ||
+                    regId.isEmpty() );
+    }
 
-    public interface OnRegisterIdListener { void onRegister(String regId); };
+    public interface OnRegisterIdListener {
+        void onRegister(String regId);
+        void onError(String error);
+    };
 
     OnRegisterIdListener listener = null;
 

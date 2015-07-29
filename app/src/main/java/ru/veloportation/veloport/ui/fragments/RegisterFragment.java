@@ -141,6 +141,12 @@ public class RegisterFragment extends BaseFragment<StartActivity> {
                             }
                         });
             }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getHostActivity(), error, Toast.LENGTH_LONG).show();
+                getHostActivity().getProgressDialog().dismiss();
+            }
         });
 
         getHostActivity().getProgressDialog().show();
