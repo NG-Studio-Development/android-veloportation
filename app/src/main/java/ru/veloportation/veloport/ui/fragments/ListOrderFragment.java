@@ -28,6 +28,7 @@ import ru.veloportation.veloport.model.requests.OrderRequest;
 import ru.veloportation.veloport.ui.activities.CourierActivity;
 import ru.veloportation.veloport.ui.activities.OrderActivity;
 import ru.veloportation.veloport.ui.adapters.OrderAdapter;
+import ru.veloportation.veloport.utils.CommonUtils;
 
 public class ListOrderFragment extends BaseFragment<CourierActivity> {
 
@@ -94,22 +95,11 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                OrderActivity.startOrderActivity(getHostActivity(),listOrder.get(position), OrderActivity.RUN_AS_COURIER);
+                OrderActivity.startOrderActivity(getHostActivity(), listOrder.get(position), OrderActivity.RUN_AS_COURIER);
             }
         });
 
-        OrderRequest request = OrderRequest.requestGetFreeOrder(new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                listOrder = new Gson().fromJson(response, new TypeToken<List<Order>>() {}.getType());
-                lvOrder.setAdapter(OrderAdapter.createOrderAdapter(VeloportApplication.getInstance(), listOrder));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+
 
 
         /*OrderRequest request = OrderRequest.requestGetFreeOrder(new Response.Listener<String>() {
@@ -127,12 +117,41 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
         });*/
 
 
-        if ( typeOrders!=null && typeOrders.equals(TYPE_FREE_ORDERS) )
-            Volley.newRequestQueue(getHostActivity()).add(request);
-        else if ( typeOrders!=null && typeOrders.equals(TYPE_MY_ORDERS) )
-            Volley.newRequestQueue(getHostActivity()).add(createRequestIdCourier());
+
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        lvOrder.setAdapter(null);
+
+        OrderRequest request = OrderRequest.requestGetFreeOrder(new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                listOrder = new Gson().fromJson(response, new TypeToken<List<Order>>() {}.getType());
+                lvOrder.setAdapter(OrderAdapter.createOrderAdapter(VeloportApplication.getInstance(), listOrder));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        if (CommonUtils.isConnected(getHostActivity())) {
+
+            if ( typeOrders!=null && typeOrders.equals(TYPE_FREE_ORDERS) )
+                Volley.newRequestQueue(getHostActivity()).add(request);
+            else if ( typeOrders!=null && typeOrders.equals(TYPE_MY_ORDERS) )
+                Volley.newRequestQueue(getHostActivity()).add(createRequestIdCourier());
+
+        } else {
+            Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     protected CourierRequest createRequestIdCourier() {

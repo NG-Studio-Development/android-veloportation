@@ -27,6 +27,7 @@ import ru.veloportation.veloport.model.requests.OrderRequest;
 import ru.veloportation.veloport.ui.activities.AboutAsActivity;
 import ru.veloportation.veloport.ui.activities.OrderActivity;
 import ru.veloportation.veloport.ui.adapters.OrderAdapter;
+import ru.veloportation.veloport.utils.CommonUtils;
 
 
 public class OrdersMenuFragment extends BaseFragment {
@@ -82,9 +83,20 @@ public class OrdersMenuFragment extends BaseFragment {
             }
         });
 
-        Volley.newRequestQueue(getHostActivity()).add(createRequestCustomerMyCustomerId());
+
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        lvOrder.setAdapter(null);
+        if (CommonUtils.isConnected(getHostActivity()))
+            Volley.newRequestQueue(getHostActivity()).add(createRequestCustomerMyCustomerId());
+        else
+            Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+
     }
 
     CustomerRequest createRequestCustomerMyCustomerId() {
