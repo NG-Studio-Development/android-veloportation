@@ -167,7 +167,7 @@
 
     <string name="server_error"> Ошибка на стороне сервера попробуйте позже </string>
 
-    <string name="delivery_near"> Доставка уже лизко :) </string>
+    <string name="delivery_near"> Доставка уже близко :) </string>
 
     <string name="invalid_input_time"> Дата не может быть раней чем текущая </string>
 
