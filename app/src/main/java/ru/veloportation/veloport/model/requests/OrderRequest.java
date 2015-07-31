@@ -10,6 +10,9 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.model.db.Order;
 
@@ -23,8 +26,15 @@ public class OrderRequest extends StringRequest {
 
     public static OrderRequest requestCreateOrder(Order order, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         String jsonOrderString = new Gson().toJson(order);
-        String url = ConstantsVeloportApp.URL_SERVER+"/classes/"+className+"/"+jsonOrderString;
+        //String url = ConstantsVeloportApp.URL_SERVER+"/classes/"+className+"/"+jsonOrderString;
+        try {
+            jsonOrderString = URLEncoder.encode(jsonOrderString,"UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+            throw new Error("Encoder error");
+        }
 
+        String url = ConstantsVeloportApp.URL_SERVER+"/classes/"+className+"/"+jsonOrderString;
 
         Log.d("ORDER_REQUEST", "Request = " + url);
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);

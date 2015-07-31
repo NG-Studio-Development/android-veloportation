@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -40,6 +41,8 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
     List<Order> listOrder;
 
     ListView lvOrder;
+
+    ProgressBar pbOrder;
 
     private String typeOrders;
 
@@ -91,6 +94,9 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
         getHostActivity().getSupportActionBar().setTitle(getString(R.string.free_booking));
         getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
+        pbOrder = (ProgressBar) view.findViewById(R.id.pbOrders);
+
+
         lvOrder = (ListView) view.findViewById(R.id.lvOrders);
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -125,18 +131,21 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
     @Override
     public void onStart() {
         super.onStart();
-
+        pbOrder.setVisibility(View.VISIBLE);
         lvOrder.setAdapter(null);
 
         OrderRequest request = OrderRequest.requestGetFreeOrder(new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 listOrder = new Gson().fromJson(response, new TypeToken<List<Order>>() {}.getType());
+                pbOrder.setVisibility(View.INVISIBLE);
                 lvOrder.setAdapter(OrderAdapter.createOrderAdapter(VeloportApplication.getInstance(), listOrder));
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                pbOrder.setVisibility(View.INVISIBLE);
                 error.printStackTrace();
             }
         });
@@ -194,11 +203,14 @@ public class ListOrderFragment extends BaseFragment<CourierActivity> {
                     if (lvOrder != null)
                         lvOrder.setAdapter(OrderAdapter.createOrderAdapter(VeloportApplication.getInstance(), listOrder));
                 }
+
+                pbOrder.setVisibility(View.INVISIBLE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(VeloportApplication.getInstance(), getString(R.string.server_error),Toast.LENGTH_LONG).show();
+                pbOrder.setVisibility(View.INVISIBLE);
             }
         });
     }

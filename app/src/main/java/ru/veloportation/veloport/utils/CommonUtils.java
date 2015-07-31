@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -66,6 +67,12 @@ public class CommonUtils {
         return cm.getActiveNetworkInfo() != null;
     }
 
+    public static boolean isOnline(@NotNull Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 
     public static void alarmManagerSetExact(Context context, int type, long when, PendingIntent operation) {
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

@@ -28,4 +28,12 @@ public class LocationRequest extends StringRequest {
         return new LocationRequest(Request.Method.GET, url, listener, errorListener);
     }
 
+    public static LocationRequest requestLocationByAddressFromGoogle(String address, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        String url = "http://maps.google.com/maps/api/geocode/json?address="+address+",Rostov-on-don+RU&sensor=false";//&key=API_KEY
+
+        //String urlAddress = String.format(Locale.ENGLISH, url);
+        Log.d("LOCATION_BY_ADDRESS","Url = "+url);
+        return new LocationRequest(Request.Method.GET, url, listener, errorListener);
+    }
+
 }

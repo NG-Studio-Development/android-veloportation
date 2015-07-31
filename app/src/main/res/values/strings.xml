@@ -73,6 +73,8 @@
 
     <string name="calculating_cost"> Идет подсчет цены </string>
 
+    <string name="in_progress"> Идет обработка запроса </string>
+
     <string name="izvilistaya">Извилистая 19 Ростов-на-Дону Ростов-на-Дону</string>
 
     <string name="service_not_available">Service not available</string>
@@ -174,6 +176,8 @@
     <string name="created_new_order"> Создан новый заказ </string>
 
     <string name="your_order_was_taking"> Ваш заказ был принят </string>
+
+    <string name="creating_order"> Создается заказ </string>
 
     <string name="invalid_registration_id"> Вам не удалось получить id,
         возможно у вас проблемы с Google Services, попробуйте еще раз

@@ -118,24 +118,37 @@ public class BookingFragment extends BaseFragment  {
             @Override
             public void onClick(View v) {
 
-                if ( !CommonUtils.isConnected(getActivity()) ) {
+                if ( !CommonUtils.isConnected(getActivity()) || !CommonUtils.isOnline(getActivity())) {
                     Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
                     return;
                 } else if(!InputValidationUtils.checkPhoneNumberWithToast(getHostActivity(),etPhone.getText().toString())) {
                     return;
                 }
+                getHostActivity().getProgressDialog().setOnShowListener(null);
+                getHostActivity().getProgressDialog().show();
+                getHostActivity().getProgressDialog().setMessage(getString(R.string.in_progress));
+
+                // getString(R.string.creating_order);
 
                 Volley.newRequestQueue(getHostActivity())
-                    .add(createCustomerRequesrt( new Order(getHostActivity() )
-                                                        .setPhone( etPhone.getText().toString() )
-                                                        .setAddressDelivery( etAddressDelivery.getText().toString() )
-                                                        .setAddressSender( etAddressSender.getText().toString() )
-                                                        .setMessage( etMessage.getText().toString() )
-                                                        .setCost( tvCost.getText().toString() ) ) );
+                    .add(createCustomerRequesrt(new Order(getHostActivity())
+                            .setPhone(etPhone.getText().toString())
+                            .setAddressDelivery(etAddressDelivery.getText().toString())
+                            .setAddressSender(etAddressSender.getText().toString())
+                            .setMessage(etMessage.getText().toString())
+                            .setCost(tvCost.getText().toString())));
             }
         } );
 
         return view;
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getHostActivity().getProgressDialog().dismiss();
     }
 
     protected OrderRequest createOrderCheckoutRequest(Order order) {
@@ -144,21 +157,25 @@ public class BookingFragment extends BaseFragment  {
             public void onResponse(String response) {
                 Log.d("SEND_ORDER", "Result = " + response);
                 getHostActivity().onBackPressed();
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                getHostActivity().getProgressDialog().dismiss();
+                Toast.makeText(getHostActivity(), getString(R.string.server_error), Toast.LENGTH_LONG).show();
                 Log.d("SEND_ORDER", "Error = " + error.getMessage());
             }
         });
     }
 
     CustomerRequest createCustomerRequesrt(final Order order) {
+
         return CustomerRequest.requestCustomerMyCustomerId(new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (response.contains("error")) {
-                    Toast.makeText(getHostActivity(), getString(R.string.server_error), Toast.LENGTH_LONG);
+                    Toast.makeText(getHostActivity(), getString(R.string.server_error), Toast.LENGTH_LONG).show();
                 } else {
                     order.setIdCustomer(response);
                     Volley.newRequestQueue(getHostActivity()).add(createOrderCheckoutRequest(order));
@@ -167,7 +184,8 @@ public class BookingFragment extends BaseFragment  {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getHostActivity(), getString(R.string.server_error), Toast.LENGTH_LONG);
+                Toast.makeText(getHostActivity(), getString(R.string.server_error), Toast.LENGTH_LONG).show();
+                getHostActivity().getProgressDialog().dismiss();
             }
         });
     }
@@ -179,8 +197,8 @@ public class BookingFragment extends BaseFragment  {
         getHostActivity().getProgressDialog().setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                getHostActivity().getProgressDialog().setMessage(getString(R.string.calculating_cost));
-                new Thread(new Runnable() {
+                getHostActivity().getProgressDialog().setMessage(getString(R.string.in_progress));
+                /*new Thread(new Runnable() {
                     @Override
                     public void run() {
                         String result = LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery);
@@ -196,13 +214,32 @@ public class BookingFragment extends BaseFragment  {
                         msg.setData(bundle);
                         handler.sendMessage(msg);
                     }
-                } ).start();
+                } ).start(); */
+
+
+                LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery, new LocationUtils.CostListener() {
+                    @Override
+                    public void onCalculated(String result) {
+                        //String result = LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery);
+                        Message msg = Message.obtain();
+
+                        if ( result.contains("Error") || result.contains(getString(R.string.no_address_found)) )
+                            msg.what = LOCATION_ERROR;
+                        else
+                            msg.what = LOCATION_SUCCESS;
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(ConstantsVeloportApp.RESULT_DATA_KEY, result);
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
+                    }
+                });
+
             }
         });
 
         getHostActivity().getProgressDialog().show();
     }
-
 
     protected void requestCountCourier() {
         CourierRequest request = CourierRequest.requestFreeCourier(new Response.Listener<String>() {
@@ -224,25 +261,5 @@ public class BookingFragment extends BaseFragment  {
 
         Volley.newRequestQueue(getHostActivity()).add(request);
     }
-
-
-    /*class LocationResultReceiver extends ResultReceiver {
-        public LocationResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            String cost = resultData.getString(ConstantsVeloportApp.RESULT_DATA_KEY);
-
-            if ( resultCode == ConstantsVeloportApp.SUCCESS_RESULT ) {
-                buttonSend.setVisibility(View.VISIBLE);
-                tvCost.setText(cost+"p.");
-            }
-
-            getHostActivity().getProgressDialog().hide();
-        }
-    }*/
 
 }

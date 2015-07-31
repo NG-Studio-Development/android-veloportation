@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class OrdersMenuFragment extends BaseFragment {
     private List<Order> listOrder;
     private ListView lvOrder;
     private TextView tvEmptyList;
+    private ProgressBar pbOrders;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class OrdersMenuFragment extends BaseFragment {
 
         getHostActivity().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getHostActivity().getSupportActionBar().setTitle(getString(R.string.your_order));
+
+        pbOrders = (ProgressBar) view.findViewById(R.id.pbOrders);
 
         lvOrder = (ListView) view.findViewById(R.id.lvOrders);
 
@@ -90,6 +94,8 @@ public class OrdersMenuFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         lvOrder.setAdapter(null);
+        pbOrders.setVisibility(View.VISIBLE);
+        tvEmptyList.setVisibility(View.INVISIBLE);
         if (CommonUtils.isConnected(getHostActivity()))
             Volley.newRequestQueue(getHostActivity()).add(createRequestCustomerMyCustomerId());
         else
@@ -103,15 +109,19 @@ public class OrdersMenuFragment extends BaseFragment {
             public void onResponse(String response) {
 
                 if ( response.contains("error") ) {
+                    pbOrders.setVisibility(View.INVISIBLE);
                     Toast.makeText( getHostActivity(),getString(R.string.server_error),Toast.LENGTH_LONG ).show();
                 } else {
                     Volley.newRequestQueue(getHostActivity()).add(createRequestGetListCustomerOrder(response));
                 }
+
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText( getHostActivity(),getString(R.string.server_error),Toast.LENGTH_LONG ).show();
+                pbOrders.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -125,12 +135,13 @@ public class OrdersMenuFragment extends BaseFragment {
                 if (listOrder.isEmpty())
                     tvEmptyList.setVisibility(View.VISIBLE);
 
+                pbOrders.setVisibility(View.INVISIBLE);
                 lvOrder.setAdapter(OrderAdapter.createOrderAdapter(getHostActivity(), listOrder));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                pbOrders.setVisibility(View.INVISIBLE);
             }
         });
     }
