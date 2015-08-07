@@ -107,8 +107,8 @@ public class BookingFragment extends BaseFragment  {
                     return;
                 }
 
-                startIntentService(etAddressSender.getText().toString(),
-                            etAddressDelivery.getText().toString());
+                calculateCost(etAddressSender.getText().toString(),
+                        etAddressDelivery.getText().toString());
             }
         });
 
@@ -127,8 +127,6 @@ public class BookingFragment extends BaseFragment  {
                 getHostActivity().getProgressDialog().setOnShowListener(null);
                 getHostActivity().getProgressDialog().show();
                 getHostActivity().getProgressDialog().setMessage(getString(R.string.in_progress));
-
-                // getString(R.string.creating_order);
 
                 Volley.newRequestQueue(getHostActivity())
                     .add(createCustomerRequesrt(new Order(getHostActivity())
@@ -192,7 +190,7 @@ public class BookingFragment extends BaseFragment  {
 
 
 
-    protected void startIntentService(final String addressSender, final String addressDelivery) {
+    protected void calculateCost(final String addressSender, final String addressDelivery) {
 
         getHostActivity().getProgressDialog().setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -202,7 +200,6 @@ public class BookingFragment extends BaseFragment  {
                 LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery, new LocationUtils.CostListener() {
                     @Override
                     public void onCalculated(String result) {
-                        //String result = LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery);
                         Message msg = Message.obtain();
 
                         if ( result.contains("Error") || result.contains(getString(R.string.no_address_found)) )
@@ -216,7 +213,6 @@ public class BookingFragment extends BaseFragment  {
                         handler.sendMessage(msg);
                     }
                 });
-
             }
         });
 

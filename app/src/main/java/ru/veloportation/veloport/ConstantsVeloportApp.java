@@ -13,15 +13,9 @@ public class ConstantsVeloportApp {
 
     public static final String PREF_KEY_STATE_EMPLOYMENT = "state_employment";
 
-
-
-
-
     public static final String SHARED_PREFERENCE_NAME = "prefs";
 
     public final static String BROADCAST_ACTION = "ru.veloportation.veloport.broadcast.action";
-
-
 
     public static final int SUCCESS_RESULT = 0;
     public static final int FAILURE_RESULT = 1;
@@ -30,9 +24,6 @@ public class ConstantsVeloportApp {
     public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
     public static final String RESULT_DATA_KEY = PACKAGE_NAME +
             ".RESULT_DATA_KEY";
-
-    /* public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
-            ".LOCATION_DATA_EXTRA"; */
 
     public static final String SENDER_DATA_EXTRA = PACKAGE_NAME +
             ".SENDER_DATA_EXTRA";

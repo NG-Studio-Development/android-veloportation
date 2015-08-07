@@ -78,13 +78,6 @@ public class GCMIntentService extends IntentService {
         return intentBroadcast;
     }
 
-
-    /* private void saveIncomingMessage(Intent intent) {
-        List<Message> list = new ArrayList<Message>();
-        list.add(MessagesHelpers.getInstance().getMessageFromIntent(intent));
-        MessagesHelpers.getInstance().saveMessages(list);
-    } */
-
     private void sendNotification( String action ) {
 
 
@@ -98,10 +91,8 @@ public class GCMIntentService extends IntentService {
 
         if ( action.equals(ACTION_CREATE_ORDER) )
             clazz = CourierActivity.class;
-            //stackBuilder.addParentStack(CourierActivity.class);
         else
             clazz = CustomerActivity.class;
-            //stackBuilder.addParentStack(CustomerActivity.class);
 
         if (clazz != null) {
             stackBuilder.addParentStack(clazz);
@@ -116,17 +107,6 @@ public class GCMIntentService extends IntentService {
             mBuilder.setContentIntent(pendingIntent);
             mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
         }
-
-        /*stackBuilder.addNextIntent(createIntentUpdateData( getApplicationContext() ));
-        final PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
-
-        NotificationCompat.Builder mBuilder = buildNotification(action);
-
-
-        callSound();
-        mBuilder.setAutoCancel(true);
-        mBuilder.setContentIntent(pendingIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());*/
     }
 
     private NotificationCompat.Builder buildNotification(String action) {
@@ -147,7 +127,6 @@ public class GCMIntentService extends IntentService {
     public static Intent createIntentUpdateData( Context context, Class clazz ) {
         Intent intent = new Intent( context, clazz );
         Bundle b = new Bundle();
-        //b.putSerializable(MainActivity.START_TYPE, MainActivity.START_COURIER);
         intent.putExtras(b);
 
         return intent;

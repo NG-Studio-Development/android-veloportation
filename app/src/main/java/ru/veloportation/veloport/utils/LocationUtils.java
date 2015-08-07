@@ -55,24 +55,6 @@ public class LocationUtils {
         return bestLocation;
     }
 
-    /*public String calculateCostForAddresses(String addressSender, String addressDelivery) {
-
-        Location locationAddressSender = getLocationByAddress(addressSender);
-        Location locationAddressDelivery = getLocationByAddress(addressDelivery);
-
-        if ( locationAddressSender != null &&
-                locationAddressDelivery != null ) {
-
-            float distance = locationAddressSender.distanceTo(locationAddressDelivery);
-            distance = distance / 1000;
-            int cost = (int) (distance > 3 ? (distance - 3) * 10 + (3*20) : distance*20);
-            return String.valueOf(cost);
-        }
-
-        return locError; //VeloportApplication.getInstance().getString(R.string.no_address_found);
-    } */
-
-
     Location locationSender;
     Location locationDelivery;
 
@@ -155,8 +137,6 @@ public class LocationUtils {
 
     public static LocationRequest getLocationInfo(final String address, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         return LocationRequest.requestLocationByAddressFromGoogle(address, listener, errorListener);
-        //Volley.newRequestQueue(VeloportApplication.getInstance()).add(request);
-        // http://maps.google.com/maps/api/geocode/json?address=Izvilistaya%2019,%20Rostov-on-don+RU&sensor=false
     }
 
 
