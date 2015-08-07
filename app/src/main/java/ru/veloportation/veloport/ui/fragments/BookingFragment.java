@@ -198,24 +198,6 @@ public class BookingFragment extends BaseFragment  {
             @Override
             public void onShow(DialogInterface dialog) {
                 getHostActivity().getProgressDialog().setMessage(getString(R.string.in_progress));
-                /*new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String result = LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery);
-                        Message msg = Message.obtain();
-
-                        if ( result.contains("Error") || result.contains(getString(R.string.no_address_found)) )
-                            msg.what = LOCATION_ERROR;
-                        else
-                            msg.what = LOCATION_SUCCESS;
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString(ConstantsVeloportApp.RESULT_DATA_KEY, result);
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
-                    }
-                } ).start(); */
-
 
                 LocationUtils.getInstance().calculateCostForAddresses(addressSender, addressDelivery, new LocationUtils.CostListener() {
                     @Override

@@ -89,29 +89,7 @@ public class LocationUtils {
         }
 
 
-        getLocationInfo(addressSenderEncode, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                try {
-                    locationSender = getLocation(new JSONObject(response), addressSender);
-                } catch (JSONException ex) {
-                    ex.printStackTrace();
-                    throw new Error( ex.getMessage()!=null ? ex.getMessage() : "JSONException in getLocationInfo()" );
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(VeloportApplication.getInstance(),"Error in get sender location", Toast.LENGTH_LONG).show();
-            }
-        } );
-
-
-
-        getLocationInfo(addressDeliveryEncode, new Response.Listener<String>() {
+        final LocationRequest deliveryLocationRequest = getLocationInfo(addressDeliveryEncode, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
@@ -144,6 +122,30 @@ public class LocationUtils {
             }
         } );
 
+
+        LocationRequest senderLocationRequest = getLocationInfo(addressSenderEncode, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    locationSender = getLocation(new JSONObject(response), addressSender);
+                    Volley.newRequestQueue(VeloportApplication.getInstance()).add(deliveryLocationRequest);
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                    throw new Error( ex.getMessage()!=null ? ex.getMessage() : "JSONException in getLocationInfo()" );
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(VeloportApplication.getInstance(),"Error in get sender location", Toast.LENGTH_LONG).show();
+            }
+        } );
+
+        Volley.newRequestQueue(VeloportApplication.getInstance()).add(senderLocationRequest);
+
     }
 
 
@@ -151,9 +153,9 @@ public class LocationUtils {
         void onCalculated(String cost);
     }
 
-    public static void getLocationInfo(final String address, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        LocationRequest request = LocationRequest.requestLocationByAddressFromGoogle(address, listener, errorListener);
-        Volley.newRequestQueue(VeloportApplication.getInstance()).add(request);
+    public static LocationRequest getLocationInfo(final String address, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        return LocationRequest.requestLocationByAddressFromGoogle(address, listener, errorListener);
+        //Volley.newRequestQueue(VeloportApplication.getInstance()).add(request);
         // http://maps.google.com/maps/api/geocode/json?address=Izvilistaya%2019,%20Rostov-on-don+RU&sensor=false
     }
 
