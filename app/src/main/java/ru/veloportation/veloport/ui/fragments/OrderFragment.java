@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,7 @@ import java.util.Calendar;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.VeloportApplication;
+import ru.veloportation.veloport.components.GPSTracker;
 import ru.veloportation.veloport.components.SampleAlarmReceiver;
 import ru.veloportation.veloport.model.db.Order;
 import ru.veloportation.veloport.model.requests.LocationRequest;
@@ -126,6 +126,11 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
 
                     } catch (JSONException ex) {
                         ex.printStackTrace();
+
+                        GPSTracker gps = new GPSTracker(getHostActivity());
+                        setLocation( new LatLng( gps.getLatitude(), gps.getLongitude() ) );
+                        gps.stopUsingGPS();
+
                     }
                 }
             }
@@ -182,7 +187,7 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
 
 
 
-    private void setLocation(Bundle extras) {
+    /*private void setLocation(Bundle extras) {
 
         double latitude = extras.getDouble(DATA_LATITUDE, -1);
         double longitude = extras.getDouble(DATA_LONGITUDE, -1);
@@ -191,7 +196,7 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
 
         if (latitude != -1 && longitude != -1)
             setLocation( new LatLng(latitude, longitude) );
-    }
+    } */
 
     private void setLocation(LatLng latLng) {
         changingCameraPosition(latLng);
@@ -223,6 +228,7 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
             tvTimer.setVisibility(View.INVISIBLE);
         }
 
+        rlEmptyMap.setVisibility(View.GONE);
 
         buttonGet.setOnClickListener(new View.OnClickListener() {
             @Override
