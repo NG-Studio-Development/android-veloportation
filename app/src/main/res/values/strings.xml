@@ -32,7 +32,9 @@
 
     <string name="button_send">Велопортировать</string>
 
-    <string name="google_key">AIzaSyDvTVnB2ls-_d1hIVXWbVykP7qq7oPeUCQ</string>
+    <string name="google_debug_key">AIzaSyDvTVnB2ls-_d1hIVXWbVykP7qq7oPeUCQ</string>
+
+    <string name="google_release_key">AIzaSyDMQGRQOS600eLg78HvL2746YQAJFYyDzk</string>
 
     <string name="title_activity_start">StartActivity</string>
 

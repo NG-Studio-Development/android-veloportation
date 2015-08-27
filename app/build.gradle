@@ -19,9 +19,23 @@ android {
     }
 
     signingConfigs {
-        debug {
+        /*debug {
             storeFile file('debug.keystore')
+        } */
+
+        config {
+            keyAlias 'VeloportationApp'
+            keyPassword 'vport2015'
+            storeFile file('veloportation_key_store.jks')
+            storePassword 'vport2015'
         }
+
+    }
+
+    compileOptions {
+        encoding "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 

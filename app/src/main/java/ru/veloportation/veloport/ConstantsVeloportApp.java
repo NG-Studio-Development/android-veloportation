@@ -2,7 +2,10 @@ package ru.veloportation.veloport;
 
 public class ConstantsVeloportApp {
 
-    public static final String URL_SERVER = "http://akimovdev.ru/server_veloportation/api/index.php";
+    public static final String DEBUG_URL_SERVER = "http://akimovdev.ru/server_veloportation/api/index.php";
+    public static final String PRODUCTION_URL_SERVER = "http://prokatvros.temp.swtest.ru/veloportation/api/index.php";
+
+    public static final String URL_SERVER = PRODUCTION_URL_SERVER;
 
     public static final String PREF_KEY_IS_LOGGED_IN = "is_logged_in";
     public static final String PREF_KEY_EMAIL = "pref_key_email";
