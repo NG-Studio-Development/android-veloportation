@@ -110,7 +110,7 @@ public class OrdersMenuFragment extends BaseFragment {
 
                 if ( response.contains("error") ) {
                     pbOrders.setVisibility(View.INVISIBLE);
-                    Toast.makeText( getHostActivity(),getString(R.string.server_error),Toast.LENGTH_LONG ).show();
+                    Toast.makeText( getHostActivity(), getString(R.string.server_error), Toast.LENGTH_LONG ).show();
                 } else {
                     Volley.newRequestQueue(getHostActivity()).add(createRequestGetListCustomerOrder(response));
                 }

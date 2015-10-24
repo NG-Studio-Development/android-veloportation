@@ -8,23 +8,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import org.json.JSONObject;
-
 import java.io.IOException;
-
 import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
 import ru.veloportation.veloport.model.requests.RegisterIdRequest;
 import ru.veloportation.veloport.ui.fragments.LoginFragment;
-
 
 public class StartActivity extends BaseActivity {
 
@@ -77,9 +72,10 @@ public class StartActivity extends BaseActivity {
 
     GoogleCloudMessaging gcm;
     String regId;
-    String SENDER_ID = "185997592493";
+    String SENDER_ID;// = getString(R.string.sender_id);
 
     public void registerInBackground() {
+        SENDER_ID = getString(R.string.sender_id);
         new AsyncTask<Void, String, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -144,6 +140,7 @@ public class StartActivity extends BaseActivity {
 
     public void authClientAction(String login, String pass, String regId, Response.Listener<String> listener, Response.ErrorListener errorListener ) {
         RegisterIdRequest request = RegisterIdRequest.requestLoginCustomer(login, pass, VeloportApplication.getInstance().getUUID(), regId, listener, errorListener);
+        //RegisterIdRequest request = RegisterIdRequest.requestRegisterUUID(VeloportApplication.getInstance().getUUID(), regId, listener, errorListener);
         Volley.newRequestQueue(StartActivity.this).add(request);
     }
 
@@ -163,7 +160,6 @@ public class StartActivity extends BaseActivity {
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putInt(ConstantsVeloportApp.PREF_KEY_WHO_LOGGED, whoLogged);
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_IS_LOGGED_IN, true);
         VeloportApplication.getInstance().getApplicationPreferencesEditor().commit();
-
     }
 
     public final static int LOGGED_CUSTOMER = 1;

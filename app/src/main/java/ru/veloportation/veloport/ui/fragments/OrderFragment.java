@@ -207,7 +207,7 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
     BroadcastReceiver createBroadCast() {
         return new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
-                if (intent.getStringExtra(PARAM_ACTION).equals(ACTION_TAKE_ORDER)) {
+                if ( intent.getStringExtra(PARAM_ACTION).equals(ACTION_TAKE_ORDER) ) {
                     long id = Long.valueOf(intent.getStringExtra(PARAM_ID_ORDER));
                     long timeInMillis = Long.valueOf(intent.getStringExtra(PARAM_TIME_IN_MILLIS));
                     onTakeOrder(id,timeInMillis);

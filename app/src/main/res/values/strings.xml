@@ -34,9 +34,11 @@
 
     <string name="google_debug_key">AIzaSyDvTVnB2ls-_d1hIVXWbVykP7qq7oPeUCQ</string>
 
-    <!-- <string name="google_release_key">AIzaSyDMQGRQOS600eLg78HvL2746YQAJFYyDzk</string>-->
+    <string name="google_release_key">AIzaSyDMQGRQOS600eLg78HvL2746YQAJFYyDzk</string>
 
     <string name="google_map_key">@string/google_debug_key</string>
+
+    <string name="sender_id">185997592493</string>
 
     <string name="title_activity_start">StartActivity</string>
 
