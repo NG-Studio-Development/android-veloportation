@@ -47,7 +47,7 @@ public class RegisterIdRequest extends StringRequest {
             ex.printStackTrace();
             throw new RuntimeException("Error in json data");
         }
-        Log.d("REQUEST", "Request = " + ConstantsVeloportApp.URL_SERVER + "/classes/1/Users/" + uuid + "/" + jsonObject.toString());
-        return new RegisterIdRequest(Request.Method.GET, ConstantsVeloportApp.URL_SERVER+"/classes/1/Users/"+uuid+"/"+jsonObject.toString(),listener,errorListener);
+        Log.d("REQUEST", "Request = " + ConstantsVeloportApp.URL_SERVER + "/classes/ic_1/Users/" + uuid + "/" + jsonObject.toString());
+        return new RegisterIdRequest(Request.Method.GET, ConstantsVeloportApp.URL_SERVER+"/classes/ic_1/Users/"+uuid+"/"+jsonObject.toString(),listener,errorListener);
     }
 }

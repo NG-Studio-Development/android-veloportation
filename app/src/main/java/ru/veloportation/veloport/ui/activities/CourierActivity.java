@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import ru.veloportation.veloport.ConstantsVeloportApp;
 import ru.veloportation.veloport.R;
+import ru.veloportation.veloport.VeloportApplication;
 import ru.veloportation.veloport.ui.fragments.ListOrderFragment;
 
 public class CourierActivity extends MainActivity {
@@ -48,6 +51,14 @@ public class CourierActivity extends MainActivity {
     }
 
 
+    protected int getResIconEmployment(boolean state) {
+        if (state)
+            return R.mipmap.ic_state_free;
+        else
+            return R.mipmap.ic_state_busy;
+
+    }
+
     private TabHost.TabSpec createTabSpec(final View view, String tag, String indicatorText) {
         View tabview = createTabView(tabHost.getContext(), indicatorText);
 
@@ -83,14 +94,15 @@ public class CourierActivity extends MainActivity {
         }
 
         if (fragment != null)
-            replaceFragment(fragment,false);
+            replaceFragment(fragment, false);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        menu.findItem(R.id.changeStatus).setVisible(true);
+        MenuItem menuItem = menu.findItem(R.id.changeStatus).setVisible(true);
+        boolean state = VeloportApplication.getInstance().getApplicationPreferences().getBoolean(ConstantsVeloportApp.PREF_KEY_STATE_EMPLOYMENT, true);
+        menuItem.setIcon( getResIconEmployment( state ) );
         return true;
     }
 

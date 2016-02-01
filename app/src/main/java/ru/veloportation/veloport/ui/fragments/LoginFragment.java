@@ -1,6 +1,7 @@
 package ru.veloportation.veloport.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import ru.veloportation.veloport.R;
+import ru.veloportation.veloport.model.db.Courier;
 import ru.veloportation.veloport.ui.activities.StartActivity;
 import ru.veloportation.veloport.utils.CommonUtils;
 
@@ -149,12 +152,18 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                             @Override
                             public void onResponse(String response) {
 
+                                Courier courier = new Gson().fromJson(response, Courier.class);
+
+
+                                Log.d("LOGIN_FRAGMENT", "Auth response: "+response);
+
                                 getHostActivity().getProgressDialog().dismiss();
 
                                 if (response.contains("Error")) {
-                                    Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getHostActivity(), "Error in query", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_COURIER, login);
+                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_COURIER, login, courier.getEmployment());
                                     getHostActivity().startUser(StartActivity.LOGGED_COURIER);
                                 }
                             }
@@ -162,6 +171,7 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 error.fillInStackTrace();
+                                Toast.makeText(getHostActivity(), "Server return error", Toast.LENGTH_SHORT).show();
                                 getHostActivity().getProgressDialog().dismiss();
                             }
                         });
@@ -195,12 +205,14 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                     @Override
                     public void onResponse(String response) {
 
+                        Log.d("LOGIN_FRAGMENT", "Auth response: "+response);
                         getHostActivity().getProgressDialog().dismiss();
 
                         if (response.contains("Error")) {
-                            Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getHostActivity(), R.string.authorization_incorrect_data, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getHostActivity(), "Error in query", Toast.LENGTH_SHORT).show();
                         } else {
-                            getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER, login);
+                            getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER, login, null);
                             getHostActivity().startUser(StartActivity.LOGGED_CUSTOMER);
                         }
                     }
@@ -208,6 +220,7 @@ public class LoginFragment extends BaseFragment<StartActivity> {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.fillInStackTrace();
+                        Toast.makeText(getHostActivity(), "Server return error", Toast.LENGTH_SHORT).show();
                         getHostActivity().getProgressDialog().dismiss();
                     }
                 });

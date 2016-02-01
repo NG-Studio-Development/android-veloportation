@@ -8,9 +8,10 @@ android {
         applicationId "ru.veloportation.veloport"
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 101
-        versionName "1.0.1"
+        versionCode 103
+        versionName "1.0.3"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -47,7 +48,7 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.google.android.gms:play-services:7.5.0'*/
 
-    
+
     //compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.android.support:appcompat-v7:22.0.0'
     //compile 'com.intellij:annotations:+@jar'

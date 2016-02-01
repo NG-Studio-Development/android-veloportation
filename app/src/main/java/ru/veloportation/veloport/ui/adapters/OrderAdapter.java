@@ -39,7 +39,7 @@ public class OrderAdapter extends ArrayAdapter<Order> {
             convertView = inflater.inflate(item,null);
             holder.textSender = (TextView) convertView.findViewById(R.id.tvName);
             holder.textDelivery = (TextView) convertView.findViewById(R.id.tvNameDelivery);
-            holder.tvTimer = (TextView) convertView.findViewById(R.id.tvTimer);
+            holder.tvCost = (TextView) convertView.findViewById(R.id.tvCost);
 
             convertView.setTag(holder);
         } else {
@@ -47,9 +47,10 @@ public class OrderAdapter extends ArrayAdapter<Order> {
         }
 
         Order item = getItem(position);
-        holder.textSender.setText(context.getString(R.string.take_from)+" "+item.getAddressSender());
+        //holder.textSender.setText(context.getString(R.string.take_from)+" "+item.getAddressSender());
+        holder.textSender.setText(item.getAddressSender());
         holder.textDelivery.setText(item.getAddressDelivery());
-        holder.tvTimer.setText(item.getTimeResidueString(":)"));
+        holder.tvCost.setText(item.getCost());
         return convertView;
     }
 
@@ -63,7 +64,7 @@ public class OrderAdapter extends ArrayAdapter<Order> {
     private static class Holder {
         TextView textSender;
         TextView textDelivery;
-        TextView tvTimer;
+        TextView tvCost;
     }
 
 }

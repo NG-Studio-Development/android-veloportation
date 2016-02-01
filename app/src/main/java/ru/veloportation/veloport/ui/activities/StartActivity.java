@@ -150,16 +150,21 @@ public class StartActivity extends BaseActivity {
         Volley.newRequestQueue(StartActivity.this).add(request);
     }
 
-    public void saveEnterDataFromJson(int whoLogged, String login) {
-        saveEnterData(whoLogged, login);
+    public void saveEnterDataFromJson(int whoLogged, String login, Boolean employment) {
+        saveEnterData(whoLogged, login, employment);
     }
 
-    void saveEnterData(int whoLogged, String login) {
+    void saveEnterData(int whoLogged, String login, Boolean employment) {
+
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putString(ConstantsVeloportApp.PREF_KEY_LOGIN, login);
-        VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_STATE_EMPLOYMENT, false);
+
+        if ( employment != null )
+            VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_STATE_EMPLOYMENT, employment);
+
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putInt(ConstantsVeloportApp.PREF_KEY_WHO_LOGGED, whoLogged);
         VeloportApplication.getInstance().getApplicationPreferencesEditor().putBoolean(ConstantsVeloportApp.PREF_KEY_IS_LOGGED_IN, true);
         VeloportApplication.getInstance().getApplicationPreferencesEditor().commit();
+
     }
 
     public final static int LOGGED_CUSTOMER = 1;

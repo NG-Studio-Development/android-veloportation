@@ -9,6 +9,10 @@ public class Courier  implements Serializable {
     public double longitude;
     public String login;
     public String pass;
-    public int employment;
+    private int employment;
+
+    public Boolean getEmployment() {
+        return employment != 0;
+    }
 
 }

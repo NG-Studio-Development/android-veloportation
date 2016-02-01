@@ -94,7 +94,7 @@ public class OrderRequest extends StringRequest {
 
     public static OrderRequest requestTakeOrder(Order order, String uuid, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         String jsonOrderString = new Gson().toJson(order);
-        //String url = ConstantsVeloportApp.URL_SERVER+"/classes/2/"+className+"/"+order.getId()+"/"+jsonOrderString;
+        //String url = ConstantsVeloportApp.URL_SERVER+"/classes/ic_2/"+className+"/"+order.getId()+"/"+jsonOrderString;
         String url = ConstantsVeloportApp.URL_SERVER+"/put/takeorder/"+order.getId()+"/"+uuid+"/"+jsonOrderString;
         Log.d("REQUEST_TAKE_ORDER","REQUEST ="+url);
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);
@@ -102,7 +102,7 @@ public class OrderRequest extends StringRequest {
 
     public static OrderRequest removeDelivery(Order order, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         //String jsonOrderString = new Gson().toJson(order);
-        //String url = ConstantsVeloportApp.URL_SERVER+"/classes/2/"+className+"/"+order.getId()+"/"+jsonOrderString;
+        //String url = ConstantsVeloportApp.URL_SERVER+"/classes/ic_2/"+className+"/"+order.getId()+"/"+jsonOrderString;
         String url = ConstantsVeloportApp.URL_SERVER+"/delete/delivery/"+order.getId();
         Log.d("REMOVE_DELIVERY", "Request = " + url);
         return new OrderRequest(Request.Method.GET, url, listener, errorListener);

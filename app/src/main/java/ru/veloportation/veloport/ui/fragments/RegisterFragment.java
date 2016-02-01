@@ -128,7 +128,7 @@ public class RegisterFragment extends BaseFragment<StartActivity> {
                                 } else if ( response.contains("error") ) {
                                     Toast.makeText(getHostActivity(), getString(R.string.error_of_registration), Toast.LENGTH_SHORT).show();
                                 } else {
-                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER, etLogin.getText().toString());
+                                    getHostActivity().saveEnterDataFromJson(StartActivity.LOGGED_CUSTOMER, etLogin.getText().toString(), null);
                                     MainActivity.startCustomerActivity(getHostActivity());
                                 }
                             }

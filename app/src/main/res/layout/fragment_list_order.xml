@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/blue_light"
-        android:alpha="0.3"
+        android:alpha="0.ic_3"
         android:id="@+id/contactsDivider"
         android:layout_below="@+id/relativeLayout2"
         android:layout_alignParentRight="true"

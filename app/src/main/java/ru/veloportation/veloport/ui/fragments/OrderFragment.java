@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -72,6 +74,8 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
 
     RelativeLayout rlEmptyMap;
 
+
+
     public static OrderFragment customerFragment(Order order) {
         return createOrderFragment(order, RUN_CUSTOMER);
     }
@@ -97,13 +101,18 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
         buttonGet = (Button) view.findViewById(R.id.buttonGet);
         rlEmptyMap = (RelativeLayout) view.findViewById(R.id.rlEmptyMap);
 
         tvTitleTimer = (TextView) view.findViewById(R.id.tvTitleTimer);
+
+        ImageView mImageViewFilling = (ImageView) view.findViewById(R.id.ivWait);
+        ((AnimationDrawable) mImageViewFilling.getBackground()).start();
+
 
         setHasOptionsMenu(true);
         getHostActivity().getSupportActionBar().setTitle(order.getAddressDelivery());
@@ -185,16 +194,14 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
         return view;
     }
 
-
-
     /*private void setLocation(Bundle extras) {
 
-        double latitude = extras.getDouble(DATA_LATITUDE, -1);
-        double longitude = extras.getDouble(DATA_LONGITUDE, -1);
+        double latitude = extras.getDouble(DATA_LATITUDE, -ic_1);
+        double longitude = extras.getDouble(DATA_LONGITUDE, -ic_1);
 
         Log.d("SET_LOCATION", "latitude = " + latitude + " longitude = " + longitude);
 
-        if (latitude != -1 && longitude != -1)
+        if (latitude != -ic_1 && longitude != -ic_1)
             setLocation( new LatLng(latitude, longitude) );
     } */
 
@@ -364,7 +371,7 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
                 @Override
                 public void onResponse(String response) {
                     if (response.contains("error")) {
-                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Error in query", Toast.LENGTH_LONG).show();
                     } else {
                         buttonGet.setText(R.string.order_delivery);
                         alarm.setAlarm(context);
@@ -373,7 +380,7 @@ public class OrderFragment extends BaseMapFragment<OrderActivity> {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Server return ERROR", Toast.LENGTH_LONG).show();
                 }
             });
 

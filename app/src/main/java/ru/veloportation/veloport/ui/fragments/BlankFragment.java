@@ -34,8 +34,8 @@ public class BlankFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param param1 Parameter ic_1.
+     * @param param2 Parameter ic_2.
      * @return A new instance of fragment BlankFragment.
      */
     // TODO: Rename and change types and number of parameters

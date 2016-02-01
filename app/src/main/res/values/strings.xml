@@ -173,6 +173,8 @@
 
     <string name="my"> Мои </string>
 
+    <string name="rub"> р. </string>
+
     <string name="server_error"> Ошибка на стороне сервера попробуйте позже </string>
 
     <string name="delivery_near"> Доставка уже близко :) </string>
@@ -184,6 +186,8 @@
     <string name="your_order_was_taking"> Ваш заказ был принят </string>
 
     <string name="creating_order"> Создается заказ </string>
+
+    <string name="warning_order_was_delivered"> Доставка выполнена </string>
 
     <string name="invalid_registration_id"> Вам не удалось получить id,
         возможно у вас проблемы с Google Services, попробуйте еще раз

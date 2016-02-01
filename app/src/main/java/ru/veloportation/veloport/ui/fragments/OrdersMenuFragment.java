@@ -67,7 +67,13 @@ public class OrdersMenuFragment extends BaseFragment {
         lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                OrderActivity.startOrderActivity(getHostActivity(), listOrder.get(position), OrderActivity.RUN_AS_CUSTOMER);
+                Order order = listOrder.get(position);
+
+                if ( order.getStatus() == order.STATE_DELIVERY )
+                    Toast.makeText(getHostActivity(), getString(R.string.warning_order_was_delivered), Toast.LENGTH_LONG).show();
+                else
+                    OrderActivity.startOrderActivity(getHostActivity(), listOrder.get(position), OrderActivity.RUN_AS_CUSTOMER);
+
             }
         });
 
@@ -100,7 +106,6 @@ public class OrdersMenuFragment extends BaseFragment {
             Volley.newRequestQueue(getHostActivity()).add(createRequestCustomerMyCustomerId());
         else
             Toast.makeText(getActivity(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
-
     }
 
     CustomerRequest createRequestCustomerMyCustomerId() {
